@@ -105,7 +105,7 @@ wso2:
 ## Enabling MI Dashboard
 
 Using the following sample configuration, the MI node will connect to the MI dashboard running with a service `private-cloud-mi-dash-1`.
-The groupId of the MI node will be the release name while the nodeId will be the pod name.
+By default, the groupId of the MI node will be the release name while the nodeId will be the pod name.
 
 ```yaml
 wso2:

@@ -98,7 +98,7 @@ node_id = {{ .Values.wso2.config.coordination.nodeId | quote }}
 {{- end }}
 {{- end }}
 
-{{- if .Values.wso2.config.secureVault.enabled }}
+{{ if .Values.wso2.config.secureVault.enabled }}
 [secrets]
 super_admin_password = {{ .Values.wso2.config.admin.password | quote }}
 primary_keystore_password = {{ .Values.wso2.config.keyStore.primary.password | quote }}
@@ -125,12 +125,22 @@ transport_sender_truststore_password = {{ .Values.wso2.config.trustStore.transpo
 {{- end }}
 {{- end }}
 
-{{- if .Values.wso2.config.dashboard }}
+{{ if .Values.wso2.config.dashboard }}
 [dashboard_config]
 dashboard_url = {{ .Values.wso2.config.dashboard.url | quote }}
+{{- if .Values.wso2.config.dashboard.heartbeatInterval }}
 heartbeat_interval = {{ .Values.wso2.config.dashboard.heartbeatInterval }}
+{{- end }}
+{{- if .Values.wso2.config.dashboard.groupId }}
+group_id = {{ .Values.wso2.config.dashboard.groupId | quote }}
+{{- else }}
 group_id = {{ .Release.Name | quote }}
+{{- end }}
+{{- if .Values.wso2.config.dashboard.nodeId }}
+node_id = {{ .Values.wso2.config.dashboard.nodeId | quote }}
+{{- else }}
 node_id = "$env{POD_NAME}"
+{{- end }}
 {{- end }}
 
 {{- if and (.Values.wso2.config.keyStore.transport) (.Values.wso2.config.keyStore.transport.listener) }}
