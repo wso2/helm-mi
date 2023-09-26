@@ -120,12 +120,44 @@ wso2:
         password: ""
         # -- Internal keystore key password
         keyPassword: ""
+      # Keystores used for HTTPS transport
+      transport:
+        listener:
+          # -- Transport listener keystore file name
+          fileName: "wso2carbon.jks"
+          # -- Transport listener keystore alias
+          alias: "wso2carbon"
+          # -- Transport listener keystore password
+          password: ""
+          # -- Transport listener keystore key password
+          keyPassword: ""
+        sender:
+          # -- Transport sender keystore file name
+          fileName: "wso2carbon.jks"
+          # -- Transport sender keystore alias
+          alias: "wso2carbon"
+          # -- Transport sender keystore password
+          password: ""
+          # -- Transport sender keystore key password
+          keyPassword: ""
     trustStore:
       primary:
         # -- Primary truststore file name
         fileName: "client-truststore.jks"
         # -- Primary truststore password
         password: ""
+      # Truststores used for HTTPS transport
+      transport:
+        listener:
+          # -- Transport listener truststore file name
+          fileName: "client-truststore.jks"
+          # -- Transport listener truststore password
+          password: ""
+        sender:
+          # -- Transport sender truststore file name
+          fileName: "client-truststore.jks"
+          # -- Transport sender truststore password
+          password: ""
     dashboard:
       # -- MI Dashboard URL
       url: ""

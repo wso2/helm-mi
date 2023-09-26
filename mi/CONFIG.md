@@ -44,10 +44,22 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.config.keyStore.primary.fileName | string | `"wso2carbon.jks"` | Primary keystore file name |
 | wso2.config.keyStore.primary.keyPassword | string | `""` | Primary keystore key password |
 | wso2.config.keyStore.primary.password | string | `""` | Primary keystore password |
+| wso2.config.keyStore.transport.listener.alias | string | `"wso2carbon"` | Transport listener keystore alias |
+| wso2.config.keyStore.transport.listener.fileName | string | `"wso2carbon.jks"` | Transport listener keystore file name |
+| wso2.config.keyStore.transport.listener.keyPassword | string | `""` | Transport listener keystore key password |
+| wso2.config.keyStore.transport.listener.password | string | `""` | Transport listener keystore password |
+| wso2.config.keyStore.transport.sender.alias | string | `"wso2carbon"` | Transport sender keystore alias |
+| wso2.config.keyStore.transport.sender.fileName | string | `"wso2carbon.jks"` | Transport sender keystore file name |
+| wso2.config.keyStore.transport.sender.keyPassword | string | `""` | Transport sender keystore key password |
+| wso2.config.keyStore.transport.sender.password | string | `""` | Transport sender keystore password |
 | wso2.config.portOffset | int | `10` | Port offset for Micro Integrator (https://apim.docs.wso2.com/en/latest/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/#changing-the-default-mi-ports) |
 | wso2.config.secureVault.enabled | bool | `false` | Enable/Disable secure vault |
 | wso2.config.trustStore.primary.fileName | string | `"client-truststore.jks"` | Primary truststore file name |
 | wso2.config.trustStore.primary.password | string | `""` | Primary truststore password |
+| wso2.config.trustStore.transport.listener.fileName | string | `"client-truststore.jks"` | Transport listener truststore file name |
+| wso2.config.trustStore.transport.listener.password | string | `""` | Transport listener truststore password |
+| wso2.config.trustStore.transport.sender.fileName | string | `"client-truststore.jks"` | Transport sender truststore file name |
+| wso2.config.trustStore.transport.sender.password | string | `""` | Transport sender truststore password |
 | wso2.config.userstore.file.enabled | bool | `true` | Enable/Disable file based userstore |
 | wso2.config.userstore.rdbms.jdbc.driver | string | `""` | JDBC driver class name of the User Database |
 | wso2.config.userstore.rdbms.jdbc.poolParameters | list | `nil` | JDBC connection pool parameters of the User Database |

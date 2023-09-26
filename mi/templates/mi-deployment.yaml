@@ -144,10 +144,34 @@ spec:
             - name: keystores
               mountPath: /home/wso2carbon/wso2mi-{{ .Values.wso2.deployment.BuildVersion }}/repository/resources/security/{{ .Values.wso2.config.keyStore.internal.fileName }}
               subPath: {{ .Values.wso2.config.keyStore.internal.fileName }}
+            {{- if and (.Values.wso2.config.keyStore.transport) (.Values.wso2.config.keyStore.transport.listener) }}
+              # Transport listener keystore
+            - name: keystores
+              mountPath: /home/wso2carbon/wso2mi-{{ .Values.wso2.deployment.BuildVersion }}/repository/resources/security/{{ .Values.wso2.config.keyStore.transport.listener.fileName }}
+              subPath: {{ .Values.wso2.config.keyStore.transport.listener.fileName }}
+            {{- end }}
+            {{- if and (.Values.wso2.config.keyStore.transport) (.Values.wso2.config.keyStore.transport.sender) }}
+              # Transport sender keystore
+            - name: keystores
+              mountPath: /home/wso2carbon/wso2mi-{{ .Values.wso2.deployment.BuildVersion }}/repository/resources/security/{{ .Values.wso2.config.keyStore.transport.sender.fileName }}
+              subPath: {{ .Values.wso2.config.keyStore.transport.sender.fileName }}
+            {{- end }}
               # Primary Truststore
             - name: keystores
               mountPath: /home/wso2carbon/wso2mi-{{ .Values.wso2.deployment.BuildVersion }}/repository/resources/security/{{ .Values.wso2.config.trustStore.primary.fileName }}
               subPath: {{ .Values.wso2.config.trustStore.primary.fileName }}
+            {{- if and (.Values.wso2.config.trustStore.transport) (.Values.wso2.config.trustStore.transport.listener) }}
+              # Transport listener Truststore
+            - name: keystores
+              mountPath: /home/wso2carbon/wso2mi-{{ .Values.wso2.deployment.BuildVersion }}/repository/resources/security/{{ .Values.wso2.config.trustStore.transport.listener.fileName }}
+              subPath: {{ .Values.wso2.config.trustStore.transport.listener.fileName }}
+            {{- end }}
+            {{- if and (.Values.wso2.config.trustStore.transport) (.Values.wso2.config.trustStore.transport.sender) }}
+              # Transport sender Truststore
+            - name: keystores
+              mountPath: /home/wso2carbon/wso2mi-{{ .Values.wso2.deployment.BuildVersion }}/repository/resources/security/{{ .Values.wso2.config.trustStore.transport.sender.fileName }}
+              subPath: {{ .Values.wso2.config.trustStore.transport.sender.fileName }}
+            {{- end }}
             {{- end }}
             {{- if .Values.wso2.config.secureVault.enabled }}
             - name: wso2mi-secrets-volume
