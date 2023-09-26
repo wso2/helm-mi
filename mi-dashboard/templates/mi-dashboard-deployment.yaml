@@ -1,0 +1,152 @@
+# -------------------------------------------------------------------------------------
+#
+# Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com). All Rights Reserved.
+#
+# This software is the property of WSO2 LLC. and its suppliers, if any.
+# Dissemination of any information or reproduction of any material contained 
+# herein is strictly forbidden, unless permitted by WSO2 in accordance with the 
+# WSO2 Commercial License available at https://wso2.com/licenses/eula/3.2
+#
+# --------------------------------------------------------------------------------------
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "mi-dashboard.labels" . | indent 4 }}
+  annotations:
+    checkov.io/skip1: CKV_K8S_22=suppress read-only file system check
+spec:
+  replicas: {{ .Values.wso2.deployment.replicas }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.wso2.deployment.strategy.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.wso2.deployment.strategy.rollingUpdate.maxUnavailable }}
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      deployment: {{ template "resource.prefix" . }}-{{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+        checksum.mi.dashboard.toml: {{ include (print $.Template.BasePath "/mi-dashboard-conf.yaml") . | sha256sum }}
+        checksum.mi.dashboard.log4j2.properties: {{ include (print $.Template.BasePath "/mi-dashboard-log4j2-conf.yaml") . | sha256sum }}
+        checksum.mi.dashboard.secret.properties: {{ include (print $.Template.BasePath "/mi-dashboard-secret-conf.yaml") . | sha256sum }}
+        checksum.mi.dashboard.entrypoint.sh: {{ include (print $.Template.BasePath "/mi-dashboard-conf-entrypoint.yaml") . | sha256sum }}
+        # container.apparmor.security.beta.kubernetes.io/wso2mi-dashboard: "runtime/default"
+      labels:
+        deployment: {{ template "resource.prefix" . }}-{{ .Release.Name }}
+    spec:
+      {{- if .Values.aws.serviceAccountName }} 
+      serviceAccountName: {{ .Values.aws.serviceAccountName }}
+      {{- end }}
+      securityContext:
+        runAsUser: {{ .Values.wso2.deployment.securityContext.runAsUser }}
+        # seccompProfile:
+          # type: RuntimeDefault
+      containers:
+        - name: wso2mi-dashboard
+          image: {{ .Values.aws.ecr.registry }}/{{ .Values.wso2.deployment.image.repository }}@{{ .Values.wso2.deployment.image.digest }}
+          imagePullPolicy: {{ .Values.wso2.deployment.image.pullPolicy }}
+          startupProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - nc -z localhost {{ .Values.wso2.config.serverPort }}
+            initialDelaySeconds: {{ .Values.wso2.deployment.probes.startup.initialDelaySeconds }}
+            periodSeconds: {{ .Values.wso2.deployment.probes.startup.periodSeconds }}
+            failureThreshold: {{ .Values.wso2.deployment.probes.startup.failureThreshold }}
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - nc -z localhost {{ .Values.wso2.config.serverPort }}
+            periodSeconds: {{ .Values.wso2.deployment.probes.liveness.periodSeconds }}
+          readinessProbe:
+            httpGet:
+              path: /dashboard/api/healthz
+              port: {{ .Values.wso2.config.serverPort }}
+            initialDelaySeconds: {{ .Values.wso2.deployment.probes.readiness.initialDelaySeconds }}
+            periodSeconds: {{ .Values.wso2.deployment.probes.readiness.periodSeconds }}
+          resources:
+            requests:
+              memory: {{ .Values.wso2.deployment.resources.requests.memory }}
+              cpu: {{ .Values.wso2.deployment.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.wso2.deployment.resources.limits.memory }}
+              cpu: {{ .Values.wso2.deployment.resources.limits.cpu }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - all
+          ports:
+            - containerPort: {{ .Values.wso2.config.serverPort }}
+              protocol: TCP
+          env:
+            - name: JAVA_MEM_OPTS
+              value: "-Xms{{ .Values.wso2.deployment.resources.jvm.memory.xms }} -Xmx{{ .Values.wso2.deployment.resources.jvm.memory.xmx }}"
+          {{- if .Values.wso2.deployment.envs }}
+            {{- range $key, $val := .Values.wso2.deployment.envs }}
+            - name: {{ $key }}
+              value: {{ $val | quote }}
+            {{- end }}
+          {{- end }}
+          volumeMounts:
+            - name: wso2mi-dashboard-toml
+              mountPath: /home/wso2carbon/wso2-config-volume/conf/deployment.toml
+              subPath: deployment.toml
+            - name: wso2mi-dashboard-log4j2-properties
+              mountPath: /home/wso2carbon/wso2-config-volume/conf/log4j2.properties
+              subPath: log4j2.properties
+              {{- if .Values.wso2.deployment.JKSSecretName }}
+            - name: keystores
+              mountPath: /home/wso2carbon/wso2mi-dashboard-{{ .Values.wso2.deployment.BuildVersion }}/conf/security/{{ .Values.wso2.config.keyStore.fileName }}
+              subPath: {{ .Values.wso2.config.keyStore.fileName }}
+            # - name: keystores
+            #   mountPath: /home/wso2carbon/wso2mi-dashboard-{{ .Values.wso2.deployment.BuildVersion }}/conf/security/{{ .Values.wso2.config.trustStore.fileName }}
+            #   subPath: {{ .Values.wso2.config.trustStore.fileName }}
+              {{- end }}
+            {{- if .Values.wso2.config.secureVault.enabled }}
+            - name: wso2mi-dashboard-secrets-volume
+              mountPath: /mnt/secrets-store
+              readOnly: true
+            - name: wso2mi-dashboard-entrypoint
+              mountPath: /home/wso2carbon/docker-entrypoint.sh
+              subPath: docker-entrypoint.sh
+            - name: wso2mi-dashboard-secret-properties
+              mountPath: /home/wso2carbon/wso2-config-volume/conf/security/secret-conf.properties
+              subPath: secret-conf.properties
+            {{- end }}
+      volumes:
+        - name: wso2mi-dashboard-toml
+          configMap:
+            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-dashboard-toml
+        - name: wso2mi-dashboard-log4j2-properties
+          configMap:
+            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-dashboard-log4j2-properties
+        {{- if .Values.wso2.deployment.JKSSecretName }}
+        - name: keystores
+          secret:
+            secretName: {{ .Values.wso2.deployment.JKSSecretName }}
+        {{- end }}
+        {{- if .Values.wso2.config.secureVault.enabled }}
+        - name: wso2mi-dashboard-secrets-volume
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: {{ .Values.aws.secretManager.secretProviderClass }}
+        - name: wso2mi-dashboard-entrypoint
+          configMap:
+            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-dashboard-entrypoint
+            defaultMode: 0407
+        - name: wso2mi-dashboard-secret-properties
+          configMap:
+            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-dashboard-secret-properties
+        {{- end }}

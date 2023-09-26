@@ -1,0 +1,39 @@
+[server_config]
+port = {{ .Values.wso2.config.serverPort }}
+
+[heartbeat_config]
+pool_size = {{ .Values.wso2.config.heartbeatPoolSize }}
+
+[mi_user_store]
+username = {{ .Values.wso2.config.miUserstore.username | quote }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+password = "$secret{mi_admin_password}"
+{{- else }}
+password = {{ .Values.wso2.config.miUserstore.password | quote }}
+{{- end }}
+
+[keystore]
+file_name = "conf/security/{{ .Values.wso2.config.keyStore.fileName }}"
+{{- if .Values.wso2.config.secureVault.enabled }}
+password = "$secret{keystore_password}"
+key_password = "$secret{keystore_key_password}"
+{{- else }}
+password = "{{ .Values.wso2.config.keyStore.password }}"
+key_password = "{{ .Values.wso2.config.keyStore.keyPassword }}"
+{{- end }}
+
+# [truststore]
+# file_name = "conf/security/{{ .Values.wso2.config.trustStore.fileName }}"
+# {{- if .Values.wso2.config.secureVault.enabled }}
+# password = "$secret{truststore_password}"
+# {{- else }}
+# password = "{{ .Values.wso2.config.trustStore.password }}"
+# {{- end }}
+
+{{- if .Values.wso2.config.secureVault.enabled }}
+[secrets]
+mi_admin_password = {{ .Values.wso2.config.miUserstore.password | quote }}
+keystore_password = {{ .Values.wso2.config.keyStore.password | quote }}
+keystore_key_password = {{ .Values.wso2.config.keyStore.keyPassword | quote }}
+truststore_password = {{ .Values.wso2.config.trustStore.password | quote }}
+{{- end }}
