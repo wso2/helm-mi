@@ -228,11 +228,15 @@ wso2:
     synapseTest:
       # -- Enable/Disable synapse testing
       enabled: false
-    # Persistent volume configurations
-    storage:
-      # -- Persistent volume storage class name
-      storageClass: ""
-      # -- Persistent volume storage capacity
-      capacity: ""
-      # -- EFS volume handle
-      volumeHandle: ""
+    # -- Incase the CApps are not burned into the docker image, the following configurations can be used to mount the CApps using a persistent volume
+    mountCapps:
+      # Persistent volume configurations
+      storage:
+        # -- Storage provisioner
+        provisioner: ""
+        # -- Persistent volume storage class name
+        storageClass: ""
+        # -- Persistent volume storage capacity
+        capacity: ""
+        # -- (list) Storage class parameters
+        parameters:

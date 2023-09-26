@@ -131,8 +131,10 @@ spec:
             - name: wso2mi-log4j2-properties
               mountPath: /home/wso2carbon/wso2-config-volume/conf/log4j2.properties
               subPath: log4j2.properties
+            {{- if .Values.wso2.deployment.mountCapps }}
             - name: capps
               mountPath: /home/wso2carbon/wso2mi-{{ .Values.wso2.deployment.BuildVersion }}/repository/deployment/server/carbonapps
+            {{- end }}
             {{- if .Values.wso2.deployment.JKSSecretName }}
               # Primary keystore
             - name: keystores
@@ -170,9 +172,11 @@ spec:
           secret:
             secretName: {{ .Values.wso2.deployment.JKSSecretName }}
         {{- end }}
+        {{- if .Values.wso2.deployment.mountCapps }}
         - name: capps
           persistentVolumeClaim:
             claimName: {{ template "resource.prefix" . }}-{{ .Release.Name }}-carbonapps
+        {{- end }}
         {{- if .Values.wso2.config.secureVault.enabled }}
         - name: wso2mi-secrets-volume
           csi:

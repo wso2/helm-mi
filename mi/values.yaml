@@ -200,11 +200,3 @@ wso2:
     synapseTest:
       # -- Enable/Disable synapse testing
       enabled: false
-    # Persistent volume configurations
-    storage:
-      # -- Persistent volume storage class name
-      storageClass: ""
-      # -- Persistent volume storage capacity
-      capacity: ""
-      # -- EFS volume handle
-      volumeHandle: ""

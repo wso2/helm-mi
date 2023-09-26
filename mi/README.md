@@ -14,9 +14,10 @@ The [values_full.yaml](./values_full.yaml) file contains all the parameterize co
 
 2. Update the [values_full.yaml](./values_full.yaml) accordingly.
 
-3. Run the following command to generate the docs
+3. Run the following command to generate the docs.
+
 **Note**: If `helm-docs` is not installed, refer [Installation](https://github.com/norwoodj/helm-docs#installation) first.
 
 ```
-helm-docs -f values_full.yaml -o CONFIG.m
+helm-docs -f values_full.yaml -o CONFIG.md
 ```

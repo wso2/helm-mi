@@ -1,3 +1,4 @@
+{{- if .Values.wso2.deployment.mountCapps }}
 # -------------------------------------------------------------------------------------
 #
 # Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com). All Rights Reserved.
@@ -19,5 +20,6 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: {{ .Values.wso2.deployment.storage.capacity }}
-  storageClassName: {{ .Values.wso2.deployment.storage.storageClass }}
+      storage: {{ .Values.wso2.deployment.mountCapps.storage.capacity }}
+  storageClassName: {{ .Values.wso2.deployment.mountCapps.storage.storageClass }}
+{{- end}}

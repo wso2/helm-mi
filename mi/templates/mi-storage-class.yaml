@@ -1,3 +1,4 @@
+{{- if .Values.wso2.deployment.mountCapps }}
 # -------------------------------------------------------------------------------------
 #
 # Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com). All Rights Reserved.
@@ -12,9 +13,8 @@
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: {{ .Values.wso2.deployment.storage.storageClass }}
-provisioner: efs.csi.aws.com
+  name: {{ .Values.wso2.deployment.mountCapps.storage.storageClass }}
+provisioner: {{ .Values.wso2.deployment.mountCapps.storage.provisioner }}
 parameters:
-  provisioningMode: efs-ap
-  fileSystemId: {{ .Values.wso2.deployment.storage.volumeHandle }}
-  directoryPerms: "777"
+{{ toYaml .Values.wso2.deployment.mountCapps.storage.parameters | indent 2 }}
+{{- end}}
