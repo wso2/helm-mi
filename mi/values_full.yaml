@@ -70,9 +70,37 @@ wso2:
       file:
         # -- Enable/Disable file based userstore
         enabled: true
+      rdbms:
+        # -- User Database URL
+        url: ""
+        # -- User Database username
+        username: ""
+        # -- User Database password
+        password: ""
+        jdbc:
+          # -- JDBC driver class name of the User Database
+          driver: ""
+          # -- (list) JDBC connection pool parameters of the User Database
+          poolParameters:
     secureVault:
       # -- Enable/Disable secure vault
       enabled: false
+    # -- Enable/Disable coordination
+    coordination:
+      # -- Node ID for coordination
+      nodeId: ""
+      rdbms:
+        # -- Coordination Database URL
+        url: ""
+        # -- Coordination Database username
+        username: ""
+        # -- Coordination Database password
+        password: ""
+        jdbc:
+          # -- JDBC driver class name of the Coordination Database
+          driver: ""
+          # -- (list) JDBC connection pool parameters of the Coordination Database
+          poolParameters:
     keyStore:
       primary:
         # -- Primary keystore file name

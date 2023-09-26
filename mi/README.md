@@ -13,6 +13,17 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | aws.secretManager.secretIdentifiers.internalKeystorePassword.secretName | string | `""` | Secret name for internal keystore password |
 | aws.secretManager.secretProviderClass | string | `""` | AWS Secret Manager secret provider class name |
 | aws.serviceAccountName | string | `""` | AWS IAM serivce account name |
+| azure.acr.registry | string | `""` | Azure Container registry |
+| azure.keyVault.activeDirectory.servicePrincipal | object | `{"appId":"","clientSecret":""}` | Service Principal created for transacting with the target Azure Key Vault For advanced details refer to official documentation (https://github.com/Azure/secrets-store-csi-driver-provider-azure/blob/master/docs/service-principal-mode.md) |
+| azure.keyVault.activeDirectory.servicePrincipal.appId | string | `""` | Azure AD application name for fetching secrets via CSI secret store driver |
+| azure.keyVault.activeDirectory.servicePrincipal.clientSecret | string | `""` | Client secret of Azure AD application client |
+| azure.keyVault.activeDirectory.tenantId | string | `""` | Azure Active Directory tenant ID of the target Key Vault |
+| azure.keyVault.name | string | `""` | Name of the target Azure Key Vault instance |
+| azure.keyVault.resourceManager.resourceGroup | string | `""` | Name of the Azure Resource Group to which the target Azure Key Vault belongs |
+| azure.keyVault.resourceManager.subscriptionId | string | `""` | Subscription ID of the target Azure Key Vault |
+| azure.keyVault.secretIdentifiers.internalKeystorePassword | string | `""` |  |
+| azure.keyVault.secretProviderClass | string | `""` |  |
+| provider | string | `""` | Kubernetes cluster provider. Supported values: azure, aws |
 | wso2.config.admin.createAdminAccount | bool | `false` | Create super admin account |
 | wso2.config.admin.password | string | `""` | Super admin password |
 | wso2.config.admin.username | string | `""` | Super admin username |
