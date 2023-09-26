@@ -22,13 +22,29 @@ password = "{{ .Values.wso2.config.keyStore.password }}"
 key_password = "{{ .Values.wso2.config.keyStore.keyPassword }}"
 {{- end }}
 
-# [truststore]
-# file_name = "conf/security/{{ .Values.wso2.config.trustStore.fileName }}"
-# {{- if .Values.wso2.config.secureVault.enabled }}
-# password = "$secret{truststore_password}"
-# {{- else }}
-# password = "{{ .Values.wso2.config.trustStore.password }}"
-# {{- end }}
+{{ if and (.Values.wso2.config.sso) (.Values.wso2.config.sso.enabled) }}
+[truststore]
+file_name = "conf/security/{{ .Values.wso2.config.trustStore.fileName }}"
+{{- if .Values.wso2.config.secureVault.enabled }}
+password = "$secret{truststore_password}"
+{{- else }}
+password = "{{ .Values.wso2.config.trustStore.password }}"
+{{ end }}
+
+[sso]
+enable = true
+client_id = {{ .Values.wso2.config.sso.clientId | quote }}
+base_url = {{ .Values.wso2.config.sso.baseUrl | quote }}
+jwt_issuer = {{ .Values.wso2.config.sso.jwtIssuer | quote }}
+resource_server_URLs = {{ .Values.wso2.config.sso.resourceServerUrls}}
+sign_in_redirect_URL = {{ .Values.wso2.config.sso.signInRedirectUrl | quote }}
+{{- if .Values.wso2.config.sso.enablePKCE }}
+enable_PKCE = {{ .Values.wso2.config.sso.enablePKCE }}
+{{- end }}
+{{- if .Values.wso2.config.sso.trustedAudience }}
+additional_trusted_audience = {{ .Values.wso2.config.sso.trustedAudience }}
+{{- end }}
+{{- end }}
 
 {{- if .Values.wso2.config.secureVault.enabled }}
 [secrets]

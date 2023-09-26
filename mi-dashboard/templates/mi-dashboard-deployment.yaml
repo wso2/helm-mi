@@ -44,8 +44,8 @@ spec:
       {{- end }}
       securityContext:
         runAsUser: {{ .Values.wso2.deployment.securityContext.runAsUser }}
-        # seccompProfile:
-          # type: RuntimeDefault
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: wso2mi-dashboard
           image: {{ .Values.aws.ecr.registry }}/{{ .Values.wso2.deployment.image.repository }}@{{ .Values.wso2.deployment.image.digest }}
@@ -108,9 +108,11 @@ spec:
             - name: keystores
               mountPath: /home/wso2carbon/wso2mi-dashboard-{{ .Values.wso2.deployment.BuildVersion }}/conf/security/{{ .Values.wso2.config.keyStore.fileName }}
               subPath: {{ .Values.wso2.config.keyStore.fileName }}
-            # - name: keystores
-            #   mountPath: /home/wso2carbon/wso2mi-dashboard-{{ .Values.wso2.deployment.BuildVersion }}/conf/security/{{ .Values.wso2.config.trustStore.fileName }}
-            #   subPath: {{ .Values.wso2.config.trustStore.fileName }}
+              {{- if and (.Values.wso2.config.sso) (.Values.wso2.config.sso.enabled) }}
+            - name: keystores
+              mountPath: /home/wso2carbon/wso2mi-dashboard-{{ .Values.wso2.deployment.BuildVersion }}/conf/security/{{ .Values.wso2.config.trustStore.fileName }}
+              subPath: {{ .Values.wso2.config.trustStore.fileName }}
+              {{- end }}
               {{- end }}
             {{- if .Values.wso2.config.secureVault.enabled }}
             - name: wso2mi-dashboard-secrets-volume
