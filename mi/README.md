@@ -2,11 +2,20 @@
 
 This module contains the Helm resources required to deploy WSO2 Micro Integrator in a Kubernetes environment.
 
+## Supported Cluster providers
+
+Currently, the MI helm charts are tested with the following cluster providers,
+
+* [Amazon Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks/)
+* [Azure Kubernetes Service (AKS)](https://azure.microsoft.com/en-us/services/kubernetes-service/)
+
 ## Helm chart configurations
 
 The [values.yaml](./values.yaml) file contains the basic required parameters to deploy MI in a Kubernetes environment.
 
 The [values_full.yaml](./values_full.yaml) file contains all the parameterize configurations. You may refer [CONFIG](./CONFIG.md) for full chart configurations. 
+
+The [EXAMPLES](./EXAMPLES.md) file contains sample configurations which can be used as values for the Helm chart for different use cases.
 
 ## Contributing
 

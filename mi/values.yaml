@@ -98,11 +98,6 @@ wso2:
         fileName: "client-truststore.jks"
         # -- Primary truststore password
         password: ""
-    dashboard:
-      # -- MI Dashboard URL
-      url: ""
-      # -- The time interval (in seconds) between two heartbeats sent from the Micro Integrator to the dashboard server
-      heartbeatInterval: 5
   deployment:
     securityContext:
       # -- The UID to run the entrypoint of the container process
