@@ -46,3 +46,19 @@ Create chart name and version as used by the chart label.
 {{- define "micro-integrator.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{- define "cp-secret-to-password-tmp" -}}
+{{- if eq "azure" .Values.provider }}
+{{- printf "cp /mnt/secrets-store/%s ${WSO2_SERVER_HOME}/password-tmp" .Values.azure.keyVault.secretIdentifiers.internalKeystorePassword -}}
+{{- else if eq "aws" .Values.provider }}
+{{- printf "cp /mnt/secrets-store/%s ${WSO2_SERVER_HOME}/password-tmp" .Values.aws.secretManager.secretIdentifiers.internalKeystorePassword.secretKey -}}
+{{- end }}
+{{- end -}}
+
+{{- define "container-registry" -}}
+{{- if eq "azure" .Values.provider }}
+{{- .Values.azure.acr.registry -}}
+{{- else if eq "aws" .Values.provider }}
+{{- .Values.aws.ecr.registry -}}
+{{- end }}
+{{- end -}}
