@@ -6,6 +6,8 @@ containerRegistry: ""
 aws:
   # -- AWS IAM serivce account name
   serviceAccountName: ""
+  # -- AWS region
+  region: ""
   # AWS Secret Manager configurations
   secretManager:
     # -- AWS Secret Manager secret provider class name
@@ -290,5 +292,9 @@ wso2:
         storageClass: ""
         # -- Persistent volume storage capacity
         capacity: ""
-        # -- (list) Storage class parameters
-        parameters:
+        # -- EFS file system ID
+        fileSystemId:
+        # -- EFS file system access point ID for mounting the CApps
+        cAppAccessPoint:
+        # -- Directory permissions for access point root directory creation
+        directoryPerms:

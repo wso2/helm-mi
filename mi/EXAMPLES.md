@@ -15,10 +15,6 @@ provider: "aws"
 # AWS service configurations
 aws:
   serviceAccountName: "<service_account_name>"
-  # AWS Elastic Container Registry (ECR) configurations
-  ecr:
-    # -- AWS Elastic Container Registry
-    registry: "<aws_account_id>.dkr.ecr.<region>.amazonaws.com"
   secretManager:
     secretProviderClass: "<secret_provider_class_name>"
     secretIdentifiers:
@@ -56,10 +52,6 @@ azure:
       subscriptionId: "<>"
       # -- Name of the Azure Resource Group to which the target Azure Key Vault belongs
       resourceGroup: "<>"
-  # Azure Container Registry service
-  acr:
-    # -- Azure Container registry
-    registry: "<>"
 ```
 
 ## MI User store configurations
@@ -96,10 +88,9 @@ wso2:
         provisioner: "efs.csi.aws.com"
         storageClass: "efs-sc"
         capacity: "5Gi"
-        parameters:
-          fileSystemId: "<replace_with_your_file_System_Id>"
-          provisioningMode: efs-ap
-          directoryPerms: "744"
+        fileSystemId: "<replace_with_filesystem_id>"
+        cAppAccessPoint: "<replace_with_accesspoint_id>"
+        directoryPerms: "0777"
 ```
 
 ## Enabling MI Dashboard

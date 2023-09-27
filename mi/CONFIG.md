@@ -8,6 +8,7 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| aws.region | string | `""` | AWS region |
 | aws.secretManager.secretIdentifiers.internalKeystorePassword.secretKey | string | `""` | Secret key for internal keystore password |
 | aws.secretManager.secretIdentifiers.internalKeystorePassword.secretName | string | `""` | Secret name for internal keystore password |
 | aws.secretManager.secretProviderClass | string | `""` | AWS Secret Manager secret provider class name |
@@ -85,9 +86,11 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.deployment.image.digest | string | `""` | Container image digest |
 | wso2.deployment.image.pullPolicy | string | `"Always"` | Container image pull policy. Refer (https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
 | wso2.deployment.image.repository | string | `""` | Container image repository name |
-| wso2.deployment.mountCapps | object | `{"storage":{"capacity":"","parameters":null,"provisioner":"","storageClass":""}}` | Incase the CApps are not burned into the docker image, the following configurations can be used to mount the CApps using a persistent volume |
+| wso2.deployment.mountCapps | object | `{"storage":{"cAppAccessPoint":null,"capacity":"","directoryPerms":null,"fileSystemId":null,"provisioner":"","storageClass":""}}` | Incase the CApps are not burned into the docker image, the following configurations can be used to mount the CApps using a persistent volume |
+| wso2.deployment.mountCapps.storage.cAppAccessPoint | string | `nil` | EFS file system access point ID for mounting the CApps |
 | wso2.deployment.mountCapps.storage.capacity | string | `""` | Persistent volume storage capacity |
-| wso2.deployment.mountCapps.storage.parameters | list | `nil` | Storage class parameters |
+| wso2.deployment.mountCapps.storage.directoryPerms | string | `nil` | Directory permissions for access point root directory creation |
+| wso2.deployment.mountCapps.storage.fileSystemId | string | `nil` | EFS file system ID |
 | wso2.deployment.mountCapps.storage.provisioner | string | `""` | Storage provisioner |
 | wso2.deployment.mountCapps.storage.storageClass | string | `""` | Persistent volume storage class name |
 | wso2.deployment.pdb | object | `{"enabled":false,"minAvailable":1}` | Pod disruption budget configurations (https://kubernetes.io/docs/tasks/run-application/configure-pdb/) |

@@ -1,4 +1,4 @@
-{{- if .Values.wso2.deployment.mountCapps }}
+{{- if and (eq "aws" .Values.provider) (.Values.wso2.deployment.mountCapps) }}
 # -------------------------------------------------------------------------------------
 #
 # Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com). All Rights Reserved.
@@ -16,5 +16,9 @@ metadata:
   name: {{ .Values.wso2.deployment.mountCapps.storage.storageClass }}
 provisioner: {{ .Values.wso2.deployment.mountCapps.storage.provisioner }}
 parameters:
-{{ toYaml .Values.wso2.deployment.mountCapps.storage.parameters | indent 2 }}
+  provisioningMode: efs-ap
+  fileSystemId: {{ .Values.wso2.deployment.mountCapps.storage.fileSystemId | quote }}
+  directoryPerms: {{ .Values.wso2.deployment.mountCapps.storage.directoryPerms | quote }}
+  uid: {{ .Values.wso2.deployment.securityContext.runAsUser | quote }}
+  gid: {{ .Values.wso2.deployment.securityContext.runAsUser | quote }}
 {{- end}}
