@@ -1,0 +1,203 @@
+[server]
+hostname = {{ .Values.wso2.deployment.hostname | quote }}
+offset  = {{ .Values.wso2.config.portOffset }}
+
+[user_store]
+{{- if .Values.wso2.config.userstore.rdbms }}
+class = "org.wso2.micro.integrator.security.user.core.jdbc.JDBCUserStoreManager"
+type = "database"
+{{- else }}
+type = "read_only_ldap"
+{{- end }}
+
+[internal_apis.file_user_store]
+enable = {{ .Values.wso2.config.userstore.file.enabled }}
+
+[super_admin]
+username = {{ .Values.wso2.config.admin.username | quote }}
+create_admin_account = {{ .Values.wso2.config.admin.createAdminAccount }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+password = "$secret{super_admin_password}"
+{{- else }}
+password = {{ .Values.wso2.config.admin.password | quote }}
+{{- end }}
+
+[keystore.primary]
+file_name = "repository/resources/security/{{ .Values.wso2.config.keyStore.primary.fileName }}"
+alias = {{ .Values.wso2.config.keyStore.primary.alias | quote }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+password = "$secret{primary_keystore_password}"
+key_password = "$secret{primary_keystore_key_password}"
+{{- else }}
+password = {{ .Values.wso2.config.keyStore.primary.password | quote }}
+key_password = {{ .Values.wso2.config.keyStore.primary.keyPassword | quote }}
+{{- end }}
+
+[keystore.internal]
+file_name = "repository/resources/security/{{ .Values.wso2.config.keyStore.internal.fileName }}"
+alias = {{ .Values.wso2.config.keyStore.internal.alias | quote }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+password = "$secret{internal_keystore_password}"
+key_password = "$secret{internal_keystore_key_password}"
+{{- else }}
+password = {{ .Values.wso2.config.keyStore.internal.password | quote }}
+key_password = {{ .Values.wso2.config.keyStore.internal.keyPassword | quote }}
+{{- end }}
+
+[truststore]
+file_name = "repository/resources/security/{{ .Values.wso2.config.trustStore.primary.fileName }}"
+{{- if .Values.wso2.config.secureVault.enabled }}
+password = "$secret{primary_truststore_password}"
+{{- else }}
+password = {{ .Values.wso2.config.trustStore.primary.password | quote }}
+{{- end }}
+alias = "symmetric.key.value"
+algorithm = "AES"
+
+{{- if .Values.wso2.config.userstore.rdbms }}
+[[datasource]]
+id = "WSO2CarbonDB"
+url = {{ .Values.wso2.config.userstore.rdbms.url | quote }}
+username = {{ .Values.wso2.config.userstore.rdbms.username | quote }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+password = "$secret{user_db_password}"
+{{- else }}
+password = {{ .Values.wso2.config.userstore.rdbms.password | quote }}
+{{- end }}
+driver = {{ .Values.wso2.config.userstore.rdbms.jdbc.driver | quote }}
+{{- range $key, $value := .Values.wso2.config.userstore.rdbms.jdbc.poolParameters }}
+{{ if typeIs "string" $value }}
+pool_options.{{ $key }} = {{ $value | quote }}
+{{- else }}
+pool_options.{{ $key }} = {{ $value }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.wso2.config.coordination }}
+[[datasource]]
+id = "WSO2_COORDINATION_DB"
+url = {{ .Values.wso2.config.coordination.rdbms.url | quote }}
+username = {{ .Values.wso2.config.coordination.rdbms.username | quote }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+password = "$secret{coordination_db_password}"
+{{- else }}
+password = {{ .Values.wso2.config.coordination.rdbms.password | quote }}
+{{- end }}
+driver = {{ .Values.wso2.config.coordination.rdbms.jdbc.driver | quote }}
+{{- range $key, $value := .Values.wso2.config.coordination.rdbms.jdbc.poolParameters }}
+{{ if typeIs "string" $value }}
+pool_options.{{ $key }} = {{ $value | quote }}
+{{- else }}
+pool_options.{{ $key }} = {{ $value }}
+{{- end }}
+{{- end }}
+{{- if .Values.wso2.config.coordination.nodeId }}
+[cluster_config]
+node_id = {{ .Values.wso2.config.coordination.nodeId | quote }}
+{{- end }}
+{{- end }}
+
+{{ if .Values.wso2.config.secureVault.enabled }}
+[secrets]
+super_admin_password = {{ .Values.wso2.config.admin.password | quote }}
+primary_keystore_password = {{ .Values.wso2.config.keyStore.primary.password | quote }}
+primary_keystore_key_password = {{ .Values.wso2.config.keyStore.primary.keyPassword | quote }}
+internal_keystore_password = {{ .Values.wso2.config.keyStore.internal.password | quote }}
+internal_keystore_key_password = {{ .Values.wso2.config.keyStore.internal.keyPassword | quote }}
+primary_truststore_password = {{ .Values.wso2.config.trustStore.primary.password | quote }}
+{{- if .Values.wso2.config.userstore.rdbms }}
+user_db_password = {{ .Values.wso2.config.userstore.rdbms.password | quote }}
+{{- end }}
+{{- if and (.Values.wso2.config.keyStore.transport) (.Values.wso2.config.keyStore.transport.listener) }}
+transport_listener_keystore_password = {{ .Values.wso2.config.keyStore.transport.listener.password | quote }}
+transport_listener_keystore_key_password = {{ .Values.wso2.config.keyStore.transport.listener.keyPassword | quote }}
+{{- end }}
+{{- if and (.Values.wso2.config.trustStore.transport) (.Values.wso2.config.trustStore.transport.listener) }}
+transport_listener_truststore_password = {{ .Values.wso2.config.trustStore.transport.listener.password | quote }}
+{{- end }}
+{{- if and (.Values.wso2.config.keyStore.transport) (.Values.wso2.config.keyStore.transport.sender) }}
+transport_sender_keystore_password = {{ .Values.wso2.config.keyStore.transport.sender.password | quote }}
+transport_sender_keystore_key_password = {{ .Values.wso2.config.keyStore.transport.sender.keyPassword | quote }}
+{{- end }}
+{{- if and (.Values.wso2.config.trustStore.transport) (.Values.wso2.config.trustStore.transport.sender) }}
+transport_sender_truststore_password = {{ .Values.wso2.config.trustStore.transport.sender.password | quote }}
+{{- end }}
+{{- if .Values.wso2.config.serviceCatalog }}
+service_catalog_password = {{ .Values.wso2.config.serviceCatalog.password | quote }}
+{{- end }}
+{{- end }}
+
+{{ if .Values.wso2.config.dashboard }}
+[dashboard_config]
+dashboard_url = {{ .Values.wso2.config.dashboard.url | quote }}
+{{- if .Values.wso2.config.dashboard.heartbeatInterval }}
+heartbeat_interval = {{ .Values.wso2.config.dashboard.heartbeatInterval }}
+{{- end }}
+{{- if .Values.wso2.config.dashboard.groupId }}
+group_id = {{ .Values.wso2.config.dashboard.groupId | quote }}
+{{- else }}
+group_id = {{ .Release.Name | quote }}
+{{- end }}
+{{- if .Values.wso2.config.dashboard.nodeId }}
+node_id = {{ .Values.wso2.config.dashboard.nodeId | quote }}
+{{- else }}
+node_id = "$env{POD_NAME}"
+{{- end }}
+{{- end }}
+
+{{- if and (.Values.wso2.config.keyStore.transport) (.Values.wso2.config.keyStore.transport.listener) }}
+[transport.http.listener.keystore]
+file_name = "repository/resources/security/{{ .Values.wso2.config.keyStore.transport.listener.fileName }}"
+{{- if .Values.wso2.config.secureVault.enabled }}
+password = "$secret{transport_listener_keystore_password}"
+key_password = "$secret{transport_listener_keystore_key_password}"
+{{- else }}
+password = {{ .Values.wso2.config.keyStore.transport.listener.password | quote }}
+key_password = {{ .Values.wso2.config.keyStore.transport.listener.keyPassword | quote }}
+{{- end }}
+{{- end }}
+
+{{- if and (.Values.wso2.config.trustStore.transport) (.Values.wso2.config.trustStore.transport.listener) }}
+[transport.http.listener.truststore]
+file_name = "repository/resources/security/{{ .Values.wso2.config.trustStore.transport.listener.fileName }}"
+{{- if .Values.wso2.config.secureVault.enabled }}
+password = "$secret{transport_listener_truststore_password}"
+{{- else }}
+password = {{ .Values.wso2.config.trustStore.transport.listener.password | quote }}
+{{- end }}
+{{- end }}
+
+{{- if and (.Values.wso2.config.keyStore.transport) (.Values.wso2.config.keyStore.transport.sender) }}
+[transport.http.sender.keystore]
+file_name = "repository/resources/security/{{ .Values.wso2.config.keyStore.transport.sender.fileName }}"
+{{- if .Values.wso2.config.secureVault.enabled }}
+password = "$secret{transport_sender_keystore_password}"
+key_password = "$secret{transport_sender_keystore_key_password}"
+{{- else }}
+password = {{ .Values.wso2.config.keyStore.transport.sender.password | quote }}
+key_password = {{ .Values.wso2.config.keyStore.transport.sender.keyPassword | quote }}
+{{- end }}
+{{- end }}
+
+{{- if and (.Values.wso2.config.trustStore.transport) (.Values.wso2.config.trustStore.transport.sender) }}
+[transport.http.sender.truststore]
+file_name = "repository/resources/security/{{ .Values.wso2.config.trustStore.transport.sender.fileName }}"
+{{- if .Values.wso2.config.secureVault.enabled }}
+password = "$secret{transport_sender_truststore_password}"
+{{- else }}
+password = {{ .Values.wso2.config.trustStore.transport.sender.password | quote }}
+{{- end }}
+{{- end }}
+
+{{ if .Values.wso2.config.serviceCatalog }}
+[[service_catalog]]
+apim_host = {{ .Values.wso2.config.serviceCatalog.apimHost | quote }}
+enable = {{ .Values.wso2.config.serviceCatalog.enabled }}
+username = {{ .Values.wso2.config.serviceCatalog.username | quote }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+password = "$secret{service_catalog_password}"
+{{- else }}
+password = {{ .Values.wso2.config.serviceCatalog.password | quote }}
+{{- end }}
+{{- end }}
