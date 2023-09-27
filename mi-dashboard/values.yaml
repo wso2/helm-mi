@@ -26,6 +26,13 @@ wso2:
     annotations:
     # -- K8s TLS secret for configured hostname
     tlsSecret: ""
+    ratelimit:
+      # -- Ingress rate limit
+      enabled: false
+      # -- Ingress ratelimit zone name
+      zoneName: ""
+      # -- Ingress ratelimit burst limit
+      burstLimit: ""
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)

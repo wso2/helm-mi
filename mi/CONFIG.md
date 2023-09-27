@@ -8,12 +8,10 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| aws.ecr.registry | string | `""` | AWS Elastic Container Registry |
 | aws.secretManager.secretIdentifiers.internalKeystorePassword.secretKey | string | `""` | Secret key for internal keystore password |
 | aws.secretManager.secretIdentifiers.internalKeystorePassword.secretName | string | `""` | Secret name for internal keystore password |
 | aws.secretManager.secretProviderClass | string | `""` | AWS Secret Manager secret provider class name |
 | aws.serviceAccountName | string | `""` | AWS IAM serivce account name |
-| azure.acr.registry | string | `""` | Azure Container registry |
 | azure.keyVault.activeDirectory.servicePrincipal | object | `{"appId":"","clientSecret":""}` | Service Principal created for transacting with the target Azure Key Vault For advanced details refer to official documentation (https://github.com/Azure/secrets-store-csi-driver-provider-azure/blob/master/docs/service-principal-mode.md) |
 | azure.keyVault.activeDirectory.servicePrincipal.appId | string | `""` | Azure AD application name for fetching secrets via CSI secret store driver |
 | azure.keyVault.activeDirectory.servicePrincipal.clientSecret | string | `""` | Client secret of Azure AD application client |
@@ -23,6 +21,7 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | azure.keyVault.resourceManager.subscriptionId | string | `""` | Subscription ID of the target Azure Key Vault |
 | azure.keyVault.secretIdentifiers.internalKeystorePassword | string | `""` |  |
 | azure.keyVault.secretProviderClass | string | `""` |  |
+| containerRegistry | string | `""` | Container registry |
 | provider | string | `""` | Kubernetes cluster provider. Supported values: azure, aws |
 | wso2.config.admin.createAdminAccount | bool | `false` | Create super admin account |
 | wso2.config.admin.password | string | `""` | Super admin password |
@@ -119,6 +118,9 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.ingress.annotations | list | `nil` | Ingress annotations |
 | wso2.ingress.enabled | bool | `true` | Enable Ingress for MI |
 | wso2.ingress.ingressClassName | string | `""` | Ingress class name |
+| wso2.ingress.ratelimit.burstLimit | string | `""` | Ingress ratelimit burst limit |
+| wso2.ingress.ratelimit.enabled | bool | `false` | Ingress rate limit |
+| wso2.ingress.ratelimit.zoneName | string | `""` | Ingress ratelimit zone name |
 | wso2.ingress.tlsSecret | string | `""` | K8s TLS secret for configured hostname |
 
 ----------------------------------------------

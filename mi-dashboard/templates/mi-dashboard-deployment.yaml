@@ -50,6 +50,18 @@ spec:
         seccompProfile:
           type: RuntimeDefault
         {{- end }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: deployment
+                      operator: In
+                      values:
+                        - {{ template "resource.prefix" . }}-{{ .Release.Name }}
+                topologyKey: topology.kubernetes.io/zone
       containers:
         - name: wso2mi-dashboard
           image: {{ .Values.aws.ecr.registry }}/{{ .Values.wso2.deployment.image.repository }}@{{ .Values.wso2.deployment.image.digest }}

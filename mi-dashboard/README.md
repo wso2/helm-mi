@@ -52,12 +52,17 @@ A Helm chart for the deployment of WSO2 Micro Integrator Dashboard
 | wso2.deployment.resources.limits.memory | string | `"1Gi"` | The maximum amount of memory that should be allocated for a Pod |
 | wso2.deployment.resources.requests.cpu | string | `"500m"` | The minimum amount of CPU that should be allocated for a Pod |
 | wso2.deployment.resources.requests.memory | string | `"512Mi"` | The minimum amount of memory that should be allocated for a Pod |
+| wso2.deployment.securityContext.apparmor | bool | `true` | Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/) |
 | wso2.deployment.securityContext.runAsUser | string | `""` | The UID to run the entrypoint of the container process |
+| wso2.deployment.securityContext.seccompProfile | bool | `true` | Enable/Disable seccomp profile (https://kubernetes.io/docs/tutorials/security/seccomp/) |
 | wso2.deployment.strategy.rollingUpdate.maxSurge | int | `1` | The maximum number of pods that can be scheduled above the desired number of pods. |
 | wso2.deployment.strategy.rollingUpdate.maxUnavailable | int | `0` | The maximum number of pods that can be unavailable during the update. |
 | wso2.ingress.annotations | list | `nil` | Ingress annotations |
 | wso2.ingress.enabled | bool | `true` | Enable Ingress for MI Dashboard |
-| wso2.ingress.ingressClassName | string | `"alb"` | Ingress class name |
+| wso2.ingress.ingressClassName | string | `""` | Ingress class name |
+| wso2.ingress.ratelimit.burstLimit | string | `""` | Ingress ratelimit burst limit |
+| wso2.ingress.ratelimit.enabled | bool | `false` | Ingress rate limit |
+| wso2.ingress.ratelimit.zoneName | string | `""` | Ingress ratelimit zone name |
 | wso2.ingress.tlsSecret | string | `""` | K8s TLS secret for configured hostname |
 
 ----------------------------------------------

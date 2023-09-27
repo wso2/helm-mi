@@ -54,11 +54,3 @@ Create chart name and version as used by the chart label.
 {{- printf "cp /mnt/secrets-store/%s ${WSO2_SERVER_HOME}/password-tmp" .Values.aws.secretManager.secretIdentifiers.internalKeystorePassword.secretKey -}}
 {{- end }}
 {{- end -}}
-
-{{- define "container-registry" -}}
-{{- if eq "azure" .Values.provider }}
-{{- .Values.azure.acr.registry -}}
-{{- else if eq "aws" .Values.provider }}
-{{- .Values.aws.ecr.registry -}}
-{{- end }}
-{{- end -}}

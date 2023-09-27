@@ -1,13 +1,13 @@
 # -- Kubernetes cluster provider. Supported values: azure, aws
 provider: ""
+# -- Container registry
+containerRegistry: ""
 # AWS service configurations
 aws:
   # -- AWS IAM serivce account name
   serviceAccountName: ""
-  # AWS Elastic Container Registry (ECR) configurations
-  ecr:
-    # -- AWS Elastic Container Registry
-    registry: ""
+  # -- AWS region
+  region: ""
   # AWS Secret Manager configurations
   secretManager:
     # -- AWS Secret Manager secret provider class name
@@ -41,10 +41,6 @@ azure:
       subscriptionId: ""
       # -- Name of the Azure Resource Group to which the target Azure Key Vault belongs
       resourceGroup: ""
-  # Azure Container Registry service
-  acr:
-    # -- Azure Container registry
-    registry: ""
 wso2:
   ingress:
     # -- Enable Ingress for MI
@@ -55,7 +51,13 @@ wso2:
     annotations:
     # -- K8s TLS secret for configured hostname
     tlsSecret: ""
-
+    ratelimit:
+      # -- Ingress rate limit
+      enabled: false
+      # -- Ingress ratelimit zone name
+      zoneName: ""
+      # -- Ingress ratelimit burst limit
+      burstLimit: ""
   config:
     # -- Port offset for Micro Integrator (https://apim.docs.wso2.com/en/latest/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/#changing-the-default-mi-ports)
     portOffset: 10
