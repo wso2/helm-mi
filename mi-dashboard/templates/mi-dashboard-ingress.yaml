@@ -17,9 +17,9 @@ metadata:
 {{- if .Values.wso2.ingress.annotations }}
   annotations:
 {{ toYaml .Values.wso2.ingress.annotations | indent 4 }}
-{{- if .Values.wso2.ingress.rateLimit.enabled }}
+{{- if .Values.wso2.ingress.ratelimit.enabled }}
     nginx.ingress.kubernetes.io/configuration-snippet: |
-      limit_req zone={{ .Values.wso2.ingress.rateLimit.zoneName }} burst={{ .Values.wso2.ingress.rateLimit.burstLimit }} nodelay;                                                   
+      limit_req zone={{ .Values.wso2.ingress.ratelimit.zoneName }} burst={{ .Values.wso2.ingress.ratelimit.burstLimit }} nodelay;                                                   
       limit_req_status 429;
 {{- end }}
 {{- end }}
