@@ -35,7 +35,9 @@ spec:
         checksum.mi.dashboard.log4j2.properties: {{ include (print $.Template.BasePath "/mi-dashboard-log4j2-conf.yaml") . | sha256sum }}
         checksum.mi.dashboard.secret.properties: {{ include (print $.Template.BasePath "/mi-dashboard-secret-conf.yaml") . | sha256sum }}
         checksum.mi.dashboard.entrypoint.sh: {{ include (print $.Template.BasePath "/mi-dashboard-conf-entrypoint.yaml") . | sha256sum }}
-        # container.apparmor.security.beta.kubernetes.io/wso2mi-dashboard: "runtime/default"
+        {{- if .Values.wso2.deployment.securityContext.apparmor }}
+        container.apparmor.security.beta.kubernetes.io/wso2mi: "runtime/default"
+        {{- end }}
       labels:
         deployment: {{ template "resource.prefix" . }}-{{ .Release.Name }}
     spec:
@@ -44,8 +46,10 @@ spec:
       {{- end }}
       securityContext:
         runAsUser: {{ .Values.wso2.deployment.securityContext.runAsUser }}
+        {{- if .Values.wso2.deployment.securityContext.seccompProfile }}
         seccompProfile:
           type: RuntimeDefault
+        {{- end }}
       containers:
         - name: wso2mi-dashboard
           image: {{ .Values.aws.ecr.registry }}/{{ .Values.wso2.deployment.image.repository }}@{{ .Values.wso2.deployment.image.digest }}

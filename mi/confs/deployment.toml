@@ -123,6 +123,9 @@ transport_sender_keystore_key_password = {{ .Values.wso2.config.keyStore.transpo
 {{- if and (.Values.wso2.config.trustStore.transport) (.Values.wso2.config.trustStore.transport.sender) }}
 transport_sender_truststore_password = {{ .Values.wso2.config.trustStore.transport.sender.password | quote }}
 {{- end }}
+{{- if .Values.wso2.config.serviceCatalog }}
+service_catalog_password = {{ .Values.wso2.config.serviceCatalog.password | quote }}
+{{- end }}
 {{- end }}
 
 {{ if .Values.wso2.config.dashboard }}
@@ -184,5 +187,17 @@ file_name = "repository/resources/security/{{ .Values.wso2.config.trustStore.tra
 password = "$secret{transport_sender_truststore_password}"
 {{- else }}
 password = {{ .Values.wso2.config.trustStore.transport.sender.password | quote }}
+{{- end }}
+{{- end }}
+
+{{ if .Values.wso2.config.serviceCatalog }}
+[[service_catalog]]
+apim_host = {{ .Values.wso2.config.serviceCatalog.apimHost | quote }}
+enable = {{ .Values.wso2.config.serviceCatalog.enabled }}
+username = {{ .Values.wso2.config.serviceCatalog.username | quote }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+password = "$secret{service_catalog_password}"
+{{- else }}
+password = {{ .Values.wso2.config.serviceCatalog.password | quote }}
 {{- end }}
 {{- end }}

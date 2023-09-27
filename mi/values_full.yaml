@@ -169,8 +169,22 @@ wso2:
       # -- The node ID of the Micro Integrator deployment
       # @default -- pod name
       nodeId: ""
+    # -- Required if you want the Micro Integrator to publish integation services to the Service Catalog in the API Publisher (https://apim.docs.wso2.com/en/4.1.0/tutorials/integration-tutorials/service-catalog-tutorial/#step-3-configure-the-micro-integrator)
+    serviceCatalog:
+      # -- Enable/Disable service catalog
+      enabled: false
+      # -- API Manager runtime URL. (https://{hostname/ip}:{port})
+      apimHost: ""
+      # -- User name for signing in to the API Manager runtime
+      username: ""
+      # -- Password for signing in to the API Manager runtime
+      password: ""
   deployment:
     securityContext:
+      # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
+      apparmor: true
+      # -- Enable/Disable seccomp profile (https://kubernetes.io/docs/tutorials/security/seccomp/)
+      seccompProfile: true
       # -- The UID to run the entrypoint of the container process
       runAsUser: ""
     # -- Hostname of the Micro Integrator deployment

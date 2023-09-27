@@ -56,6 +56,11 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.config.keyStore.transport.sender.password | string | `""` | Transport sender keystore password |
 | wso2.config.portOffset | int | `10` | Port offset for Micro Integrator (https://apim.docs.wso2.com/en/latest/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/#changing-the-default-mi-ports) |
 | wso2.config.secureVault.enabled | bool | `false` | Enable/Disable secure vault |
+| wso2.config.serviceCatalog | object | `{"apimHost":"","enabled":false,"password":"","username":""}` | Required if you want the Micro Integrator to publish integation services to the Service Catalog in the API Publisher (https://apim.docs.wso2.com/en/4.1.0/tutorials/integration-tutorials/service-catalog-tutorial/#step-3-configure-the-micro-integrator) |
+| wso2.config.serviceCatalog.apimHost | string | `""` | API Manager runtime URL. (https://{hostname/ip}:{port}) |
+| wso2.config.serviceCatalog.enabled | bool | `false` | Enable/Disable service catalog |
+| wso2.config.serviceCatalog.password | string | `""` | Password for signing in to the API Manager runtime |
+| wso2.config.serviceCatalog.username | string | `""` | User name for signing in to the API Manager runtime |
 | wso2.config.trustStore.primary.fileName | string | `"client-truststore.jks"` | Primary truststore file name |
 | wso2.config.trustStore.primary.password | string | `""` | Primary truststore password |
 | wso2.config.trustStore.transport.listener.fileName | string | `"client-truststore.jks"` | Transport listener truststore file name |
@@ -105,7 +110,9 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.deployment.resources.limits.memory | string | `"1Gi"` | The maximum amount of memory that should be allocated for a Pod |
 | wso2.deployment.resources.requests.cpu | string | `"500m"` | The minimum amount of CPU that should be allocated for a Pod |
 | wso2.deployment.resources.requests.memory | string | `"512Mi"` | The minimum amount of memory that should be allocated for a Pod |
+| wso2.deployment.securityContext.apparmor | bool | `true` | Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/) |
 | wso2.deployment.securityContext.runAsUser | string | `""` | The UID to run the entrypoint of the container process |
+| wso2.deployment.securityContext.seccompProfile | bool | `true` | Enable/Disable seccomp profile (https://kubernetes.io/docs/tutorials/security/seccomp/) |
 | wso2.deployment.strategy.rollingUpdate.maxSurge | int | `1` | The maximum number of pods that can be scheduled above the desired number of pods. |
 | wso2.deployment.strategy.rollingUpdate.maxUnavailable | int | `0` | The maximum number of pods that can be unavailable during the update. |
 | wso2.deployment.synapseTest.enabled | bool | `false` | Enable/Disable synapse testing |

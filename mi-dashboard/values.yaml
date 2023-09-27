@@ -28,6 +28,10 @@ wso2:
     tlsSecret: ""
   deployment:
     securityContext:
+      # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
+      apparmor: true
+      # -- Enable/Disable seccomp profile (https://kubernetes.io/docs/tutorials/security/seccomp/)
+      seccompProfile: true
       # -- The UID to run the entrypoint of the container process
       runAsUser: ""
     # -- Hostname of the MI Dashboard deployment

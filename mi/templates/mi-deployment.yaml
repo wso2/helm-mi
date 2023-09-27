@@ -35,7 +35,9 @@ spec:
         checksum.mi.log4j2.properties: {{ include (print $.Template.BasePath "/mi-log4j2-conf.yaml") . | sha256sum }}
         checksum.mi.secret.properties: {{ include (print $.Template.BasePath "/mi-secret-conf.yaml") . | sha256sum }}
         checksum.mi.entrypoint.sh: {{ include (print $.Template.BasePath "/mi-conf-entrypoint.yaml") . | sha256sum }}
-        # container.apparmor.security.beta.kubernetes.io/wso2mi: "runtime/default"
+        {{- if .Values.wso2.deployment.securityContext.apparmor }}
+        container.apparmor.security.beta.kubernetes.io/wso2mi: "runtime/default"
+        {{- end }}
       labels:
         deployment: {{ template "resource.prefix" . }}-{{ .Release.Name }}
     spec:
@@ -44,8 +46,10 @@ spec:
       {{- end }}
       securityContext:
         runAsUser: {{ .Values.wso2.deployment.securityContext.runAsUser }}
+        {{- if .Values.wso2.deployment.securityContext.seccompProfile }}
         seccompProfile:
           type: RuntimeDefault
+        {{- end }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
