@@ -49,3 +49,11 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
+
+{{- define "cp-secret-to-password-tmp" -}}
+{{- if eq "azure" .Values.provider }}
+{{- printf "cp /mnt/secrets-store/%s ${WSO2_SERVER_HOME}/password-tmp" .Values.azure.keyVault.secretIdentifiers.internalKeystorePassword -}}
+{{- else if eq "aws" .Values.provider }}
+{{- printf "cp /mnt/secrets-store/%s ${WSO2_SERVER_HOME}/password-tmp" .Values.aws.secretManager.secretIdentifiers.internalKeystorePassword.secretKey -}}
+{{- end }}
+{{- end -}}

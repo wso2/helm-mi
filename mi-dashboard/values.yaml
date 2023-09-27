@@ -1,11 +1,13 @@
+# -- Kubernetes cluster provider. Supported values: azure, aws
+provider: ""
+# -- Container registry
+containerRegistry: ""
 # AWS service configurations
 aws:
   # -- AWS IAM serivce account name
   serviceAccountName: ""
-  # AWS Elastic Container Registry (ECR) configurations
-  ecr:
-    # -- AWS Elastic Container Registry
-    registry: ""
+  # -- AWS region
+  region: ""
   # AWS Secret Manager configurations
   secretManager:
     # -- AWS Secret Manager secret provider class name
@@ -16,6 +18,29 @@ aws:
         secretName: ""
         # -- Secret key for internal keystore password
         secretKey: ""
+# Azure service configurations
+azure:
+  keyVault:
+    # -- Name of the target Azure Key Vault instance
+    name: ""
+    secretProviderClass: ""
+    secretIdentifiers:
+      internalKeystorePassword: ""
+    activeDirectory:
+      # -- Service Principal created for transacting with the target Azure Key Vault
+      # For advanced details refer to official documentation (https://github.com/Azure/secrets-store-csi-driver-provider-azure/blob/master/docs/service-principal-mode.md)
+      servicePrincipal:
+        # -- Azure AD application name for fetching secrets via CSI secret store driver
+        appId: ""
+        # -- Client secret of Azure AD application client
+        clientSecret: ""
+      # -- Azure Active Directory tenant ID of the target Key Vault
+      tenantId: ""
+    resourceManager:
+      # -- Subscription ID of the target Azure Key Vault
+      subscriptionId: ""
+      # -- Name of the Azure Resource Group to which the target Azure Key Vault belongs
+      resourceGroup: ""
 wso2:
   ingress:
     # -- Enable Ingress for MI Dashboard

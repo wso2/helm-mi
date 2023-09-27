@@ -41,7 +41,7 @@ spec:
       labels:
         deployment: {{ template "resource.prefix" . }}-{{ .Release.Name }}
     spec:
-      {{- if .Values.aws.serviceAccountName }} 
+      {{- if and (eq "aws" .Values.provider) (.Values.aws.serviceAccountName) }}
       serviceAccountName: {{ .Values.aws.serviceAccountName }}
       {{- end }}
       securityContext:
@@ -64,7 +64,7 @@ spec:
                 topologyKey: topology.kubernetes.io/zone
       containers:
         - name: wso2mi-dashboard
-          image: {{ .Values.aws.ecr.registry }}/{{ .Values.wso2.deployment.image.repository }}@{{ .Values.wso2.deployment.image.digest }}
+          image: {{ .Values.containerRegistry }}/{{ .Values.wso2.deployment.image.repository }}@{{ .Values.wso2.deployment.image.digest }}
           imagePullPolicy: {{ .Values.wso2.deployment.image.pullPolicy }}
           startupProbe:
             exec:
@@ -158,8 +158,15 @@ spec:
           csi:
             driver: secrets-store.csi.k8s.io
             readOnly: true
+            {{- if eq "azure" .Values.provider }}
+            volumeAttributes:
+              secretProviderClass: {{ .Values.azure.keyVault.secretProviderClass }}
+            nodePublishSecretRef:
+              name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-secret-store-csi
+            {{- else if eq "aws" .Values.provider }}
             volumeAttributes:
               secretProviderClass: {{ .Values.aws.secretManager.secretProviderClass }}
+            {{- end }}
         - name: wso2mi-dashboard-entrypoint
           configMap:
             name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-dashboard-entrypoint

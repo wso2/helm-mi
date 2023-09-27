@@ -28,7 +28,7 @@ data:
     # copy any configuration changes mounted to config_volume
     test -d ${config_volume} && [[ "$(ls -A ${config_volume})" ]] && cp -RL ${config_volume}/* ${WSO2_SERVER_HOME}/
     # copy internal keystore credentials to password-tmp file for cipher-tool usage
-    cp /mnt/secrets-store/{{ .Values.aws.secretManager.secretIdentifiers.internalKeystorePassword.secretKey }} ${WSO2_SERVER_HOME}/password-tmp
+    {{ template "cp-secret-to-password-tmp" . }}
     # start WSO2 server
     sh ${WSO2_SERVER_HOME}/bin/dashboard.sh "$@"
 {{- end }}
