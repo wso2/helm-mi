@@ -36,7 +36,7 @@ spec:
         checksum.mi.dashboard.secret.properties: {{ include (print $.Template.BasePath "/mi-dashboard-secret-conf.yaml") . | sha256sum }}
         checksum.mi.dashboard.entrypoint.sh: {{ include (print $.Template.BasePath "/mi-dashboard-conf-entrypoint.yaml") . | sha256sum }}
         {{- if .Values.wso2.deployment.securityContext.apparmor }}
-        container.apparmor.security.beta.kubernetes.io/wso2mi: "runtime/default"
+        container.apparmor.security.beta.kubernetes.io/wso2mi-dashboard: "runtime/default"
         {{- end }}
       labels:
         deployment: {{ template "resource.prefix" . }}-{{ .Release.Name }}
