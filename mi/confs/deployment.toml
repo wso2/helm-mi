@@ -417,3 +417,15 @@ port = {{ .Values.wso2.config.opentelemetry.port | quote }}
 url = {{ .Values.wso2.config.opentelemetry.url | quote }}
 {{- end }}
 {{- end }}
+
+{{ if .Values.wso2.config.analytics }}
+[analytics]
+enabled = {{ .Values.wso2.config.analytics.enabled }}
+publisher = {{ .Values.wso2.config.analytics.publisher | quote }}
+id = {{ .Values.wso2.config.analytics.id | quote }}
+prefix = {{ .Values.wso2.config.analytics.prefix | quote }}
+api_analytics.enabled = {{ .Values.wso2.config.analytics.apiAnalytics }}
+proxy_service_analytics.enabled = {{ .Values.wso2.config.analytics.proxyServiceAnalytics }}
+sequence_analytics.enabled = {{ .Values.wso2.config.analytics.sequenceAnalytics }}
+endpoint_analytics.enabled = {{ .Values.wso2.config.analytics.endpointAnalytics }}
+{{- end }}

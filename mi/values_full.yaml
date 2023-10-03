@@ -280,6 +280,23 @@ wso2:
       port:
       # -- Url of the OpenTelemetry tracing system. Instead of ‘host’ and ‘port’, ‘url’ can be used
       url:
+    analytics:
+      # -- Enable/Disable analytics
+      enabled: false
+      # -- Analytics publisher (Publisher types supported are log and databridge)
+      publisher: "log"
+      # -- An identifier that will be published with the analytic
+      id: ""
+      # -- Prefix added when Elasticsearch analytics are being published
+      prefix: "SYNAPSE_ANALYTICS_DATA"
+      # -- Enable/Disable publishing API analytics data
+      apiAnalytics: true
+      # -- Enable/Disable publishing proxy service analytics data
+      proxyServiceAnalytics: true
+      # -- Enable/Disable publishing sequence analytics data
+      sequenceAnalytics: true
+      # -- Enable/Disable publishing endpoint analytics data
+      endpointAnalytics: true
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)

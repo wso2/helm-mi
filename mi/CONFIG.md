@@ -27,6 +27,14 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.config.admin.createAdminAccount | bool | `false` | Create super admin account |
 | wso2.config.admin.password | string | `""` | Super admin password |
 | wso2.config.admin.username | string | `""` | Super admin username |
+| wso2.config.analytics.apiAnalytics | bool | `true` | Enable/Disable publishing API analytics data |
+| wso2.config.analytics.enabled | bool | `false` | Enable/Disable analytics |
+| wso2.config.analytics.endpointAnalytics | bool | `true` | Enable/Disable publishing endpoint analytics data |
+| wso2.config.analytics.id | string | `""` | An identifier that will be published with the analytic |
+| wso2.config.analytics.prefix | string | `"SYNAPSE_ANALYTICS_DATA"` | Prefix added when Elasticsearch analytics are being published |
+| wso2.config.analytics.proxyServiceAnalytics | bool | `true` | Enable/Disable publishing proxy service analytics data |
+| wso2.config.analytics.publisher | string | `"log"` | Analytics publisher (Publisher types supported are log and databridge) |
+| wso2.config.analytics.sequenceAnalytics | bool | `true` | Enable/Disable publishing sequence analytics data |
 | wso2.config.coordination | object | `{"nodeId":"","rdbms":{"jdbc":{"driver":"","poolParameters":null},"password":"","url":"","username":""}}` | Enable/Disable coordination |
 | wso2.config.coordination.nodeId | string | `""` | Node ID for coordination |
 | wso2.config.coordination.rdbms.jdbc.driver | string | `""` | JDBC driver class name of the Coordination Database |
