@@ -297,6 +297,78 @@ wso2:
       sequenceAnalytics: true
       # -- Enable/Disable publishing endpoint analytics data
       endpointAnalytics: true
+    # -- (list) List of synapse handlers with the name and the implementation class
+    synapseHandlers:
+    - name: ""
+      class: ""
+    messageFormatters:
+      # -- (list) Required for configuring the message formatting implementation that is used for formatting messages that are sent out of the Micro Integrator in non-blocking mode
+      nonBlocking:
+        formUrlencoded: "org.apache.synapse.commons.formatters.XFormURLEncodedFormatter"
+        multipartFormData: "org.apache.axis2.transport.http.MultipartFormDataFormatter"
+        applicationXml: "org.apache.axis2.transport.http.ApplicationXMLFormatter"
+        textXml: "org.apache.axis2.transport.http.SOAPMessageFormatter"
+        soapXml: "org.apache.axis2.transport.http.SOAPMessageFormatter"
+        textPlain: "org.apache.axis2.format.PlainTextFormatter"
+        applicationJson: "org.wso2.micro.integrator.core.json.JsonStreamFormatter"
+        jsonBadgerfish: "org.apache.axis2.json.JSONBadgerfishMessageFormatter"
+        textJavascript: "org.apache.axis2.json.JSONMessageFormatter"
+        octetStream: "org.wso2.carbon.relay.ExpandingMessageFormatter"
+        applicationBinary: "org.apache.axis2.format.BinaryFormatter"
+      # -- (list) Required for configuring the message formatting implementation that is used for formatting messages that are sent out of the Micro Integrator in blocking mode
+      blocking:
+        formUrlencoded: "org.apache.synapse.commons.formatters.XFormURLEncodedFormatter"
+        multipartFormData: "org.apache.axis2.transport.http.MultipartFormDataFormatter"
+        applicationXml: "org.apache.axis2.transport.http.ApplicationXMLFormatter"
+        textXml: "org.apache.axis2.transport.http.SOAPMessageFormatter"
+        soapXml: "org.apache.axis2.transport.http.SOAPMessageFormatter"
+        textPlain: "org.apache.axis2.format.PlainTextFormatter"
+        applicationJson: "org.wso2.micro.integrator.core.json.JsonStreamFormatter"
+        jsonBadgerfish: "org.apache.axis2.json.JSONBadgerfishMessageFormatter"
+        textJavascript: "org.apache.axis2.json.JSONMessageFormatter"
+        octetStream: "org.wso2.carbon.relay.ExpandingMessageFormatter"
+        applicationBinary: "org.apache.axis2.format.BinaryFormatter"
+      custom:
+        # -- (list) List of custom message formatter implementation class and the selected content types to which the formatter should apply in non-blocking mode
+        nonBlocking:
+        - contentType: ""
+          class: ""
+        # -- (list) List of custom message formatter implementation class and the selected content types to which the formatter should apply in blocking mode
+        blocking:
+        - contentType: ""
+          class: ""
+    messageBuilders:
+      # -- (list) Required for configuring the message builder implementation that is used to build messages that are received by the Micro Integrator in non-blocking mode
+      nonBlocking:
+        applicationXml: "org.apache.axis2.builder.ApplicationXMLBuilder"
+        formUrlencoded: "org.apache.synapse.commons.builders.XFormURLEncodedBuilder"
+        multipartFormData: "org.apache.axis2.builder.MultipartFormDataBuilder"
+        textPlain: "org.apache.axis2.format.PlainTextBuilder"
+        applicationJson: "org.wso2.micro.integrator.core.json.JsonStreamBuilder"
+        jsonBadgerfish: "org.apache.axis2.json.JSONBadgerfishOMBuilder"
+        textJavascript: "org.apache.axis2.json.JSONBuilder"
+        octetStream: "org.wso2.carbon.relay.BinaryRelayBuilder"
+        applicationBinary: "org.apache.axis2.format.BinaryBuilder"
+      # -- (list) Required for configuring the message builder implementation that is used to build messages that are received by the Micro Integrator in blocking mode
+      blocking:
+        applicationXml: "org.apache.axis2.builder.ApplicationXMLBuilder"
+        formUrlencoded: "org.apache.synapse.commons.builders.XFormURLEncodedBuilder"
+        multipartFormData: "org.apache.axis2.builder.MultipartFormDataBuilder"
+        textPlain: "org.apache.axis2.format.PlainTextBuilder"
+        applicationJson: "org.wso2.micro.integrator.core.json.JsonStreamBuilder"
+        jsonBadgerfish: "org.apache.axis2.json.JSONBadgerfishOMBuilder"
+        textJavascript: "org.apache.axis2.json.JSONBuilder"
+        octetStream: "org.wso2.carbon.relay.BinaryRelayBuilder"
+        applicationBinary: "org.apache.axis2.format.BinaryBuilder"
+      custom:
+        # -- (list) List of custom message builder implementation class and the selected content types to which the builder should apply in non-blocking mode
+        nonBlocking:
+        - contentType: ""
+          class: ""
+        # -- (list) List of custom message builder implementation class and the selected content types to which the builder should apply in blocking mode
+        blocking:
+        - contentType: ""
+          class: ""
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
