@@ -295,3 +295,125 @@ parameter.{{ $key }} = {{ $value }}
 {{- end }}
 {{- end }}
 {{- end }}
+
+{{- if .Values.wso2.config.mediation }}
+[mediation]
+{{- if .Values.wso2.config.mediation.synapse }}
+{{- if .Values.wso2.config.mediation.synapse.coreThreads }}
+synapse.core_threads = {{ .Values.wso2.config.mediation.synapse.coreThreads }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.synapse.maxThreads }}
+synapse.max_threads = {{ .Values.wso2.config.mediation.synapse.maxThreads }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.synapse.threadsQueueLength }}
+synapse.threads_queue_length = {{ .Values.wso2.config.mediation.synapse.threadsQueueLength }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.synapse.globalTimeoutInterval }}
+synapse.global_timeout_interval = {{ .Values.wso2.config.mediation.synapse.globalTimeoutInterval }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.synapse.enableXpathDomFailover }}
+synapse.enable_xpath_dom_failover = {{ .Values.wso2.config.mediation.synapse.enableXpathDomFailover }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.synapse.tempDataChunkSize }}
+synapse.temp_data_chunk_size = {{ .Values.wso2.config.mediation.synapse.tempDataChunkSize }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.synapse.commandDebuggerPort }}
+synapse.command_debugger_port = {{ .Values.wso2.config.mediation.synapse.commandDebuggerPort }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.synapse.eventDebuggerPort }}
+synapse.event_debugger_port = {{ .Values.wso2.config.mediation.synapse.eventDebuggerPort }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.synapse.scriptMediatorPoolSize }}
+synapse.script_mediator_pool_size = {{ .Values.wso2.config.mediation.synapse.scriptMediatorPoolSize }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.synapse.enableXmlNil }}
+synapse.enable_xml_nil = {{ .Values.wso2.config.mediation.synapse.enableXmlNil }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.synapse.disableAutoPrimitiveRegex }}
+synapse.disable_auto_primitive_regex = {{ .Values.wso2.config.mediation.synapse.disableAutoPrimitiveRegex | quote }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.synapse.disableCustomReplaceRegex }}
+synapse.disable_custom_replace_regex = {{ .Values.wso2.config.mediation.synapse.disableCustomReplaceRegex | quote }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.synapse.enableNamespaceDeclaration }}
+synapse.enable_namespace_declaration = {{ .Values.wso2.config.mediation.synapse.enableNamespaceDeclaration }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.synapse.buildValidNcName }}
+synapse.build_valid_nc_name = {{ .Values.wso2.config.mediation.synapse.buildValidNcName }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.synapse.enableAutoPrimitive }}
+synapse.enable_auto_primitive = {{ .Values.wso2.config.mediation.synapse.enableAutoPrimitive }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.synapse.jsonOutAutoArray }}
+synapse.json_out_auto_array = {{ .Values.wso2.config.mediation.synapse.jsonOutAutoArray }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.synapse.preserveNamespaceOnXmlToJson }}
+synapse.preserve_namespace_on_xml_to_json = {{ .Values.wso2.config.mediation.synapse.preserveNamespaceOnXmlToJson }}
+{{- end }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.flow }}
+{{- if .Values.wso2.config.mediation.flow.statistics }}
+{{- if .Values.wso2.config.mediation.flow.statistics.enable }}
+flow.statistics.enable = {{ .Values.wso2.config.mediation.flow.statistics.enable }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.flow.statistics.captureAll }}
+flow.statistics.capture_all = {{ .Values.wso2.config.mediation.flow.statistics.captureAll }}
+{{- end }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.flow.tracer }}
+{{- if .Values.wso2.config.mediation.flow.tracer.collectPayloads }}
+stat.tracer.collect_payloads = {{ .Values.wso2.config.mediation.flow.tracer.collectPayloads }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.flow.tracer.collectMediationProperties }}
+stat.tracer.collect_mediation_properties = {{ .Values.wso2.config.mediation.flow.tracer.collectMediationProperties }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.statistics }}
+{{- if .Values.wso2.config.mediation.statistics.enableClean }}
+statistics.enable_clean = {{ .Values.wso2.config.mediation.statistics.enableClean }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.statistics.cleanInterval }}
+statistics.clean_interval = {{ .Values.wso2.config.mediation.statistics.cleanInterval }}
+{{- end }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.inbound }}
+{{- if .Values.wso2.config.mediation.inbound.coreThreads }}
+inbound.core_threads = {{ .Values.wso2.config.mediation.inbound.coreThreads }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.inbound.maxThreads }}
+inbound.max_threads = {{ .Values.wso2.config.mediation.inbound.maxThreads }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.inbound.portOffsetEnable }}
+inbound.port_offset_enable = {{ .Values.wso2.config.mediation.inbound.portOffsetEnable }}
+{{- end }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.internalHttpApiEnable }}
+internal_http_api_enable = {{ .Values.wso2.config.mediation.internalHttpApiEnable }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.internalHttpApiPort }}
+internal_http_api_port = {{ .Values.wso2.config.mediation.internalHttpApiPort }}
+{{- end }}
+{{- if .Values.wso2.config.mediation.internalHttpsApiPort }}
+internal_https_api_port = {{ .Values.wso2.config.mediation.internalHttpsApiPort }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.wso2.config.opentelemetry }}
+[opentelemetry]
+{{- if .Values.wso2.config.opentelemetry.enable }}
+enable = {{ .Values.wso2.config.opentelemetry.enable }}
+{{- end }}
+{{- if .Values.wso2.config.opentelemetry.type }}
+type = {{ .Values.wso2.config.opentelemetry.type | quote }}
+{{- end }}
+{{- if .Values.wso2.config.opentelemetry.host }}
+host = {{ .Values.wso2.config.opentelemetry.host | quote }}
+{{- end }}
+{{- if .Values.wso2.config.opentelemetry.port }}
+port = {{ .Values.wso2.config.opentelemetry.port | quote }}
+{{- end }}
+{{- if .Values.wso2.config.opentelemetry.url }}
+url = {{ .Values.wso2.config.opentelemetry.url | quote }}
+{{- end }}
+{{- end }}

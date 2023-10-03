@@ -232,6 +232,54 @@ wso2:
         - jndiName: ""
           # -- Actual queue name
           physicalName: ""
+    # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#message-mediation
+    mediation:
+      synapse:
+        coreThreads: 20
+        maxThreads: 100
+        threadsQueueLength: 10
+        globalTimeoutInterval: 120000
+        enableXpathDomFailover: true
+        tempDataChunkSize: 3072
+        commandDebuggerPort: 9005
+        eventDebuggerPort: 9006
+        scriptMediatorPoolSize: 15
+        enableXmlNil: false
+        disableAutoPrimitiveRegex: "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$"
+        disableCustomReplaceRegex: "@@@"
+        enableNamespaceDeclaration: false
+        buildValidNcName: false
+        enableAutoPrimitive: false
+        jsonOutAutoArray: false
+        preserveNamespaceOnXmlToJson: false
+      statistics:
+        enableClean: true
+        cleanInterval: 1000
+      flow:
+        statistics:
+          enable: false
+          captureAll: false
+        tracer:
+          collectPayloads: false
+          collectMediationProperties: false
+      inbound:
+        coreThreads: 20
+        maxThreads: 100
+        portOffsetEnable: false
+      internalHttpApiEnable: true
+      internalHttpApiPort: 9191
+      internalHttpsApiPort: 9154
+    opentelemetry:
+      # -- Enable/Disable OpenTelemetry
+      enable: false
+      # -- OpenTelemetry tracing system. Supported values: jaeger, zipkin, log and otlp
+      type:
+      # -- Hostname of the OpenTelemetry tracing system
+      host:
+      # -- Port of the OpenTelemetry tracing system
+      port:
+      # -- Url of the OpenTelemetry tracing system. Instead of ‘host’ and ‘port’, ‘url’ can be used
+      url:
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)

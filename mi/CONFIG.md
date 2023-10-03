@@ -54,6 +54,40 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.config.keyStore.transport.sender.fileName | string | `"wso2carbon.jks"` | Transport sender keystore file name |
 | wso2.config.keyStore.transport.sender.keyPassword | string | `""` | Transport sender keystore key password |
 | wso2.config.keyStore.transport.sender.password | string | `""` | Transport sender keystore password |
+| wso2.config.mediation.flow.statistics.captureAll | bool | `false` |  |
+| wso2.config.mediation.flow.statistics.enable | bool | `false` |  |
+| wso2.config.mediation.flow.tracer.collectMediationProperties | bool | `false` |  |
+| wso2.config.mediation.flow.tracer.collectPayloads | bool | `false` |  |
+| wso2.config.mediation.inbound.coreThreads | int | `20` |  |
+| wso2.config.mediation.inbound.maxThreads | int | `100` |  |
+| wso2.config.mediation.inbound.portOffsetEnable | bool | `false` |  |
+| wso2.config.mediation.internalHttpApiEnable | bool | `true` |  |
+| wso2.config.mediation.internalHttpApiPort | int | `9191` |  |
+| wso2.config.mediation.internalHttpsApiPort | int | `9154` |  |
+| wso2.config.mediation.statistics.cleanInterval | int | `1000` |  |
+| wso2.config.mediation.statistics.enableClean | bool | `true` |  |
+| wso2.config.mediation.synapse.buildValidNcName | bool | `false` |  |
+| wso2.config.mediation.synapse.commandDebuggerPort | int | `9005` |  |
+| wso2.config.mediation.synapse.coreThreads | int | `20` |  |
+| wso2.config.mediation.synapse.disableAutoPrimitiveRegex | string | `"^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$"` |  |
+| wso2.config.mediation.synapse.disableCustomReplaceRegex | string | `"@@@"` |  |
+| wso2.config.mediation.synapse.enableAutoPrimitive | bool | `false` |  |
+| wso2.config.mediation.synapse.enableNamespaceDeclaration | bool | `false` |  |
+| wso2.config.mediation.synapse.enableXmlNil | bool | `false` |  |
+| wso2.config.mediation.synapse.enableXpathDomFailover | bool | `true` |  |
+| wso2.config.mediation.synapse.eventDebuggerPort | int | `9006` |  |
+| wso2.config.mediation.synapse.globalTimeoutInterval | int | `120000` |  |
+| wso2.config.mediation.synapse.jsonOutAutoArray | bool | `false` |  |
+| wso2.config.mediation.synapse.maxThreads | int | `100` |  |
+| wso2.config.mediation.synapse.preserveNamespaceOnXmlToJson | bool | `false` |  |
+| wso2.config.mediation.synapse.scriptMediatorPoolSize | int | `15` |  |
+| wso2.config.mediation.synapse.tempDataChunkSize | int | `3072` |  |
+| wso2.config.mediation.synapse.threadsQueueLength | int | `10` |  |
+| wso2.config.opentelemetry.enable | bool | `false` | Enable/Disable OpenTelemetry |
+| wso2.config.opentelemetry.host | string | `nil` | Hostname of the OpenTelemetry tracing system |
+| wso2.config.opentelemetry.port | string | `nil` | Port of the OpenTelemetry tracing system |
+| wso2.config.opentelemetry.type | string | `nil` | OpenTelemetry tracing system. Supported values: jaeger, zipkin, log and otlp |
+| wso2.config.opentelemetry.url | string | `nil` | Url of the OpenTelemetry tracing system. Instead of ‘host’ and ‘port’, ‘url’ can be used |
 | wso2.config.portOffset | int | `10` | Port offset for Micro Integrator (https://apim.docs.wso2.com/en/latest/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/#changing-the-default-mi-ports) |
 | wso2.config.secureVault.enabled | bool | `false` | Enable/Disable secure vault |
 | wso2.config.serviceCatalog | object | `{"apimHost":"","enabled":false,"password":"","username":""}` | Required if you want the Micro Integrator to publish integation services to the Service Catalog in the API Publisher (https://apim.docs.wso2.com/en/4.1.0/tutorials/integration-tutorials/service-catalog-tutorial/#step-3-configure-the-micro-integrator) |

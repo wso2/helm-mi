@@ -122,3 +122,25 @@ wso2:
             username: "<USERNAME>"
             password: "<PASSWORD>"
 ```
+
+## Monitoring with OpenTelemetry
+
+Below configurations can be used to enable and view traces through Jaeger.
+
+```yaml
+wso2:
+  config:
+    config:
+    opentelemetry:
+      enable: true
+      type: "jaeger"
+      host: "<hostname-of-jaeger>"
+      port: 14250
+    mediation:
+      flow:
+        statistics:
+          captureAll: true
+        tracer:
+          collectPayloads: true
+          collectMediationProperties: true
+```
