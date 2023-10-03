@@ -232,6 +232,90 @@ wso2:
         - jndiName: ""
           # -- Actual queue name
           physicalName: ""
+      http:
+        # -- This is the maximum period of inactivity between two consecutive data packets, specified in milliseconds
+        socketTimeout: 180000
+        # -- number of core threads used by the executor pool
+        coreWorkerPoolSize: 400
+        # -- This is the maximum number of threads in the worker thread pool
+        maxWorkerPoolSize: 400
+        # -- Defines the length of the queue that is used to hold runnable tasks to be executed by the worker pool
+        workerPoolQueueLength: -1
+        # -- Memory buffer allocated when reading data into the memory from the underlying socket/file channels
+        ioBufferSize: 16384
+        # -- Maximum number of connections allowed per host port
+        maxHttpConnectionPerHostPort: 32767
+        # -- Preserves the HTTP user agent header
+        preserveHttpUserAgent: false
+        preserveHttpServerName: true
+        # -- Header field/s of messages passing through the EI that need to be preserved
+        preserveHttpHeaders: ["Content-Type"]
+        # -- Enables/disables backend HTTP connection close after the request is served
+        disableConnectionKeepalive: false
+        # -- If this property is enabled and the payload exceeds the size specified by the 'maxMessageSizeBytes' property, the Micro Integrator will discontinue reading the input stream
+        enableMessageSizeValidation: false
+        # -- If the size of the payload exceeds this value, the Micro Integrator will discontinue reading the input stream. Only applicable if the enableMessageSizeValidation property is enabled
+        maxMessageSizeBytes: 2147483647
+        # -- Restrict the number of simultaneously opened connections
+        maxOpenConnections: -1
+        # -- This property validates badly formed XML messages by building the whole XML document
+        forceXmlValidation: false
+        # -- Validates JSON messages by parsing the input message
+        forceJsonValidation: false
+        reverseProxyMode: false
+        listener:
+          enable: true
+          port: 8280
+          wsdlEprPrefix: ""
+          bindAddress: ""
+          securedEnable: true
+          securedPort: 8243
+          securedWsdlEprPrefix: ""
+          securedBindAddress: ""
+          securedProtocols: "TLSv1,TLSv1.1,TLSv1.2"
+          verifyClient: ""
+          preferredCiphers: "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256"
+          certificateRevocationVerifierEnable: false
+          certificateRevocationCacheSize: 1024
+          certificateRevocationCacheDelay: 1000
+          sslProfile:
+            filePath: "conf/sslprofiles/listenerprofiles.xml"
+            readInterval: 3600000
+          keystore:
+            fileName: "wso2carbon.jks"
+            type: "JKS"
+            password: ""
+            keyPassword: ""
+          truststore:
+            fileName: "client-truststore.jks"
+            type: "JKS"
+            password: ""
+        sender:
+          enable: true
+          warnOnHttp500: ""
+          proxyHost: ""
+          proxyPort:
+          securedProxyHost: ""
+          securedProxyPort:
+          nonProxyHosts: ""
+          hostnameVerifier: ""
+          securedProtocols: ""
+          certificateRevocationVerifierEnable: false
+          certificateRevocationCacheSize: 1024
+          certificateRevocationCacheDelay: 1000
+          securedEnable: true
+          sslProfile:
+            filePath: "conf/sslprofiles/senderprofiles.xml"
+            readInterval: 600000
+          keystore:
+            fileName: "wso2carbon.jks"
+            type: "JKS"
+            password: ""
+            keyPassword: ""
+          truststore:
+            fileName: "client-truststore.jks"
+            type: "JKS"
+            password: ""
     # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#message-mediation
     mediation:
       synapse:
