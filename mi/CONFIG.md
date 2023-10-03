@@ -61,6 +61,27 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.config.serviceCatalog.enabled | bool | `false` | Enable/Disable service catalog |
 | wso2.config.serviceCatalog.password | string | `""` | Password for signing in to the API Manager runtime |
 | wso2.config.serviceCatalog.username | string | `""` | User name for signing in to the API Manager runtime |
+| wso2.config.transport.jms.listener | list | `[{"name":"","parameters":{"initial_naming_factory":"","provider_url":"","session_transaction":true}}]` | JMS Listener configurations |
+| wso2.config.transport.jms.listener[0] | object | `{"name":"","parameters":{"initial_naming_factory":"","provider_url":"","session_transaction":true}}` | JMS Listener name |
+| wso2.config.transport.jms.listener[0].parameters | object | `{"initial_naming_factory":"","provider_url":"","session_transaction":true}` | JMS Listener parameters |
+| wso2.config.transport.jms.sender | list | `[{"name":"","parameters":{"initial_naming_factory":"","provider_url":""}}]` | JMS Sender configurations |
+| wso2.config.transport.jms.sender[0] | object | `{"name":"","parameters":{"initial_naming_factory":"","provider_url":""}}` | JMS Sender name |
+| wso2.config.transport.jms.sender[0].parameters | object | `{"initial_naming_factory":"","provider_url":""}` | JMS Sender parameters |
+| wso2.config.transport.jndi.connectionFactories | list | `[{"name":"","url":""}]` | List of JNDI connection factories |
+| wso2.config.transport.jndi.connectionFactories[0] | object | `{"name":"","url":""}` | JNDI connection factory name |
+| wso2.config.transport.jndi.connectionFactories[0].url | string | `""` | JNDI connection factory url |
+| wso2.config.transport.jndi.queue | list | `[{"jndiName":"","physicalName":""}]` | List of queues that are defined in the JMS broker |
+| wso2.config.transport.jndi.queue[0] | object | `{"jndiName":"","physicalName":""}` | JNDI queue name |
+| wso2.config.transport.jndi.queue[0].physicalName | string | `""` | Actual queue name |
+| wso2.config.transport.jndi.topic | list | `[{"jndiName":"","physicalName":""}]` | List of topics that are defined in the JMS broker |
+| wso2.config.transport.jndi.topic[0] | object | `{"jndiName":"","physicalName":""}` | JNDI topic name |
+| wso2.config.transport.jndi.topic[0].physicalName | string | `""` | Actual topic name |
+| wso2.config.transport.rabbitmq.listener | list | `[{"name":"","parameters":null}]` | RabbitMQ Listener configurations |
+| wso2.config.transport.rabbitmq.listener[0] | object | `{"name":"","parameters":null}` | RabbitMQ Listener name |
+| wso2.config.transport.rabbitmq.listener[0].parameters | list | `nil` | RabbitMQ Listener parameters (https://apim.docs.wso2.com/en/4.1.0/reference/config-catalog-mi/#rabbitmq-listener) |
+| wso2.config.transport.rabbitmq.sender | list | `[{"name":"","parameters":null}]` | RabbitMQ Sender configurations |
+| wso2.config.transport.rabbitmq.sender[0] | object | `{"name":"","parameters":null}` | RabbitMQ Sender name |
+| wso2.config.transport.rabbitmq.sender[0].parameters | list | `nil` | RabbitMQ Sender parameters (https://apim.docs.wso2.com/en/4.1.0/reference/config-catalog-mi/#rabbitmq-sender) |
 | wso2.config.trustStore.primary.fileName | string | `"client-truststore.jks"` | Primary truststore file name |
 | wso2.config.trustStore.primary.password | string | `""` | Primary truststore password |
 | wso2.config.trustStore.transport.listener.fileName | string | `"client-truststore.jks"` | Transport listener truststore file name |

@@ -104,3 +104,21 @@ wso2:
     dashboard:
       url: "https://private-cloud-mi-dash-1:9743/dashboard/api/"
 ```
+
+## Enabling RabbitMQ Listener
+
+Following sample configuration shows how to configure WSO2 Micro Integrator to connect with RabbitMQ listener. Similar configurations can be used to configure JMS transport listeners as well.
+
+```yaml
+wso2:
+  config:
+    transport:
+      rabbitmq:
+        listener:
+        - name: "AMQPConnectionFactory"
+          parameters:
+            hostname: "<HOST_NAME>"
+            port: 5672
+            username: "<USERNAME>"
+            password: "<PASSWORD>"
+```

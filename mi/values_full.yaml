@@ -181,6 +181,57 @@ wso2:
       username: ""
       # -- Password for signing in to the API Manager runtime
       password: ""
+    transport:
+      rabbitmq:
+        # -- RabbitMQ Sender configurations
+        sender:
+        # -- RabbitMQ Sender name
+        - name: ""
+          # -- (list) RabbitMQ Sender parameters (https://apim.docs.wso2.com/en/4.1.0/reference/config-catalog-mi/#rabbitmq-sender)
+          parameters:
+        # -- RabbitMQ Listener configurations
+        listener:
+        # -- RabbitMQ Listener name
+        - name: ""
+          # -- (list) RabbitMQ Listener parameters (https://apim.docs.wso2.com/en/4.1.0/reference/config-catalog-mi/#rabbitmq-listener)
+          parameters:
+      jms:
+        # -- JMS Sender configurations
+        sender:
+        # -- JMS Sender name
+        - name: ""
+          # -- JMS Sender parameters
+          parameters:
+            initial_naming_factory: ""
+            provider_url: ""
+        # -- JMS Listener configurations
+        listener:
+        # -- JMS Listener name
+        - name: ""
+          # -- JMS Listener parameters
+          parameters:
+            initial_naming_factory: ""
+            provider_url: ""
+            session_transaction: true
+      jndi:
+        # -- List of JNDI connection factories
+        connectionFactories:
+        # -- JNDI connection factory name
+        - name: ""
+          # -- JNDI connection factory url
+          url: ""
+        # -- List of topics that are defined in the JMS broker
+        topic:
+        # -- JNDI topic name
+        - jndiName: ""
+          # -- Actual topic name
+          physicalName: ""
+        # -- List of queues that are defined in the JMS broker
+        queue:
+        # -- JNDI queue name
+        - jndiName: ""
+          # -- Actual queue name
+          physicalName: ""
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)

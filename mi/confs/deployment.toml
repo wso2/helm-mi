@@ -201,3 +201,97 @@ password = "$secret{service_catalog_password}"
 password = {{ .Values.wso2.config.serviceCatalog.password | quote }}
 {{- end }}
 {{- end }}
+
+{{- if .Values.wso2.config.transport }}
+{{- if .Values.wso2.config.transport.jms }}
+[transport.jms]
+{{- if .Values.wso2.config.transport.jms.sender }}
+sender_enable = true
+{{- end }}
+{{- if .Values.wso2.config.transport.jms.listener }}
+listener_enable = true
+{{- end }}
+
+{{- range $key, $value := .Values.wso2.config.transport.jms.sender }}
+[[transport.jms.sender]]
+name = {{ $value.name | quote }}
+{{- range $key, $value := $value.parameters }}
+{{ if typeIs "string" $value }}
+parameter.{{ $key }} = {{ $value | quote }}
+{{- else }}
+parameter.{{ $key }} = {{ $value }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- range $key, $value := .Values.wso2.config.transport.jms.listener }}
+[[transport.jms.listener]]
+name = {{ $value.name | quote }}
+{{- range $key, $value := $value.parameters }}
+{{ if typeIs "string" $value }}
+parameter.{{ $key }} = {{ $value | quote }}
+{{- else }}
+parameter.{{ $key }} = {{ $value }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- end }}
+
+{{- if .Values.wso2.config.transport.jndi }}
+{{- if .Values.wso2.config.transport.jndi.connectionFactories }}
+[transport.jndi.connection_factories]
+{{- range $key, $value := .Values.wso2.config.transport.jndi.connectionFactories }}
+{{ $value.name }} = {{ $value.url | quote }}
+{{- end }}
+{{- end}}
+
+{{- if .Values.wso2.config.transport.jndi.queue }}
+[transport.jndi.queue]
+{{- range $key, $value := .Values.wso2.config.transport.jndi.queue }}
+{{ $value.jndiName }} = {{ $value.physicalName | quote }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.wso2.config.transport.jndi.topic }}
+[transport.jndi.topic]
+{{- range $key, $value := .Values.wso2.config.transport.jndi.topic }}
+{{ $value.jndiName }} = {{ $value.physicalName | quote }}
+{{- end }}
+{{- end }}
+
+{{- end}}
+{{- if .Values.wso2.config.transport.rabbitmq }}
+[transport.rabbitmq]
+{{- if .Values.wso2.config.transport.rabbitmq.sender }}
+sender_enable = true
+{{ end }}
+{{- if .Values.wso2.config.transport.rabbitmq.listener }}
+listener_enable = true
+{{ end }}
+
+{{- range $key, $value := .Values.wso2.config.transport.rabbitmq.sender }}
+[[transport.rabbitmq.sender]]
+name = {{ $value.name | quote }}
+{{- range $key, $value := $value.parameters }}
+{{ if typeIs "string" $value }}
+parameter.{{ $key }} = {{ $value | quote }}
+{{- else }}
+parameter.{{ $key }} = {{ $value }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- range $key, $value := .Values.wso2.config.transport.rabbitmq.listener }}
+[[transport.rabbitmq.listener]]
+name = {{ $value.name | quote }}
+{{- range $key, $value := $value.parameters }}
+{{- if typeIs "string" $value }}
+parameter.{{ $key }} = {{ $value | quote }}
+{{- else }}
+parameter.{{ $key }} = {{ $value }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
