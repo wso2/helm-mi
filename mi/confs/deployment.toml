@@ -6,6 +6,106 @@ offset  = {{ .Values.wso2.config.portOffset }}
 {{- if .Values.wso2.config.userstore.rdbms }}
 class = "org.wso2.micro.integrator.security.user.core.jdbc.JDBCUserStoreManager"
 type = "database"
+{{ else if .Values.wso2.config.userstore.ldap }}
+{{- if .Values.wso2.config.userStore.ldap.type }}
+type = {{ .Values.wso2.config.userStore.ldap.type | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.class }}
+class = {{ .Values.wso2.config.userStore.ldap.class | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.connectionUrl }}
+connection_url = {{ .Values.wso2.config.userStore.ldap.connectionUrl | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.connectionName }}
+connection_name = {{ .Values.wso2.config.userStore.ldap.connectionName | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.connectionPassword }}
+connection_password = {{ .Values.wso2.config.userStore.ldap.connectionPassword | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.anonymousBind }}
+anonymous_bind = {{ .Values.wso2.config.userStore.ldap.anonymousBind }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.userSearchBase }}
+user_search_base = {{ .Values.wso2.config.userStore.ldap.userSearchBase | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.userNameAttribute }}
+user_name_attribute = {{ .Values.wso2.config.userStore.ldap.userNameAttribute | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.userNameSearchFilter }}
+user_name_search_filter = {{ .Values.wso2.config.userStore.ldap.userNameSearchFilter | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.userNameListFilter }}
+user_name_list_filter = {{ .Values.wso2.config.userStore.ldap.userNameListFilter | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.displayNameAttribute }}
+display_name_attribute = {{ .Values.wso2.config.userStore.ldap.displayNameAttribute | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.readGroups }}
+read_groups = {{ .Values.wso2.config.userStore.ldap.readGroups }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.groupSearchBase }}
+group_search_base = {{ .Values.wso2.config.userStore.ldap.groupSearchBase | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.groupNameAttribute }}
+group_name_attribute = {{ .Values.wso2.config.userStore.ldap.groupNameAttribute | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.groupNameSearchFilter }}
+group_name_search_filter = {{ .Values.wso2.config.userStore.ldap.groupNameSearchFilter | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.groupNameListFilter }}
+group_name_list_filter = {{ .Values.wso2.config.userStore.ldap.groupNameListFilter | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.membershipAttribute }}
+membership_attribute = {{ .Values.wso2.config.userStore.ldap.membershipAttribute | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.backLinksEnabled }}
+back_links_enabled = {{ .Values.wso2.config.userStore.ldap.backLinksEnabled }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.usernameJavaRegex }}
+username_java_regex = {{ .Values.wso2.config.userStore.ldap.usernameJavaRegex | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.rolenameJavaRegex }}
+rolename_java_regex = {{ .Values.wso2.config.userStore.ldap.rolenameJavaRegex | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.passwordJavaRegex }}
+password_java_regex = {{ .Values.wso2.config.userStore.ldap.passwordJavaRegex | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.scimEnabled }}
+scim_enabled = {{ .Values.wso2.config.userStore.ldap.scimEnabled }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.passwordHashMethod }}
+password_hash_method = {{ .Values.wso2.config.userStore.ldap.passwordHashMethod | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.multiAttributeSeparator }}
+multi_attribute_separator = {{ .Values.wso2.config.userStore.ldap.multiAttributeSeparator | quote }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.maxUserNameListLength }}
+max_user_name_list_length = {{ .Values.wso2.config.userStore.ldap.maxUserNameListLength }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.maxRoleNameListLength }}
+max_role_name_list_length = {{ .Values.wso2.config.userStore.ldap.maxRoleNameListLength }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.userRolesCacheEnabled }}
+user_roles_cache_enabled = {{ .Values.wso2.config.userStore.ldap.userRolesCacheEnabled }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.connectionPoolingEnabled }}
+connection_pooling_enabled = {{ .Values.wso2.config.userStore.ldap.connectionPoolingEnabled }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.ldapConnectionTimeout }}
+ldap_connection_timeout = {{ .Values.wso2.config.userStore.ldap.ldapConnectionTimeout }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.readTimeout }}
+read_timeout = {{ .Values.wso2.config.userStore.ldap.readTimeout }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.retryAttempts }}
+retry_attempts = {{ .Values.wso2.config.userStore.ldap.retryAttempts }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.replaceEscapeCharactersAtUserLogin }}
+replace_escape_characters_at_user_login = {{ .Values.wso2.config.userStore.ldap.replaceEscapeCharactersAtUserLogin }}
+{{- end }}
+{{- if .Values.wso2.config.userStore.ldap.readOnly }}
+read_only = {{ .Values.wso2.config.userStore.ldap.readOnly }}
+{{- end }}
 {{- else }}
 type = "read_only_ldap"
 {{- end }}
@@ -109,19 +209,47 @@ primary_truststore_password = {{ .Values.wso2.config.trustStore.primary.password
 {{- if .Values.wso2.config.userstore.rdbms }}
 user_db_password = {{ .Values.wso2.config.userstore.rdbms.password | quote }}
 {{- end }}
-{{- if and (.Values.wso2.config.keyStore.transport) (.Values.wso2.config.keyStore.transport.listener) }}
-transport_listener_keystore_password = {{ .Values.wso2.config.transport.http.listener.keystore.password | quote }}
-transport_listener_keystore_key_password = {{ .Values.wso2.config.transport.http.listener.keystore.keyPassword | quote }}
-{{- end }}
-{{- if and (.Values.wso2.config.trustStore.transport) (.Values.wso2.config.trustStore.transport.listener) }}
-transport_listener_truststore_password = {{ .Values.wso2.config.transport.http.listener.truststore.password | quote }}
-{{- end }}
-{{- if and (.Values.wso2.config.keyStore.transport) (.Values.wso2.config.keyStore.transport.sender) }}
+{{- if .Values.wso2.config.transport }}
+
+{{- if .Values.wso2.config.transport.http }}
+
+{{- if .Values.wso2.config.transport.http.sender }}
+{{- if .Values.wso2.config.transport.http.sender.keystore }}
 transport_sender_keystore_password = {{ .Values.wso2.config.transport.http.sender.keystore.password | quote }}
 transport_sender_keystore_key_password = {{ .Values.wso2.config.transport.http.sender.keystore.keyPassword | quote }}
 {{- end }}
-{{- if and (.Values.wso2.config.trustStore.transport) (.Values.wso2.config.trustStore.transport.sender) }}
+{{- if .Values.wso2.config.transport.http.sender.truststore }}
 transport_sender_truststore_password = {{ .Values.wso2.config.transport.http.sender.truststore.password | quote }}
+{{- end }}
+# http sender end
+{{- end }}
+
+
+{{- if .Values.wso2.config.transport.http.listener }}
+{{- if .Values.wso2.config.transport.http.listener.keystore }}
+transport_listener_keystore_password = {{ .Values.wso2.config.transport.http.listener.keystore.password | quote }}
+transport_listener_keystore_key_password = {{ .Values.wso2.config.transport.http.listener.keystore.keyPassword | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.listener.truststore }}
+transport_listener_truststore_password = {{ .Values.wso2.config.transport.http.listener.truststore.password | quote }}
+{{- end }}
+# http listener end
+{{- end }}
+
+# http end
+{{- end }}
+
+{{- if .Values.wso2.config.transport.vfs }}
+{{- if .Values.wso2.config.transport.vfs.listener }}
+{{- if .Values.wso2.config.transport.vfs.listener.keystore }}
+vfs_listener_keystore_password = {{ .Values.wso2.config.transport.vfs.listener.keystore.password | quote }}
+vfs_listener_keystore_key_password = {{ .Values.wso2.config.transport.vfs.listener.keystore.keyPassword | quote }}
+{{- end }}
+# vfs listener end
+{{- end }}
+# vfs end
+{{- end }}
+# transport end
 {{- end }}
 {{- if .Values.wso2.config.serviceCatalog }}
 service_catalog_password = {{ .Values.wso2.config.serviceCatalog.password | quote }}
@@ -560,6 +688,7 @@ class = {{ $value.class | quote }}
 {{ end }}
 {{- end }}
 
+{{- if .Values.wso2.config.transport }}
 {{- if .Values.wso2.config.transport.http }}
 [transport.http]
 {{- if .Values.wso2.config.transport.http.socketTimeout }}
@@ -756,5 +885,45 @@ sender.ssl_profile.file_path = {{ .Values.wso2.config.transport.http.sender.sslP
 {{- end }}
 {{- if .Values.wso2.config.transport.http.sender.sslProfile.readInterval }}
 sender.ssl_profile.read_interval = {{ .Values.wso2.config.transport.http.sender.sslProfile.readInterval }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.wso2.config.transport.vfs }}
+[transport.vfs]
+{{- if .Values.wso2.config.transport.vfs.listener.enable }}
+listener.enable = {{ .Values.wso2.config.transport.vfs.listener.enable }}
+{{- end }}
+listener.keystore.location = "repository/resources/security/{{ .Values.wso2.config.transport.vfs.listener.keystore.fileName }}"
+{{- if .Values.wso2.config.transport.vfs.listener.keystore.type }}
+listener.keystore.type = {{ .Values.wso2.config.transport.vfs.listener.keystore.type | quote }}
+{{- end }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+listener.keystore.password = "$secret{vfs_listener_keystore_password}"
+{{- else }}
+listener.keystore.password = {{ .Values.wso2.config.transport.vfs.listener.keystore.password | quote }}
+{{- end }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+listener.keystore.key_password = "$secret{vfs_listener_keystore_key_password}"
+{{- else }}
+listener.keystore.key_password = {{ .Values.wso2.config.transport.vfs.listener.keystore.keyPassword | quote }}
+{{- end }}
+listener.keystore.alias = {{ .Values.wso2.config.transport.vfs.listener.keystore.alias | quote }}
+{{- range $key, $value := .Values.wso2.config.transport.vfs.listener.customParameters }}
+{{- if typeIs "string" $value }}
+listener.parameter.{{ $key }} = {{ $value | quote }}
+{{- else }}
+listener.parameter.{{ $key }} = {{ $value }}
+{{- end }}
+{{- end }}
+{{- if .Values.wso2.config.transport.vfs.sender.enable }}
+sender.enable = {{ .Values.wso2.config.transport.vfs.sender.enable }}
+{{- end }}
+{{- range $key, $value := .Values.wso2.config.transport.vfs.sender.customParameters }}
+{{- if typeIs "string" $value }}
+sender.parameter.{{ $key }} = {{ $value | quote }}
+{{- else }}
+sender.parameter.{{ $key }} = {{ $value }}
+{{- end }}
+{{- end }}
 {{- end }}
 {{- end }}

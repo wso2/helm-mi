@@ -68,6 +68,7 @@ wso2:
       password: ""
       # -- Create super admin account
       createAdminAccount: false
+    # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#external-user-store
     userstore:
       file:
         # -- Enable/Disable file based userstore
@@ -84,6 +85,42 @@ wso2:
           driver: ""
           # -- (list) JDBC connection pool parameters of the User Database
           poolParameters:
+      ldap:
+        type: "read_only_ldap"
+        class: "org.wso2.micro.integrator.security.user.core.ldap.ReadOnlyLDAPUserStoreManager"
+        connectionUrl: ""
+        connectionName: ""
+        connectionPassword: ""
+        anonymousBind: false
+        userSearchBase: ""
+        userNameAttribute: ""
+        userNameSearchFilter: ""
+        userNameListFilter: ""
+        displayNameAttribute: ""
+        readGroups: true
+        groupSearchBase: ""
+        groupNameAttribute: ""
+        groupNameSearchFilter: ""
+        groupNameListFilter: ""
+        membershipAttribute: ""
+        backLinksEnabled: false
+        usernameJavaRegex: "[a-zA-Z0-9._\\-|//]{3,30}$"
+        rolenameJavaRegex: "[a-zA-Z0-9._\\-|//]{3,30}$"
+        passwordJavaRegex: "^[\\S]{5,30}$"
+        scimEnabled: false
+        passwordHashMethod: "PLAIN_TEXT"
+        multiAttributeSeparator: ","
+        maxUserNameListLength: 100
+        maxRoleNameListLength: 100
+        userRolesCacheEnabled: true
+        connectionPoolingEnabled: true
+        ldapConnectionTimeout: 5000
+        # -- (int)
+        readTimeout:
+        # -- (int)
+        retryAttempts:
+        replaceEscapeCharactersAtUserLogin: true
+        readOnly: false
     secureVault:
       # -- Enable/Disable secure vault
       enabled: false
@@ -122,44 +159,12 @@ wso2:
         password: ""
         # -- Internal keystore key password
         keyPassword: ""
-      # Keystores used for HTTPS transport
-      transport:
-        listener:
-          # -- Transport listener keystore file name
-          fileName: "wso2carbon.jks"
-          # -- Transport listener keystore alias
-          alias: "wso2carbon"
-          # -- Transport listener keystore password
-          password: ""
-          # -- Transport listener keystore key password
-          keyPassword: ""
-        sender:
-          # -- Transport sender keystore file name
-          fileName: "wso2carbon.jks"
-          # -- Transport sender keystore alias
-          alias: "wso2carbon"
-          # -- Transport sender keystore password
-          password: ""
-          # -- Transport sender keystore key password
-          keyPassword: ""
     trustStore:
       primary:
         # -- Primary truststore file name
         fileName: "client-truststore.jks"
         # -- Primary truststore password
         password: ""
-      # Truststores used for HTTPS transport
-      transport:
-        listener:
-          # -- Transport listener truststore file name
-          fileName: "client-truststore.jks"
-          # -- Transport listener truststore password
-          password: ""
-        sender:
-          # -- Transport sender truststore file name
-          fileName: "client-truststore.jks"
-          # -- Transport sender truststore password
-          password: ""
     dashboard:
       # -- MI Dashboard URL
       url: ""
@@ -263,6 +268,7 @@ wso2:
         # -- Validates JSON messages by parsing the input message
         forceJsonValidation: false
         reverseProxyMode: false
+        # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#https-transport-non-blocking-mode
         listener:
           enable: true
           port: 8280
@@ -290,6 +296,7 @@ wso2:
             fileName: "client-truststore.jks"
             type: "JKS"
             password: ""
+        # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#https-transport-non-blocking-mode
         sender:
           enable: true
           warnOnHttp500: ""
@@ -316,6 +323,22 @@ wso2:
             fileName: "client-truststore.jks"
             type: "JKS"
             password: ""
+      # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#vfs-transport
+      vfs:
+        listener:
+          enable: true
+          keystore:
+            fileName: "wso2carbon.jks"
+            type: "JKS"
+            password: ""
+            keyPassword: ""
+            alias: "wso2carbon"
+          # -- (list) List of custom parameters for VFS listener
+          customParameters:
+        sender:
+          enable: true
+          # -- (list) List of custom parameters for VFS sender
+          customParameters:
     # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#message-mediation
     mediation:
       synapse:

@@ -54,14 +54,6 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.config.keyStore.primary.fileName | string | `"wso2carbon.jks"` | Primary keystore file name |
 | wso2.config.keyStore.primary.keyPassword | string | `""` | Primary keystore key password |
 | wso2.config.keyStore.primary.password | string | `""` | Primary keystore password |
-| wso2.config.keyStore.transport.listener.alias | string | `"wso2carbon"` | Transport listener keystore alias |
-| wso2.config.keyStore.transport.listener.fileName | string | `"wso2carbon.jks"` | Transport listener keystore file name |
-| wso2.config.keyStore.transport.listener.keyPassword | string | `""` | Transport listener keystore key password |
-| wso2.config.keyStore.transport.listener.password | string | `""` | Transport listener keystore password |
-| wso2.config.keyStore.transport.sender.alias | string | `"wso2carbon"` | Transport sender keystore alias |
-| wso2.config.keyStore.transport.sender.fileName | string | `"wso2carbon.jks"` | Transport sender keystore file name |
-| wso2.config.keyStore.transport.sender.keyPassword | string | `""` | Transport sender keystore key password |
-| wso2.config.keyStore.transport.sender.password | string | `""` | Transport sender keystore password |
 | wso2.config.mediation.flow.statistics.captureAll | bool | `false` |  |
 | wso2.config.mediation.flow.statistics.enable | bool | `false` |  |
 | wso2.config.mediation.flow.tracer.collectMediationProperties | bool | `false` |  |
@@ -194,13 +186,51 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.config.transport.rabbitmq.sender | list | `[{"name":"","parameters":null}]` | RabbitMQ Sender configurations |
 | wso2.config.transport.rabbitmq.sender[0] | object | `{"name":"","parameters":null}` | RabbitMQ Sender name |
 | wso2.config.transport.rabbitmq.sender[0].parameters | list | `nil` | RabbitMQ Sender parameters (https://apim.docs.wso2.com/en/4.1.0/reference/config-catalog-mi/#rabbitmq-sender) |
+| wso2.config.transport.vfs.listener.customParameters | list | `nil` | List of custom parameters for VFS listener |
+| wso2.config.transport.vfs.listener.enable | bool | `true` |  |
+| wso2.config.transport.vfs.listener.keystore.alias | string | `"wso2carbon"` |  |
+| wso2.config.transport.vfs.listener.keystore.fileName | string | `"wso2carbon.jks"` |  |
+| wso2.config.transport.vfs.listener.keystore.keyPassword | string | `""` |  |
+| wso2.config.transport.vfs.listener.keystore.password | string | `""` |  |
+| wso2.config.transport.vfs.listener.keystore.type | string | `"JKS"` |  |
+| wso2.config.transport.vfs.sender.customParameters | list | `nil` | List of custom parameters for VFS sender |
+| wso2.config.transport.vfs.sender.enable | bool | `true` |  |
 | wso2.config.trustStore.primary.fileName | string | `"client-truststore.jks"` | Primary truststore file name |
 | wso2.config.trustStore.primary.password | string | `""` | Primary truststore password |
-| wso2.config.trustStore.transport.listener.fileName | string | `"client-truststore.jks"` | Transport listener truststore file name |
-| wso2.config.trustStore.transport.listener.password | string | `""` | Transport listener truststore password |
-| wso2.config.trustStore.transport.sender.fileName | string | `"client-truststore.jks"` | Transport sender truststore file name |
-| wso2.config.trustStore.transport.sender.password | string | `""` | Transport sender truststore password |
 | wso2.config.userstore.file.enabled | bool | `true` | Enable/Disable file based userstore |
+| wso2.config.userstore.ldap.anonymousBind | bool | `false` |  |
+| wso2.config.userstore.ldap.backLinksEnabled | bool | `false` |  |
+| wso2.config.userstore.ldap.class | string | `"org.wso2.micro.integrator.security.user.core.ldap.ReadOnlyLDAPUserStoreManager"` |  |
+| wso2.config.userstore.ldap.connectionName | string | `""` |  |
+| wso2.config.userstore.ldap.connectionPassword | string | `""` |  |
+| wso2.config.userstore.ldap.connectionPoolingEnabled | bool | `true` |  |
+| wso2.config.userstore.ldap.connectionUrl | string | `""` |  |
+| wso2.config.userstore.ldap.displayNameAttribute | string | `""` |  |
+| wso2.config.userstore.ldap.groupNameAttribute | string | `""` |  |
+| wso2.config.userstore.ldap.groupNameListFilter | string | `""` |  |
+| wso2.config.userstore.ldap.groupNameSearchFilter | string | `""` |  |
+| wso2.config.userstore.ldap.groupSearchBase | string | `""` |  |
+| wso2.config.userstore.ldap.ldapConnectionTimeout | int | `5000` |  |
+| wso2.config.userstore.ldap.maxRoleNameListLength | int | `100` |  |
+| wso2.config.userstore.ldap.maxUserNameListLength | int | `100` |  |
+| wso2.config.userstore.ldap.membershipAttribute | string | `""` |  |
+| wso2.config.userstore.ldap.multiAttributeSeparator | string | `","` |  |
+| wso2.config.userstore.ldap.passwordHashMethod | string | `"PLAIN_TEXT"` |  |
+| wso2.config.userstore.ldap.passwordJavaRegex | string | `"^[\\S]{5,30}$"` |  |
+| wso2.config.userstore.ldap.readGroups | bool | `true` |  |
+| wso2.config.userstore.ldap.readOnly | bool | `false` |  |
+| wso2.config.userstore.ldap.readTimeout | int | `nil` |  |
+| wso2.config.userstore.ldap.replaceEscapeCharactersAtUserLogin | bool | `true` |  |
+| wso2.config.userstore.ldap.retryAttempts | int | `nil` |  |
+| wso2.config.userstore.ldap.rolenameJavaRegex | string | `"[a-zA-Z0-9._\\-|//]{3,30}$"` |  |
+| wso2.config.userstore.ldap.scimEnabled | bool | `false` |  |
+| wso2.config.userstore.ldap.type | string | `"read_only_ldap"` |  |
+| wso2.config.userstore.ldap.userNameAttribute | string | `""` |  |
+| wso2.config.userstore.ldap.userNameListFilter | string | `""` |  |
+| wso2.config.userstore.ldap.userNameSearchFilter | string | `""` |  |
+| wso2.config.userstore.ldap.userRolesCacheEnabled | bool | `true` |  |
+| wso2.config.userstore.ldap.userSearchBase | string | `""` |  |
+| wso2.config.userstore.ldap.usernameJavaRegex | string | `"[a-zA-Z0-9._\\-|//]{3,30}$"` |  |
 | wso2.config.userstore.rdbms.jdbc.driver | string | `""` | JDBC driver class name of the User Database |
 | wso2.config.userstore.rdbms.jdbc.poolParameters | list | `nil` | JDBC connection pool parameters of the User Database |
 | wso2.config.userstore.rdbms.password | string | `""` | User Database password |
