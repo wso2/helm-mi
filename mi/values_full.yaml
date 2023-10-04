@@ -68,6 +68,7 @@ wso2:
       password: ""
       # -- Create super admin account
       createAdminAccount: false
+    # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#external-user-store
     userstore:
       file:
         # -- Enable/Disable file based userstore
@@ -84,6 +85,42 @@ wso2:
           driver: ""
           # -- (list) JDBC connection pool parameters of the User Database
           poolParameters:
+      ldap:
+        type: "read_only_ldap"
+        class: "org.wso2.micro.integrator.security.user.core.ldap.ReadOnlyLDAPUserStoreManager"
+        connectionUrl: ""
+        connectionName: ""
+        connectionPassword: ""
+        anonymousBind: false
+        userSearchBase: ""
+        userNameAttribute: ""
+        userNameSearchFilter: ""
+        userNameListFilter: ""
+        displayNameAttribute: ""
+        readGroups: true
+        groupSearchBase: ""
+        groupNameAttribute: ""
+        groupNameSearchFilter: ""
+        groupNameListFilter: ""
+        membershipAttribute: ""
+        backLinksEnabled: false
+        usernameJavaRegex: "[a-zA-Z0-9._\\-|//]{3,30}$"
+        rolenameJavaRegex: "[a-zA-Z0-9._\\-|//]{3,30}$"
+        passwordJavaRegex: "^[\\S]{5,30}$"
+        scimEnabled: false
+        passwordHashMethod: "PLAIN_TEXT"
+        multiAttributeSeparator: ","
+        maxUserNameListLength: 100
+        maxRoleNameListLength: 100
+        userRolesCacheEnabled: true
+        connectionPoolingEnabled: true
+        ldapConnectionTimeout: 5000
+        # -- (int)
+        readTimeout:
+        # -- (int)
+        retryAttempts:
+        replaceEscapeCharactersAtUserLogin: true
+        readOnly: false
     secureVault:
       # -- Enable/Disable secure vault
       enabled: false
@@ -122,44 +159,12 @@ wso2:
         password: ""
         # -- Internal keystore key password
         keyPassword: ""
-      # Keystores used for HTTPS transport
-      transport:
-        listener:
-          # -- Transport listener keystore file name
-          fileName: "wso2carbon.jks"
-          # -- Transport listener keystore alias
-          alias: "wso2carbon"
-          # -- Transport listener keystore password
-          password: ""
-          # -- Transport listener keystore key password
-          keyPassword: ""
-        sender:
-          # -- Transport sender keystore file name
-          fileName: "wso2carbon.jks"
-          # -- Transport sender keystore alias
-          alias: "wso2carbon"
-          # -- Transport sender keystore password
-          password: ""
-          # -- Transport sender keystore key password
-          keyPassword: ""
     trustStore:
       primary:
         # -- Primary truststore file name
         fileName: "client-truststore.jks"
         # -- Primary truststore password
         password: ""
-      # Truststores used for HTTPS transport
-      transport:
-        listener:
-          # -- Transport listener truststore file name
-          fileName: "client-truststore.jks"
-          # -- Transport listener truststore password
-          password: ""
-        sender:
-          # -- Transport sender truststore file name
-          fileName: "client-truststore.jks"
-          # -- Transport sender truststore password
-          password: ""
     dashboard:
       # -- MI Dashboard URL
       url: ""
@@ -181,6 +186,347 @@ wso2:
       username: ""
       # -- Password for signing in to the API Manager runtime
       password: ""
+    transport:
+      # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#vfs-transport
+      vfs:
+        listener:
+          enable: true
+          keystore:
+            fileName: "wso2carbon.jks"
+            type: "JKS"
+            password: ""
+            keyPassword: ""
+            alias: "wso2carbon"
+          # -- (list) List of custom parameters for VFS listener
+          customParameters:
+        sender:
+          enable: true
+          # -- (list) List of custom parameters for VFS sender
+          customParameters:
+      jndi:
+        # -- List of JNDI connection factories
+        connectionFactories:
+        # -- JNDI connection factory name
+        - name: ""
+          # -- JNDI connection factory url
+          url: ""
+        # -- List of topics that are defined in the JMS broker
+        topic:
+        # -- JNDI topic name
+        - jndiName: ""
+          # -- Actual topic name
+          physicalName: ""
+        # -- List of queues that are defined in the JMS broker
+        queue:
+        # -- JNDI queue name
+        - jndiName: ""
+          # -- Actual queue name
+          physicalName: ""
+      rabbitmq:
+        # -- RabbitMQ Sender configurations in blocking mode
+        sender:
+        # -- RabbitMQ Sender name in blocking mode
+        - name: ""
+          # -- (list) RabbitMQ Sender parameters in blocking mode (https://apim.docs.wso2.com/en/4.1.0/reference/config-catalog-mi/#rabbitmq-sender)
+          parameters:
+        # -- RabbitMQ Listener configurations in blocking mode
+        listener:
+        # -- RabbitMQ Listener name in blocking mode
+        - name: ""
+          # -- (list) RabbitMQ Listener parameters in blocking mode (https://apim.docs.wso2.com/en/4.1.0/reference/config-catalog-mi/#rabbitmq-listener)
+          parameters:
+      jms:
+        # -- JMS Sender configurations in blocking mode
+        sender:
+        # -- JMS Sender name in blocking mode
+        - name: ""
+          # -- JMS Sender parameters in blocking mode
+          parameters:
+            initial_naming_factory: ""
+            provider_url: ""
+        # -- JMS Listener configurations in blocking mode
+        listener:
+        # -- JMS Listener name in blocking mode
+        - name: ""
+          # -- JMS Listener parameters in blocking mode
+          parameters:
+            initial_naming_factory: ""
+            provider_url: ""
+            session_transaction: true
+      http:
+        blocking:
+          listener:
+            enable: true
+            port: 8280
+            hostname: ""
+            originServer: ""
+            requestTimeout: ""
+            requestTcpNoDelay: ""
+            requestCoreThreadPoolSize: ""
+            requestMaxThreadPoolSize: ""
+            threadKeepaliveTime: ""
+            threadKeepaliveTimeUnit: ""
+          sender:
+            enable: true
+            enableClientCaching: true
+            transferEncoding: "chunked"
+            defaultConnectionsPerHost: 200
+            omitSoap12Action: true
+            soTimeout: 60000
+            proxyHost: ""
+            # -- (int)
+            proxyPort:
+            securedEnable: true
+            securedEnableClientCaching: true
+            securedTransferEncoding: "chunked"
+            securedDefaultConnectionsPerHost: 200
+            securedOmitSoap12Action: true
+            securedSoTimeout: 60000
+            securedProxyHost: ""
+            # -- (int)
+            securedProxyPort:
+        nonBlocking:
+          # -- This is the maximum period of inactivity between two consecutive data packets, specified in milliseconds
+          socketTimeout: 180000
+          # -- number of core threads used by the executor pool
+          coreWorkerPoolSize: 400
+          # -- This is the maximum number of threads in the worker thread pool
+          maxWorkerPoolSize: 400
+          # -- Defines the length of the queue that is used to hold runnable tasks to be executed by the worker pool
+          workerPoolQueueLength: -1
+          # -- Memory buffer allocated when reading data into the memory from the underlying socket/file channels
+          ioBufferSize: 16384
+          # -- Maximum number of connections allowed per host port
+          maxHttpConnectionPerHostPort: 32767
+          # -- Preserves the HTTP user agent header
+          preserveHttpUserAgent: false
+          preserveHttpServerName: true
+          # -- Header field/s of messages passing through the EI that need to be preserved
+          preserveHttpHeaders: ["Content-Type"]
+          # -- Enables/disables backend HTTP connection close after the request is served
+          disableConnectionKeepalive: false
+          # -- If this property is enabled and the payload exceeds the size specified by the 'maxMessageSizeBytes' property, the Micro Integrator will discontinue reading the input stream
+          enableMessageSizeValidation: false
+          # -- If the size of the payload exceeds this value, the Micro Integrator will discontinue reading the input stream. Only applicable if the enableMessageSizeValidation property is enabled
+          maxMessageSizeBytes: 2147483647
+          # -- Restrict the number of simultaneously opened connections
+          maxOpenConnections: -1
+          # -- This property validates badly formed XML messages by building the whole XML document
+          forceXmlValidation: false
+          # -- Validates JSON messages by parsing the input message
+          forceJsonValidation: false
+          reverseProxyMode: false
+          # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#https-transport-non-blocking-mode
+          listener:
+            enable: true
+            port: 8280
+            wsdlEprPrefix: ""
+            bindAddress: ""
+            securedEnable: true
+            securedPort: 8243
+            securedWsdlEprPrefix: ""
+            securedBindAddress: ""
+            securedProtocols: "TLSv1,TLSv1.1,TLSv1.2"
+            verifyClient: ""
+            preferredCiphers: "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256"
+            certificateRevocationVerifierEnable: false
+            certificateRevocationCacheSize: 1024
+            certificateRevocationCacheDelay: 1000
+            sslProfile:
+              filePath: "conf/sslprofiles/listenerprofiles.xml"
+              readInterval: 30000
+            keystore:
+              fileName: "wso2carbon.jks"
+              type: "JKS"
+              password: ""
+              keyPassword: ""
+            truststore:
+              fileName: "client-truststore.jks"
+              type: "JKS"
+              password: ""
+          # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#https-transport-non-blocking-mode
+          sender:
+            enable: true
+            warnOnHttp500: ""
+            proxyHost: ""
+            proxyPort:
+            securedProxyHost: ""
+            securedProxyPort:
+            nonProxyHosts: ""
+            hostnameVerifier: ""
+            securedProtocols: ""
+            certificateRevocationVerifierEnable: false
+            certificateRevocationCacheSize: 1024
+            certificateRevocationCacheDelay: 1000
+            securedEnable: true
+            sslProfile:
+              filePath: "conf/sslprofiles/senderprofiles.xml"
+              readInterval: 30000
+            keystore:
+              fileName: "wso2carbon.jks"
+              type: "JKS"
+              password: ""
+              keyPassword: ""
+            truststore:
+              fileName: "client-truststore.jks"
+              type: "JKS"
+              password: ""
+    # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#message-mediation
+    mediation:
+      synapse:
+        coreThreads: 20
+        maxThreads: 100
+        threadsQueueLength: 10
+        globalTimeoutInterval: 120000
+        enableXpathDomFailover: true
+        tempDataChunkSize: 3072
+        commandDebuggerPort: 9005
+        eventDebuggerPort: 9006
+        scriptMediatorPoolSize: 15
+        enableXmlNil: false
+        disableAutoPrimitiveRegex: "^-?(0|[1-9][0-9]*)(\\.[0-9]+)?([eE][+-]?[0-9]+)?$"
+        disableCustomReplaceRegex: "@@@"
+        enableNamespaceDeclaration: false
+        buildValidNcName: false
+        enableAutoPrimitive: false
+        jsonOutAutoArray: false
+        preserveNamespaceOnXmlToJson: false
+      statistics:
+        enableClean: true
+        cleanInterval: 1000
+      flow:
+        statistics:
+          enable: false
+          captureAll: false
+        tracer:
+          collectPayloads: false
+          collectMediationProperties: false
+      inbound:
+        coreThreads: 20
+        maxThreads: 100
+        portOffsetEnable: false
+      internalHttpApiEnable: true
+      internalHttpApiPort: 9191
+      internalHttpsApiPort: 9154
+    opentelemetry:
+      # -- Enable/Disable OpenTelemetry
+      enable: false
+      # -- OpenTelemetry tracing system. Supported values: jaeger, zipkin, log and otlp
+      type:
+      # -- Hostname of the OpenTelemetry tracing system
+      host:
+      # -- Port of the OpenTelemetry tracing system
+      port:
+      # -- Url of the OpenTelemetry tracing system. Instead of ‘host’ and ‘port’, ‘url’ can be used
+      url:
+    analytics:
+      # -- Enable/Disable analytics
+      enabled: false
+      # -- Analytics publisher (Publisher types supported are log and databridge)
+      publisher: "log"
+      # -- An identifier that will be published with the analytic
+      id: ""
+      # -- Prefix added when Elasticsearch analytics are being published
+      prefix: "SYNAPSE_ANALYTICS_DATA"
+      # -- Enable/Disable publishing API analytics data
+      apiAnalytics: true
+      # -- Enable/Disable publishing proxy service analytics data
+      proxyServiceAnalytics: true
+      # -- Enable/Disable publishing sequence analytics data
+      sequenceAnalytics: true
+      # -- Enable/Disable publishing endpoint analytics data
+      endpointAnalytics: true
+    # -- (list) List of synapse handlers with the name and the implementation class
+    synapseHandlers:
+    - name: ""
+      class: ""
+    messageFormatters:
+      # -- (list) Required for configuring the message formatting implementation that is used for formatting messages that are sent out of the Micro Integrator in non-blocking mode
+      nonBlocking:
+        formUrlencoded: "org.apache.synapse.commons.formatters.XFormURLEncodedFormatter"
+        multipartFormData: "org.apache.axis2.transport.http.MultipartFormDataFormatter"
+        applicationXml: "org.apache.axis2.transport.http.ApplicationXMLFormatter"
+        textXml: "org.apache.axis2.transport.http.SOAPMessageFormatter"
+        soapXml: "org.apache.axis2.transport.http.SOAPMessageFormatter"
+        textPlain: "org.apache.axis2.format.PlainTextFormatter"
+        applicationJson: "org.wso2.micro.integrator.core.json.JsonStreamFormatter"
+        jsonBadgerfish: "org.apache.axis2.json.JSONBadgerfishMessageFormatter"
+        textJavascript: "org.apache.axis2.json.JSONMessageFormatter"
+        octetStream: "org.wso2.carbon.relay.ExpandingMessageFormatter"
+        applicationBinary: "org.apache.axis2.format.BinaryFormatter"
+      # -- (list) Required for configuring the message formatting implementation that is used for formatting messages that are sent out of the Micro Integrator in blocking mode
+      blocking:
+        formUrlencoded: "org.apache.synapse.commons.formatters.XFormURLEncodedFormatter"
+        multipartFormData: "org.apache.axis2.transport.http.MultipartFormDataFormatter"
+        applicationXml: "org.apache.axis2.transport.http.ApplicationXMLFormatter"
+        textXml: "org.apache.axis2.transport.http.SOAPMessageFormatter"
+        soapXml: "org.apache.axis2.transport.http.SOAPMessageFormatter"
+        textPlain: "org.apache.axis2.format.PlainTextFormatter"
+        applicationJson: "org.wso2.micro.integrator.core.json.JsonStreamFormatter"
+        jsonBadgerfish: "org.apache.axis2.json.JSONBadgerfishMessageFormatter"
+        textJavascript: "org.apache.axis2.json.JSONMessageFormatter"
+        octetStream: "org.wso2.carbon.relay.ExpandingMessageFormatter"
+        applicationBinary: "org.apache.axis2.format.BinaryFormatter"
+      custom:
+        # -- (list) List of custom message formatter implementation class and the selected content types to which the formatter should apply in non-blocking mode
+        nonBlocking:
+        - contentType: ""
+          class: ""
+        # -- (list) List of custom message formatter implementation class and the selected content types to which the formatter should apply in blocking mode
+        blocking:
+        - contentType: ""
+          class: ""
+    messageBuilders:
+      # -- (list) Required for configuring the message builder implementation that is used to build messages that are received by the Micro Integrator in non-blocking mode
+      nonBlocking:
+        applicationXml: "org.apache.axis2.builder.ApplicationXMLBuilder"
+        formUrlencoded: "org.apache.synapse.commons.builders.XFormURLEncodedBuilder"
+        multipartFormData: "org.apache.axis2.builder.MultipartFormDataBuilder"
+        textPlain: "org.apache.axis2.format.PlainTextBuilder"
+        applicationJson: "org.wso2.micro.integrator.core.json.JsonStreamBuilder"
+        jsonBadgerfish: "org.apache.axis2.json.JSONBadgerfishOMBuilder"
+        textJavascript: "org.apache.axis2.json.JSONBuilder"
+        octetStream: "org.wso2.carbon.relay.BinaryRelayBuilder"
+        applicationBinary: "org.apache.axis2.format.BinaryBuilder"
+      # -- (list) Required for configuring the message builder implementation that is used to build messages that are received by the Micro Integrator in blocking mode
+      blocking:
+        applicationXml: "org.apache.axis2.builder.ApplicationXMLBuilder"
+        formUrlencoded: "org.apache.synapse.commons.builders.XFormURLEncodedBuilder"
+        multipartFormData: "org.apache.axis2.builder.MultipartFormDataBuilder"
+        textPlain: "org.apache.axis2.format.PlainTextBuilder"
+        applicationJson: "org.wso2.micro.integrator.core.json.JsonStreamBuilder"
+        jsonBadgerfish: "org.apache.axis2.json.JSONBadgerfishOMBuilder"
+        textJavascript: "org.apache.axis2.json.JSONBuilder"
+        octetStream: "org.wso2.carbon.relay.BinaryRelayBuilder"
+        applicationBinary: "org.apache.axis2.format.BinaryBuilder"
+      custom:
+        # -- (list) List of custom message builder implementation class and the selected content types to which the builder should apply in non-blocking mode
+        nonBlocking:
+        - contentType: ""
+          class: ""
+        # -- (list) List of custom message builder implementation class and the selected content types to which the builder should apply in blocking mode
+        blocking:
+        - contentType: ""
+          class: ""
+    # -- ManagementAPI related configurations. (https://apim.docs.wso2.com/en/latest/install-and-setup/setup/mi-setup/security/securing_management_api/)
+    managementApi:
+      cors:
+        enabled: true
+        allowedOrigins: "*"
+        allowedHeaders: "Authorization, Content-Type"
+      authorizationHandler:
+        enable: true
+        # -- (list) Enable authorization for additional resources
+        resources: ["/users"]
+      jwtTokenSecurityHandler:
+        enable: true
+        tokenStoreConfig:
+          maxSize: 200
+          cleanUpInterval: 600
+          removeOldestTokenOnOverflow: true
+        tokenConfig:
+          expiry: 3600
+          size: 2048
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)

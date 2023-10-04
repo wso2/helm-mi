@@ -104,3 +104,68 @@ wso2:
     dashboard:
       url: "https://private-cloud-mi-dash-1:9743/dashboard/api/"
 ```
+
+## Enabling RabbitMQ Listener
+
+Following sample configuration shows how to configure WSO2 Micro Integrator to connect with RabbitMQ listener. Similar configurations can be used to configure JMS transport listeners as well.
+
+```yaml
+wso2:
+  config:
+    transport:
+      rabbitmq:
+        listener:
+        - name: "AMQPConnectionFactory"
+          parameters:
+            hostname: "<HOST_NAME>"
+            port: 5672
+            username: "<USERNAME>"
+            password: "<PASSWORD>"
+```
+
+## Monitoring with OpenTelemetry
+
+Below configurations can be used to enable and view traces through Jaeger.
+
+```yaml
+wso2:
+  config:
+    opentelemetry:
+      enable: true
+      type: "jaeger"
+      host: "<hostname-of-jaeger>"
+      port: 14250
+    mediation:
+      flow:
+        statistics:
+          captureAll: true
+        tracer:
+          collectPayloads: true
+          collectMediationProperties: true
+```
+
+## Configuring a synapse handler
+
+```yaml
+wso2:
+  config:
+    synapseHandlers:
+    - name: "TestHandler"
+      class: "org.wso2.carbon.test.gateway.TestHandler"
+    - name: "SecHandler"
+      class: "org.wso2.carbon.test.gateway.SecHandler"
+```
+
+## Defining a custom message formatter
+
+Similar configurations can be used to define a custom message builder as well. Refer `wso2.config.messageFormatters` and `wso2.config.messageBuilders` sections in [CONFIG](./CONFIG.md).
+
+```yaml
+wso2:
+  config:
+    messageFormatters:
+      custom:
+        nonBlocking:
+        - contentType: "application/ld+json"
+          class: "org.example.CustomJsonFormatter"
+```
