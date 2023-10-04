@@ -210,46 +210,39 @@ primary_truststore_password = {{ .Values.wso2.config.trustStore.primary.password
 user_db_password = {{ .Values.wso2.config.userstore.rdbms.password | quote }}
 {{- end }}
 {{- if .Values.wso2.config.transport }}
+{{- if .Values.wso2.config.transport.nonBlocking }}
+{{- if .Values.wso2.config.transport.http.nonBlocking }}
 
-{{- if .Values.wso2.config.transport.http }}
-
-{{- if .Values.wso2.config.transport.http.sender }}
-{{- if .Values.wso2.config.transport.http.sender.keystore }}
-transport_sender_keystore_password = {{ .Values.wso2.config.transport.http.sender.keystore.password | quote }}
-transport_sender_keystore_key_password = {{ .Values.wso2.config.transport.http.sender.keystore.keyPassword | quote }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.keystore }}
+transport_sender_keystore_password = {{ .Values.wso2.config.transport.http.nonBlocking.sender.keystore.password | quote }}
+transport_sender_keystore_key_password = {{ .Values.wso2.config.transport.http.nonBlocking.sender.keystore.keyPassword | quote }}
 {{- end }}
-{{- if .Values.wso2.config.transport.http.sender.truststore }}
-transport_sender_truststore_password = {{ .Values.wso2.config.transport.http.sender.truststore.password | quote }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.truststore }}
+transport_sender_truststore_password = {{ .Values.wso2.config.transport.http.nonBlocking.sender.truststore.password | quote }}
 {{- end }}
-# http sender end
-{{- end }}
-
-
-{{- if .Values.wso2.config.transport.http.listener }}
-{{- if .Values.wso2.config.transport.http.listener.keystore }}
-transport_listener_keystore_password = {{ .Values.wso2.config.transport.http.listener.keystore.password | quote }}
-transport_listener_keystore_key_password = {{ .Values.wso2.config.transport.http.listener.keystore.keyPassword | quote }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.listener.truststore }}
-transport_listener_truststore_password = {{ .Values.wso2.config.transport.http.listener.truststore.password | quote }}
-{{- end }}
-# http listener end
 {{- end }}
 
-# http end
-{{- end }}
 
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.keystore }}
+transport_listener_keystore_password = {{ .Values.wso2.config.transport.http.nonBlocking.listener.keystore.password | quote }}
+transport_listener_keystore_key_password = {{ .Values.wso2.config.transport.http.nonBlocking.listener.keystore.keyPassword | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.truststore }}
+transport_listener_truststore_password = {{ .Values.wso2.config.transport.http.nonBlocking.listener.truststore.password | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
 {{- if .Values.wso2.config.transport.vfs }}
 {{- if .Values.wso2.config.transport.vfs.listener }}
 {{- if .Values.wso2.config.transport.vfs.listener.keystore }}
 vfs_listener_keystore_password = {{ .Values.wso2.config.transport.vfs.listener.keystore.password | quote }}
 vfs_listener_keystore_key_password = {{ .Values.wso2.config.transport.vfs.listener.keystore.keyPassword | quote }}
 {{- end }}
-# vfs listener end
 {{- end }}
-# vfs end
 {{- end }}
-# transport end
 {{- end }}
 {{- if .Values.wso2.config.serviceCatalog }}
 service_catalog_password = {{ .Values.wso2.config.serviceCatalog.password | quote }}
@@ -283,100 +276,6 @@ username = {{ .Values.wso2.config.serviceCatalog.username | quote }}
 password = "$secret{service_catalog_password}"
 {{- else }}
 password = {{ .Values.wso2.config.serviceCatalog.password | quote }}
-{{- end }}
-{{- end }}
-
-{{- if .Values.wso2.config.transport }}
-{{- if .Values.wso2.config.transport.jms }}
-[transport.jms]
-{{- if .Values.wso2.config.transport.jms.sender }}
-sender_enable = true
-{{- end }}
-{{- if .Values.wso2.config.transport.jms.listener }}
-listener_enable = true
-{{- end }}
-
-{{- range $key, $value := .Values.wso2.config.transport.jms.sender }}
-[[transport.jms.sender]]
-name = {{ $value.name | quote }}
-{{- range $key, $value := $value.parameters }}
-{{ if typeIs "string" $value }}
-parameter.{{ $key }} = {{ $value | quote }}
-{{- else }}
-parameter.{{ $key }} = {{ $value }}
-{{- end }}
-{{- end }}
-{{- end }}
-
-{{- range $key, $value := .Values.wso2.config.transport.jms.listener }}
-[[transport.jms.listener]]
-name = {{ $value.name | quote }}
-{{- range $key, $value := $value.parameters }}
-{{ if typeIs "string" $value }}
-parameter.{{ $key }} = {{ $value | quote }}
-{{- else }}
-parameter.{{ $key }} = {{ $value }}
-{{- end }}
-{{- end }}
-{{- end }}
-
-{{- end }}
-
-{{- if .Values.wso2.config.transport.jndi }}
-{{- if .Values.wso2.config.transport.jndi.connectionFactories }}
-[transport.jndi.connection_factories]
-{{- range $key, $value := .Values.wso2.config.transport.jndi.connectionFactories }}
-{{ $value.name }} = {{ $value.url | quote }}
-{{- end }}
-{{- end}}
-
-{{- if .Values.wso2.config.transport.jndi.queue }}
-[transport.jndi.queue]
-{{- range $key, $value := .Values.wso2.config.transport.jndi.queue }}
-{{ $value.jndiName }} = {{ $value.physicalName | quote }}
-{{- end }}
-{{- end }}
-
-{{- if .Values.wso2.config.transport.jndi.topic }}
-[transport.jndi.topic]
-{{- range $key, $value := .Values.wso2.config.transport.jndi.topic }}
-{{ $value.jndiName }} = {{ $value.physicalName | quote }}
-{{- end }}
-{{- end }}
-
-{{- end}}
-{{- if .Values.wso2.config.transport.rabbitmq }}
-[transport.rabbitmq]
-{{- if .Values.wso2.config.transport.rabbitmq.sender }}
-sender_enable = true
-{{ end }}
-{{- if .Values.wso2.config.transport.rabbitmq.listener }}
-listener_enable = true
-{{ end }}
-
-{{- range $key, $value := .Values.wso2.config.transport.rabbitmq.sender }}
-[[transport.rabbitmq.sender]]
-name = {{ $value.name | quote }}
-{{- range $key, $value := $value.parameters }}
-{{ if typeIs "string" $value }}
-parameter.{{ $key }} = {{ $value | quote }}
-{{- else }}
-parameter.{{ $key }} = {{ $value }}
-{{- end }}
-{{- end }}
-{{- end }}
-
-{{- range $key, $value := .Values.wso2.config.transport.rabbitmq.listener }}
-[[transport.rabbitmq.listener]]
-name = {{ $value.name | quote }}
-{{- range $key, $value := $value.parameters }}
-{{- if typeIs "string" $value }}
-parameter.{{ $key }} = {{ $value | quote }}
-{{- else }}
-parameter.{{ $key }} = {{ $value }}
-{{- end }}
-{{- end }}
-{{- end }}
 {{- end }}
 {{- end }}
 
@@ -689,210 +588,14 @@ class = {{ $value.class | quote }}
 {{- end }}
 
 {{- if .Values.wso2.config.transport }}
-{{- if .Values.wso2.config.transport.http }}
-[transport.http]
-{{- if .Values.wso2.config.transport.http.socketTimeout }}
-socket_timeout = {{ .Values.wso2.config.transport.http.socketTimeout }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.coreWorkerPoolSize }}
-core_worker_pool_size = {{ .Values.wso2.config.transport.http.coreWorkerPoolSize }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.maxWorkerPoolSize }}
-max_worker_pool_size = {{ .Values.wso2.config.transport.http.maxWorkerPoolSize }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.workerPoolQueueLength }}
-worker_pool_queue_length = {{ .Values.wso2.config.transport.http.workerPoolQueueLength }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.ioBufferSize }}
-io_buffer_size = {{ .Values.wso2.config.transport.http.ioBufferSize }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.maxHttpConnectionPerHostPort }}
-max_http_connection_per_host_port = {{ .Values.wso2.config.transport.http.maxHttpConnectionPerHostPort }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.preserveHttpUserAgent }}
-preserve_http_user_agent = {{ .Values.wso2.config.transport.http.preserveHttpUserAgent }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.preserveHttpServerName }}
-preserve_http_server_name = {{ .Values.wso2.config.transport.http.preserveHttpServerName }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.preserveHttpHeaders }}
-preserve_http_headers = {{ .Values.wso2.config.transport.http.preserveHttpHeaders }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.disableConnectionKeepalive }}
-disable_connection_keepalive = {{ .Values.wso2.config.transport.http.disableConnectionKeepalive }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.enableMessageSizeValidation }}
-enable_message_size_validation = {{ .Values.wso2.config.transport.http.enableMessageSizeValidation }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.maxMessageSizeBytes }}
-max_message_size_bytes = {{ .Values.wso2.config.transport.http.maxMessageSizeBytes }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.maxOpenConnections }}
-max_open_connections = {{ .Values.wso2.config.transport.http.maxOpenConnections }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.forceXmlValidation }}
-force_xml_validation = {{ .Values.wso2.config.transport.http.forceXmlValidation }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.forceJsonValidation }}
-force_json_validation = {{ .Values.wso2.config.transport.http.forceJsonValidation }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.reverseProxyMode }}
-reverse_proxy_mode = {{ .Values.wso2.config.transport.http.reverseProxyMode }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.listener.enable }}
-listener.enable = {{ .Values.wso2.config.transport.http.listener.enable }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.listener.port }}
-listener.port = {{ .Values.wso2.config.transport.http.listener.port }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.listener.wsdlEprPrefix }}
-listener.wsdl_epr_prefix = {{ .Values.wso2.config.transport.http.listener.wsdlEprPrefix }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.listener.bindAddress }}
-listener.bind_address = {{ .Values.wso2.config.transport.http.listener.bindAddress }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.listener.securedEnable }}
-listener.secured_enable = {{ .Values.wso2.config.transport.http.listener.securedEnable }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.listener.securedPort }}
-listener.secured_port = {{ .Values.wso2.config.transport.http.listener.securedPort }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.listener.securedWsdlEprPrefix }}
-listener.secured_wsdl_epr_prefix = {{ .Values.wso2.config.transport.http.listener.securedWsdlEprPrefix }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.listener.securedBindAddress }}
-listener.secured_bind_address = {{ .Values.wso2.config.transport.http.listener.securedBindAddress }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.listener.securedProtocols }}
-listener.secured_protocols = {{ .Values.wso2.config.transport.http.listener.securedProtocols }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.listener.verifyClient }}
-listener.verify_client = {{ .Values.wso2.config.transport.http.listener.verifyClient }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.listener.preferredCiphers }}
-listener.preferred_ciphers = {{ .Values.wso2.config.transport.http.listener.preferredCiphers }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.listener.sslProfile.filePath }}
-listener.ssl_profile.file_path = {{ .Values.wso2.config.transport.http.listener.sslProfile.filePath }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.listener.sslProfile.readInterval }}
-listener.ssl_profile.read_interval = {{ .Values.wso2.config.transport.http.listener.sslProfile.readInterval }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.listener.certificateRevocationVerifierEnable }}
-listener.certificate_revocation_verifier_enable = {{ .Values.wso2.config.transport.http.listener.certificateRevocationVerifierEnable }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.listener.certificateRevocationCacheSize }}
-listener.certificate_revocation_cache_size = {{ .Values.wso2.config.transport.http.listener.certificateRevocationCacheSize }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.listener.certificateRevocationCacheDelay }}
-listener.certificate_revocation_cache_delay = {{ .Values.wso2.config.transport.http.listener.certificateRevocationCacheDelay }}
-{{- end }}
-
-{{- if .Values.wso2.config.transport.http.listener.keystore }}
-listener.keystore.location = "repository/resources/security/{{ .Values.wso2.config.transport.http.listener.keystore.fileName }}"
-{{- if .Values.wso2.config.transport.http.listener.keystore.type }}
-listener.keystore.type = {{ .Values.wso2.config.transport.http.listener.keystore.type }}
-{{- end }}
-{{- if .Values.wso2.config.secureVault.enabled }}
-listener.keystore.password = "$secret{transport_listener_keystore_password}"
-listener.keystore.key_password = "$secret{transport_listener_keystore_key_password}"
-{{- else }}
-listener.keystore.password = {{ .Values.wso2.config.transport.http.listener.keystore.password }}
-listener.keystore.key_password = {{ .Values.wso2.config.transport.http.listener.keystore.keyPassword }}
-{{- end }}
-{{- end }}
-
-{{- if .Values.wso2.config.transport.http.listener.truststore }}
-listener.truststore.location = "repository/resources/security/{{ .Values.wso2.config.transport.http.listener.truststore.fileName }}"
-{{- if .Values.wso2.config.transport.http.listener.truststore.type }}
-listener.truststore.type = {{ .Values.wso2.config.transport.http.listener.truststore.type }}
-{{- end }}
-{{- if .Values.wso2.config.secureVault.enabled }}
-listener.truststore.password = "$secret{transport_listener_truststore_password}"
-{{- else }}
-listener.truststore.password = {{ .Values.wso2.config.transport.http.listener.truststore.password }}
-{{- end }}
-{{- end }}
-
-{{- if .Values.wso2.config.transport.http.sender.enable }}
-sender.enable = {{ .Values.wso2.config.transport.http.sender.enable }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.sender.warnOnHttp500 }}
-sender.warn_on_http_500 = {{ .Values.wso2.config.transport.http.sender.warnOnHttp500 }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.sender.proxyHost }}
-sender.proxy_host = {{ .Values.wso2.config.transport.http.sender.proxyHost }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.sender.proxyPort }}
-sender.proxy_port = {{ .Values.wso2.config.transport.http.sender.proxyPort }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.sender.securedProxyHost }}
-sender.secured_proxy_host = {{ .Values.wso2.config.transport.http.sender.securedProxyHost }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.sender.securedProxyPort }}
-sender.secured_proxy_port = {{ .Values.wso2.config.transport.http.sender.securedProxyPort }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.sender.nonProxyHosts }}
-sender.non_proxy_hosts = {{ .Values.wso2.config.transport.http.sender.nonProxyHosts }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.sender.hostnameVerifier }}
-sender.hostname_verifier = {{ .Values.wso2.config.transport.http.sender.hostnameVerifier }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.sender.securedProtocols }}
-sender.secured_protocols = {{ .Values.wso2.config.transport.http.sender.securedProtocols }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.sender.certificateRevocationVerifierEnable }}
-sender.certificate_revocation_verifier_enable = {{ .Values.wso2.config.transport.http.sender.certificateRevocationVerifierEnable }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.sender.certificateRevocationCacheSize }}
-sender.certificate_revocation_cache_size = {{ .Values.wso2.config.transport.http.sender.certificateRevocationCacheSize }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.sender.certificateRevocationCacheDelay }}
-sender.certificate_revocation_cache_delay = {{ .Values.wso2.config.transport.http.sender.certificateRevocationCacheDelay }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.sender.securedEnable }}
-sender.secured_enable = {{ .Values.wso2.config.transport.http.sender.securedEnable }}
-{{- end }}
-
-{{- if .Values.wso2.config.transport.http.sender.keystore }}
-sender.keystore.location = "repository/resources/security/{{ .Values.wso2.config.transport.http.sender.keystore.fileName }}"
-{{- if .Values.wso2.config.transport.http.sender.keystore.type }}
-sender.keystore.type = {{ .Values.wso2.config.transport.http.sender.keystore.type }}
-{{- end }}
-{{- if .Values.wso2.config.secureVault.enabled }}
-sender.keystore.password = "$secret{transport_sender_keystore_password}"
-sender.keystore.key_password = "$secret{transport_sender_keystore_key_password}"
-{{- else }}
-sender.keystore.password = {{ .Values.wso2.config.transport.http.sender.keystore.password }}
-sender.keystore.key_password = {{ .Values.wso2.config.transport.http.sender.keystore.keyPassword }}
-{{- end }}
-{{- end }}
-
-{{- if .Values.wso2.config.transport.http.sender.truststore }}
-sender.truststore.location = "repository/resources/security/{{ .Values.wso2.config.transport.http.sender.truststore.fileName }}"
-{{- if .Values.wso2.config.transport.http.sender.truststore.type }}
-sender.truststore.type = {{ .Values.wso2.config.transport.http.sender.truststore.type }}
-{{- end }}
-{{- if .Values.wso2.config.secureVault.enabled }}
-sender.truststore.password = "$secret{transport_sender_truststore_password}"
-{{- else }}
-sender.truststore.password = {{ .Values.wso2.config.transport.http.sender.truststore.password }}
-{{- end }}
-{{- end }}
-
-{{- if .Values.wso2.config.transport.http.sender.sslProfile.filePath }}
-sender.ssl_profile.file_path = {{ .Values.wso2.config.transport.http.sender.sslProfile.filePath }}
-{{- end }}
-{{- if .Values.wso2.config.transport.http.sender.sslProfile.readInterval }}
-sender.ssl_profile.read_interval = {{ .Values.wso2.config.transport.http.sender.sslProfile.readInterval }}
-{{- end }}
-{{- end }}
 
 {{- if .Values.wso2.config.transport.vfs }}
 [transport.vfs]
+{{- if .Values.wso2.config.transport.vfs.listener }}
 {{- if .Values.wso2.config.transport.vfs.listener.enable }}
 listener.enable = {{ .Values.wso2.config.transport.vfs.listener.enable }}
 {{- end }}
+{{- if .Values.wso2.config.transport.vfs.listener.keystore }}
 listener.keystore.location = "repository/resources/security/{{ .Values.wso2.config.transport.vfs.listener.keystore.fileName }}"
 {{- if .Values.wso2.config.transport.vfs.listener.keystore.type }}
 listener.keystore.type = {{ .Values.wso2.config.transport.vfs.listener.keystore.type | quote }}
@@ -908,6 +611,7 @@ listener.keystore.key_password = "$secret{vfs_listener_keystore_key_password}"
 listener.keystore.key_password = {{ .Values.wso2.config.transport.vfs.listener.keystore.keyPassword | quote }}
 {{- end }}
 listener.keystore.alias = {{ .Values.wso2.config.transport.vfs.listener.keystore.alias | quote }}
+{{- end }}
 {{- range $key, $value := .Values.wso2.config.transport.vfs.listener.customParameters }}
 {{- if typeIs "string" $value }}
 listener.parameter.{{ $key }} = {{ $value | quote }}
@@ -915,6 +619,8 @@ listener.parameter.{{ $key }} = {{ $value | quote }}
 listener.parameter.{{ $key }} = {{ $value }}
 {{- end }}
 {{- end }}
+{{- end }}
+{{- if .Values.wso2.config.transport.vfs.sender }}
 {{- if .Values.wso2.config.transport.vfs.sender.enable }}
 sender.enable = {{ .Values.wso2.config.transport.vfs.sender.enable }}
 {{- end }}
@@ -923,6 +629,390 @@ sender.enable = {{ .Values.wso2.config.transport.vfs.sender.enable }}
 sender.parameter.{{ $key }} = {{ $value | quote }}
 {{- else }}
 sender.parameter.{{ $key }} = {{ $value }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.wso2.config.transport.jndi }}
+{{- if .Values.wso2.config.transport.jndi.connectionFactories }}
+[transport.jndi.connection_factories]
+{{- range $key, $value := .Values.wso2.config.transport.jndi.connectionFactories }}
+{{ $value.name }} = {{ $value.url | quote }}
+{{- end }}
+{{- end}}
+
+{{- if .Values.wso2.config.transport.jndi.queue }}
+[transport.jndi.queue]
+{{- range $key, $value := .Values.wso2.config.transport.jndi.queue }}
+{{ $value.jndiName }} = {{ $value.physicalName | quote }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.wso2.config.transport.jndi.topic }}
+[transport.jndi.topic]
+{{- range $key, $value := .Values.wso2.config.transport.jndi.topic }}
+{{ $value.jndiName }} = {{ $value.physicalName | quote }}
+{{- end }}
+{{- end }}
+
+{{- end}}
+
+{{- if .Values.wso2.config.transport.jms }}
+[transport.jms]
+{{- if .Values.wso2.config.transport.jms.sender }}
+sender_enable = true
+{{- end }}
+{{- if .Values.wso2.config.transport.jms.listener }}
+listener_enable = true
+{{- end }}
+
+{{- range $key, $value := .Values.wso2.config.transport.jms.sender }}
+[[transport.jms.sender]]
+name = {{ $value.name | quote }}
+{{- range $key, $value := $value.parameters }}
+{{ if typeIs "string" $value }}
+parameter.{{ $key }} = {{ $value | quote }}
+{{- else }}
+parameter.{{ $key }} = {{ $value }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- range $key, $value := .Values.wso2.config.transport.jms.listener }}
+[[transport.jms.listener]]
+name = {{ $value.name | quote }}
+{{- range $key, $value := $value.parameters }}
+{{ if typeIs "string" $value }}
+parameter.{{ $key }} = {{ $value | quote }}
+{{- else }}
+parameter.{{ $key }} = {{ $value }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- end }}
+
+{{- if .Values.wso2.config.transport.rabbitmq }}
+[transport.rabbitmq]
+{{- if .Values.wso2.config.transport.rabbitmq.sender }}
+sender_enable = true
+{{ end }}
+{{- if .Values.wso2.config.transport.rabbitmq.listener }}
+listener_enable = true
+{{ end }}
+
+{{- range $key, $value := .Values.wso2.config.transport.rabbitmq.sender }}
+[[transport.rabbitmq.sender]]
+name = {{ $value.name | quote }}
+{{- range $key, $value := $value.parameters }}
+{{ if typeIs "string" $value }}
+parameter.{{ $key }} = {{ $value | quote }}
+{{- else }}
+parameter.{{ $key }} = {{ $value }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- range $key, $value := .Values.wso2.config.transport.rabbitmq.listener }}
+[[transport.rabbitmq.listener]]
+name = {{ $value.name | quote }}
+{{- range $key, $value := $value.parameters }}
+{{- if typeIs "string" $value }}
+parameter.{{ $key }} = {{ $value | quote }}
+{{- else }}
+parameter.{{ $key }} = {{ $value }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.wso2.config.transport.http }}
+{{- if .Values.wso2.config.transport.http.nonBlocking }}
+[transport.http]
+{{- if .Values.wso2.config.transport.http.nonBlocking.socketTimeout }}
+socket_timeout = {{ .Values.wso2.config.transport.http.nonBlocking.socketTimeout }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.coreWorkerPoolSize }}
+core_worker_pool_size = {{ .Values.wso2.config.transport.http.nonBlocking.coreWorkerPoolSize }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.maxWorkerPoolSize }}
+max_worker_pool_size = {{ .Values.wso2.config.transport.http.nonBlocking.maxWorkerPoolSize }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.workerPoolQueueLength }}
+worker_pool_queue_length = {{ .Values.wso2.config.transport.http.nonBlocking.workerPoolQueueLength }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.ioBufferSize }}
+io_buffer_size = {{ .Values.wso2.config.transport.http.nonBlocking.ioBufferSize }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.maxHttpConnectionPerHostPort }}
+max_http_connection_per_host_port = {{ .Values.wso2.config.transport.http.nonBlocking.maxHttpConnectionPerHostPort }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.preserveHttpUserAgent }}
+preserve_http_user_agent = {{ .Values.wso2.config.transport.http.nonBlocking.preserveHttpUserAgent }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.preserveHttpServerName }}
+preserve_http_server_name = {{ .Values.wso2.config.transport.http.nonBlocking.preserveHttpServerName }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.preserveHttpHeaders }}
+preserve_http_headers = [{{- range $key, $value := .Values.wso2.config.transport.http.nonBlocking.preserveHttpHeaders }}{{if $key}}, {{end}}{{ $value | quote }} {{- end }}]
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.disableConnectionKeepalive }}
+disable_connection_keepalive = {{ .Values.wso2.config.transport.http.nonBlocking.disableConnectionKeepalive }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.enableMessageSizeValidation }}
+enable_message_size_validation = {{ .Values.wso2.config.transport.http.nonBlocking.enableMessageSizeValidation }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.maxMessageSizeBytes }}
+max_message_size_bytes = {{ .Values.wso2.config.transport.http.nonBlocking.maxMessageSizeBytes }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.maxOpenConnections }}
+max_open_connections = {{ .Values.wso2.config.transport.http.nonBlocking.maxOpenConnections }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.forceXmlValidation }}
+force_xml_validation = {{ .Values.wso2.config.transport.http.nonBlocking.forceXmlValidation }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.forceJsonValidation }}
+force_json_validation = {{ .Values.wso2.config.transport.http.nonBlocking.forceJsonValidation }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.reverseProxyMode }}
+reverse_proxy_mode = {{ .Values.wso2.config.transport.http.nonBlocking.reverseProxyMode }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.enable }}
+listener.enable = {{ .Values.wso2.config.transport.http.nonBlocking.listener.enable }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.port }}
+listener.port = {{ .Values.wso2.config.transport.http.nonBlocking.listener.port }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.wsdlEprPrefix }}
+listener.wsdl_epr_prefix = {{ .Values.wso2.config.transport.http.nonBlocking.listener.wsdlEprPrefix | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.bindAddress }}
+listener.bind_address = {{ .Values.wso2.config.transport.http.nonBlocking.listener.bindAddress | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.securedEnable }}
+listener.secured_enable = {{ .Values.wso2.config.transport.http.nonBlocking.listener.securedEnable }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.securedPort }}
+listener.secured_port = {{ .Values.wso2.config.transport.http.nonBlocking.listener.securedPort }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.securedWsdlEprPrefix }}
+listener.secured_wsdl_epr_prefix = {{ .Values.wso2.config.transport.http.nonBlocking.listener.securedWsdlEprPrefix | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.securedBindAddress }}
+listener.secured_bind_address = {{ .Values.wso2.config.transport.http.nonBlocking.listener.securedBindAddress | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.securedProtocols }}
+listener.secured_protocols = {{ .Values.wso2.config.transport.http.nonBlocking.listener.securedProtocols | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.verifyClient }}
+listener.verify_client = {{ .Values.wso2.config.transport.http.nonBlocking.listener.verifyClient | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.preferredCiphers }}
+listener.preferred_ciphers = {{ .Values.wso2.config.transport.http.nonBlocking.listener.preferredCiphers | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.sslProfile }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.sslProfile.filePath }}
+listener.ssl_profile.file_path = {{ .Values.wso2.config.transport.http.nonBlocking.listener.sslProfile.filePath | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.sslProfile.readInterval }}
+listener.ssl_profile.read_interval = {{ .Values.wso2.config.transport.http.nonBlocking.listener.sslProfile.readInterval }}
+{{- end }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.certificateRevocationVerifierEnable }}
+listener.certificate_revocation_verifier_enable = {{ .Values.wso2.config.transport.http.nonBlocking.listener.certificateRevocationVerifierEnable }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.certificateRevocationCacheSize }}
+listener.certificate_revocation_cache_size = {{ .Values.wso2.config.transport.http.nonBlocking.listener.certificateRevocationCacheSize }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.certificateRevocationCacheDelay }}
+listener.certificate_revocation_cache_delay = {{ .Values.wso2.config.transport.http.nonBlocking.listener.certificateRevocationCacheDelay }}
+{{- end }}
+
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.keystore }}
+listener.keystore.location = "repository/resources/security/{{ .Values.wso2.config.transport.http.nonBlocking.listener.keystore.fileName }}"
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.keystore.type }}
+listener.keystore.type = {{ .Values.wso2.config.transport.http.nonBlocking.listener.keystore.type | quote }}
+{{- end }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+listener.keystore.password = "$secret{transport_listener_keystore_password}"
+listener.keystore.key_password = "$secret{transport_listener_keystore_key_password}"
+{{- else }}
+listener.keystore.password = {{ .Values.wso2.config.transport.http.nonBlocking.listener.keystore.password | quote }}
+listener.keystore.key_password = {{ .Values.wso2.config.transport.http.nonBlocking.listener.keystore.keyPassword | quote }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.truststore }}
+listener.truststore.location = "repository/resources/security/{{ .Values.wso2.config.transport.http.nonBlocking.listener.truststore.fileName }}"
+{{- if .Values.wso2.config.transport.http.nonBlocking.listener.truststore.type }}
+listener.truststore.type = {{ .Values.wso2.config.transport.http.nonBlocking.listener.truststore.type | quote }}
+{{- end }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+listener.truststore.password = "$secret{transport_listener_truststore_password}"
+{{- else }}
+listener.truststore.password = {{ .Values.wso2.config.transport.http.nonBlocking.listener.truststore.password | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.enable }}
+sender.enable = {{ .Values.wso2.config.transport.http.nonBlocking.sender.enable }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.warnOnHttp500 }}
+sender.warn_on_http_500 = {{ .Values.wso2.config.transport.http.nonBlocking.sender.warnOnHttp500 | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.proxyHost }}
+sender.proxy_host = {{ .Values.wso2.config.transport.http.nonBlocking.sender.proxyHost | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.proxyPort }}
+sender.proxy_port = {{ .Values.wso2.config.transport.http.nonBlocking.sender.proxyPort }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.securedProxyHost }}
+sender.secured_proxy_host = {{ .Values.wso2.config.transport.http.nonBlocking.sender.securedProxyHost | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.securedProxyPort }}
+sender.secured_proxy_port = {{ .Values.wso2.config.transport.http.nonBlocking.sender.securedProxyPort }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.nonProxyHosts }}
+sender.non_proxy_hosts = {{ .Values.wso2.config.transport.http.nonBlocking.sender.nonProxyHosts | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.hostnameVerifier }}
+sender.hostname_verifier = {{ .Values.wso2.config.transport.http.nonBlocking.sender.hostnameVerifier | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.securedProtocols }}
+sender.secured_protocols = {{ .Values.wso2.config.transport.http.nonBlocking.sender.securedProtocols | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.certificateRevocationVerifierEnable }}
+sender.certificate_revocation_verifier_enable = {{ .Values.wso2.config.transport.http.nonBlocking.sender.certificateRevocationVerifierEnable }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.certificateRevocationCacheSize }}
+sender.certificate_revocation_cache_size = {{ .Values.wso2.config.transport.http.nonBlocking.sender.certificateRevocationCacheSize }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.certificateRevocationCacheDelay }}
+sender.certificate_revocation_cache_delay = {{ .Values.wso2.config.transport.http.nonBlocking.sender.certificateRevocationCacheDelay }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.securedEnable }}
+sender.secured_enable = {{ .Values.wso2.config.transport.http.nonBlocking.sender.securedEnable }}
+{{- end }}
+
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.keystore }}
+sender.keystore.location = "repository/resources/security/{{ .Values.wso2.config.transport.http.nonBlocking.sender.keystore.fileName }}"
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.keystore.type }}
+sender.keystore.type = {{ .Values.wso2.config.transport.http.nonBlocking.sender.keystore.type | quote }}
+{{- end }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+sender.keystore.password = "$secret{transport_sender_keystore_password}"
+sender.keystore.key_password = "$secret{transport_sender_keystore_key_password}"
+{{- else }}
+sender.keystore.password = {{ .Values.wso2.config.transport.http.nonBlocking.sender.keystore.password | quote }}
+sender.keystore.key_password = {{ .Values.wso2.config.transport.http.nonBlocking.sender.keystore.keyPassword | quote }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.truststore }}
+sender.truststore.location = "repository/resources/security/{{ .Values.wso2.config.transport.http.nonBlocking.sender.truststore.fileName }}"
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.truststore.type }}
+sender.truststore.type = {{ .Values.wso2.config.transport.http.nonBlocking.sender.truststore.type | quote }}
+{{- end }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+sender.truststore.password = "$secret{transport_sender_truststore_password}"
+{{- else }}
+sender.truststore.password = {{ .Values.wso2.config.transport.http.nonBlocking.sender.truststore.password | quote }}
+{{- end }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.sslProfile }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.sslProfile.filePath }}
+sender.ssl_profile.file_path = {{ .Values.wso2.config.transport.http.nonBlocking.sender.sslProfile.filePath | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.nonBlocking.sender.sslProfile.readInterval }}
+sender.ssl_profile.read_interval = {{ .Values.wso2.config.transport.http.nonBlocking.sender.sslProfile.readInterval }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{- end }}
+
+{{- if .Values.wso2.config.transport.http.blocking }}
+[transport.http.blocking]
+{{- if .Values.wso2.config.transport.http.blocking.listener.enable }}
+listener.enable = {{ .Values.wso2.config.transport.http.blocking.listener.enable }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.listener.port }}
+listener.port = {{ .Values.wso2.config.transport.http.blocking.listener.port }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.listener.hostname }}
+listener.hostname = {{ .Values.wso2.config.transport.http.blocking.listener.hostname | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.listener.originServer }}
+listener.origin_server = {{ .Values.wso2.config.transport.http.blocking.listener.originServer | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.listener.requestTimeout }}
+listener.request_timeout = {{ .Values.wso2.config.transport.http.blocking.listener.requestTimeout }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.listener.requestTcpNoDelay }}
+listener.request_tcp_no_delay = {{ .Values.wso2.config.transport.http.blocking.listener.requestTcpNoDelay }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.listener.requestCoreThreadPoolSize }}
+listener.request_core_thread_pool_size = {{ .Values.wso2.config.transport.http.blocking.listener.requestCoreThreadPoolSize }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.listener.requestMaxThreadPoolSize }}
+listener.request_max_thread_pool_size = {{ .Values.wso2.config.transport.http.blocking.listener.requestMaxThreadPoolSize }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.listener.threadKeepaliveTime }}
+listener.thread_keepalive_time = {{ .Values.wso2.config.transport.http.blocking.listener.threadKeepaliveTime }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.listener.threadKeepaliveTimeUnit }}
+listener.thread_keepalive_time_unit = {{ .Values.wso2.config.transport.http.blocking.listener.threadKeepaliveTimeUnit | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.sender.enable }}
+sender.enable = {{ .Values.wso2.config.transport.http.blocking.sender.enable }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.sender.enableClientCaching }}
+sender.enable_client_caching = {{ .Values.wso2.config.transport.http.blocking.sender.enableClientCaching }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.sender.transferEncoding }}
+sender.transfer_encoding = {{ .Values.wso2.config.transport.http.blocking.sender.transferEncoding | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.sender.defaultConnectionsPerHost }}
+sender.default_connections_per_host = {{ .Values.wso2.config.transport.http.blocking.sender.defaultConnectionsPerHost }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.sender.omitSoap12Action }}
+sender.omit_soap12_action = {{ .Values.wso2.config.transport.http.blocking.sender.omitSoap12Action }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.sender.soTimeout }}
+sender.so_timeout = {{ .Values.wso2.config.transport.http.blocking.sender.soTimeout }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.sender.proxyHost }}
+sender.proxy_host = {{ .Values.wso2.config.transport.http.blocking.sender.proxyHost | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.sender.proxyPort }}
+sender.proxy_port = {{ .Values.wso2.config.transport.http.blocking.sender.proxyPort }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.sender.securedEnable }}
+sender.secured_enable = {{ .Values.wso2.config.transport.http.blocking.sender.securedEnable }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.sender.securedEnableClientCaching }}
+sender.secured_enable_client_caching = {{ .Values.wso2.config.transport.http.blocking.sender.securedEnableClientCaching }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.sender.securedTransferEncoding }}
+sender.secured_transfer_encoding = {{ .Values.wso2.config.transport.http.blocking.sender.securedTransferEncoding | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.sender.securedDefaultConnectionsPerHost }}
+sender.secured_default_connections_per_host = {{ .Values.wso2.config.transport.http.blocking.sender.securedDefaultConnectionsPerHost }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.sender.securedOmitSoap12Action }}
+sender.secured_omit_soap12_action = {{ .Values.wso2.config.transport.http.blocking.sender.securedOmitSoap12Action }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.sender.securedSoTimeout }}
+sender.secured_so_timeout = {{ .Values.wso2.config.transport.http.blocking.sender.securedSoTimeout }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.sender.securedProxyHost }}
+sender.secured_proxy_host = {{ .Values.wso2.config.transport.http.blocking.sender.securedProxyHost | quote }}
+{{- end }}
+{{- if .Values.wso2.config.transport.http.blocking.sender.securedProxyPort }}
+sender.secured_proxy_port = {{ .Values.wso2.config.transport.http.blocking.sender.securedProxyPort }}
 {{- end }}
 {{- end }}
 {{- end }}
@@ -947,6 +1037,7 @@ allowed_headers = {{ .Values.wso2.config.managementApi.cors.allowedHeaders | quo
 {{- if .Values.wso2.config.managementApi.jwtTokenSecurityHandler.enable }}
 enable = {{ .Values.wso2.config.managementApi.jwtTokenSecurityHandler.enable }}
 {{- end }}
+{{- if .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenStoreConfig }}
 {{- if .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenStoreConfig.maxSize }}
 token_store_config.max_size = {{ .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenStoreConfig.maxSize }}
 {{- end }}
@@ -956,11 +1047,14 @@ token_store_config.clean_up_interval = {{ .Values.wso2.config.managementApi.jwtT
 {{- if .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenStoreConfig.removeOldestTokenOnOverflow }}
 token_store_config.remove_oldest_token_on_overflow = {{ .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenStoreConfig.removeOldestTokenOnOverflow }}
 {{- end }}
+{{- end }}
+{{- if .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenConfig }}
 {{- if .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenConfig.expiry }}
 token_config.expiry = {{ .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenConfig.expiry }}
 {{- end }}
 {{- if .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenConfig.size }}
 token_config.size = {{ .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenConfig.size }}
+{{- end }}
 {{- end }}
 {{- end }}
 

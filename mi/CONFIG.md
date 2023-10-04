@@ -106,73 +106,99 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.config.serviceCatalog.password | string | `""` | Password for signing in to the API Manager runtime |
 | wso2.config.serviceCatalog.username | string | `""` | User name for signing in to the API Manager runtime |
 | wso2.config.synapseHandlers | list | `[{"class":"","name":""}]` | List of synapse handlers with the name and the implementation class |
-| wso2.config.transport.http.coreWorkerPoolSize | int | `400` | number of core threads used by the executor pool |
-| wso2.config.transport.http.disableConnectionKeepalive | bool | `false` | Enables/disables backend HTTP connection close after the request is served |
-| wso2.config.transport.http.enableMessageSizeValidation | bool | `false` | If this property is enabled and the payload exceeds the size specified by the 'maxMessageSizeBytes' property, the Micro Integrator will discontinue reading the input stream |
-| wso2.config.transport.http.forceJsonValidation | bool | `false` | Validates JSON messages by parsing the input message |
-| wso2.config.transport.http.forceXmlValidation | bool | `false` | This property validates badly formed XML messages by building the whole XML document |
-| wso2.config.transport.http.ioBufferSize | int | `16384` | Memory buffer allocated when reading data into the memory from the underlying socket/file channels |
-| wso2.config.transport.http.listener.bindAddress | string | `""` |  |
-| wso2.config.transport.http.listener.certificateRevocationCacheDelay | int | `1000` |  |
-| wso2.config.transport.http.listener.certificateRevocationCacheSize | int | `1024` |  |
-| wso2.config.transport.http.listener.certificateRevocationVerifierEnable | bool | `false` |  |
-| wso2.config.transport.http.listener.enable | bool | `true` |  |
-| wso2.config.transport.http.listener.keystore.fileName | string | `"wso2carbon.jks"` |  |
-| wso2.config.transport.http.listener.keystore.keyPassword | string | `""` |  |
-| wso2.config.transport.http.listener.keystore.password | string | `""` |  |
-| wso2.config.transport.http.listener.keystore.type | string | `"JKS"` |  |
-| wso2.config.transport.http.listener.port | int | `8280` |  |
-| wso2.config.transport.http.listener.preferredCiphers | string | `"TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256"` |  |
-| wso2.config.transport.http.listener.securedBindAddress | string | `""` |  |
-| wso2.config.transport.http.listener.securedEnable | bool | `true` |  |
-| wso2.config.transport.http.listener.securedPort | int | `8243` |  |
-| wso2.config.transport.http.listener.securedProtocols | string | `"TLSv1,TLSv1.1,TLSv1.2"` |  |
-| wso2.config.transport.http.listener.securedWsdlEprPrefix | string | `""` |  |
-| wso2.config.transport.http.listener.sslProfile.filePath | string | `"conf/sslprofiles/listenerprofiles.xml"` |  |
-| wso2.config.transport.http.listener.sslProfile.readInterval | int | `3600000` |  |
-| wso2.config.transport.http.listener.truststore.fileName | string | `"client-truststore.jks"` |  |
-| wso2.config.transport.http.listener.truststore.password | string | `""` |  |
-| wso2.config.transport.http.listener.truststore.type | string | `"JKS"` |  |
-| wso2.config.transport.http.listener.verifyClient | string | `""` |  |
-| wso2.config.transport.http.listener.wsdlEprPrefix | string | `""` |  |
-| wso2.config.transport.http.maxHttpConnectionPerHostPort | int | `32767` | Maximum number of connections allowed per host port |
-| wso2.config.transport.http.maxMessageSizeBytes | int | `2147483647` | If the size of the payload exceeds this value, the Micro Integrator will discontinue reading the input stream. Only applicable if the enableMessageSizeValidation property is enabled |
-| wso2.config.transport.http.maxOpenConnections | int | `-1` | Restrict the number of simultaneously opened connections |
-| wso2.config.transport.http.maxWorkerPoolSize | int | `400` | This is the maximum number of threads in the worker thread pool |
-| wso2.config.transport.http.preserveHttpHeaders | list | `["Content-Type"]` | Header field/s of messages passing through the EI that need to be preserved |
-| wso2.config.transport.http.preserveHttpServerName | bool | `true` |  |
-| wso2.config.transport.http.preserveHttpUserAgent | bool | `false` | Preserves the HTTP user agent header |
-| wso2.config.transport.http.reverseProxyMode | bool | `false` |  |
-| wso2.config.transport.http.sender.certificateRevocationCacheDelay | int | `1000` |  |
-| wso2.config.transport.http.sender.certificateRevocationCacheSize | int | `1024` |  |
-| wso2.config.transport.http.sender.certificateRevocationVerifierEnable | bool | `false` |  |
-| wso2.config.transport.http.sender.enable | bool | `true` |  |
-| wso2.config.transport.http.sender.hostnameVerifier | string | `""` |  |
-| wso2.config.transport.http.sender.keystore.fileName | string | `"wso2carbon.jks"` |  |
-| wso2.config.transport.http.sender.keystore.keyPassword | string | `""` |  |
-| wso2.config.transport.http.sender.keystore.password | string | `""` |  |
-| wso2.config.transport.http.sender.keystore.type | string | `"JKS"` |  |
-| wso2.config.transport.http.sender.nonProxyHosts | string | `""` |  |
-| wso2.config.transport.http.sender.proxyHost | string | `""` |  |
-| wso2.config.transport.http.sender.proxyPort | string | `nil` |  |
-| wso2.config.transport.http.sender.securedEnable | bool | `true` |  |
-| wso2.config.transport.http.sender.securedProtocols | string | `""` |  |
-| wso2.config.transport.http.sender.securedProxyHost | string | `""` |  |
-| wso2.config.transport.http.sender.securedProxyPort | string | `nil` |  |
-| wso2.config.transport.http.sender.sslProfile.filePath | string | `"conf/sslprofiles/senderprofiles.xml"` |  |
-| wso2.config.transport.http.sender.sslProfile.readInterval | int | `600000` |  |
-| wso2.config.transport.http.sender.truststore.fileName | string | `"client-truststore.jks"` |  |
-| wso2.config.transport.http.sender.truststore.password | string | `""` |  |
-| wso2.config.transport.http.sender.truststore.type | string | `"JKS"` |  |
-| wso2.config.transport.http.sender.warnOnHttp500 | string | `""` |  |
-| wso2.config.transport.http.socketTimeout | int | `180000` | This is the maximum period of inactivity between two consecutive data packets, specified in milliseconds |
-| wso2.config.transport.http.workerPoolQueueLength | int | `-1` | Defines the length of the queue that is used to hold runnable tasks to be executed by the worker pool |
-| wso2.config.transport.jms.listener | list | `[{"name":"","parameters":{"initial_naming_factory":"","provider_url":"","session_transaction":true}}]` | JMS Listener configurations |
-| wso2.config.transport.jms.listener[0] | object | `{"name":"","parameters":{"initial_naming_factory":"","provider_url":"","session_transaction":true}}` | JMS Listener name |
-| wso2.config.transport.jms.listener[0].parameters | object | `{"initial_naming_factory":"","provider_url":"","session_transaction":true}` | JMS Listener parameters |
-| wso2.config.transport.jms.sender | list | `[{"name":"","parameters":{"initial_naming_factory":"","provider_url":""}}]` | JMS Sender configurations |
-| wso2.config.transport.jms.sender[0] | object | `{"name":"","parameters":{"initial_naming_factory":"","provider_url":""}}` | JMS Sender name |
-| wso2.config.transport.jms.sender[0].parameters | object | `{"initial_naming_factory":"","provider_url":""}` | JMS Sender parameters |
+| wso2.config.transport.http.blocking.listener.enable | bool | `true` |  |
+| wso2.config.transport.http.blocking.listener.hostname | string | `""` |  |
+| wso2.config.transport.http.blocking.listener.originServer | string | `""` |  |
+| wso2.config.transport.http.blocking.listener.port | int | `8280` |  |
+| wso2.config.transport.http.blocking.listener.requestCoreThreadPoolSize | string | `""` |  |
+| wso2.config.transport.http.blocking.listener.requestMaxThreadPoolSize | string | `""` |  |
+| wso2.config.transport.http.blocking.listener.requestTcpNoDelay | string | `""` |  |
+| wso2.config.transport.http.blocking.listener.requestTimeout | string | `""` |  |
+| wso2.config.transport.http.blocking.listener.threadKeepaliveTime | string | `""` |  |
+| wso2.config.transport.http.blocking.listener.threadKeepaliveTimeUnit | string | `""` |  |
+| wso2.config.transport.http.blocking.sender.defaultConnectionsPerHost | int | `200` |  |
+| wso2.config.transport.http.blocking.sender.enable | bool | `true` |  |
+| wso2.config.transport.http.blocking.sender.enableClientCaching | bool | `true` |  |
+| wso2.config.transport.http.blocking.sender.omitSoap12Action | bool | `true` |  |
+| wso2.config.transport.http.blocking.sender.proxyHost | string | `""` |  |
+| wso2.config.transport.http.blocking.sender.proxyPort | int | `nil` |  |
+| wso2.config.transport.http.blocking.sender.securedDefaultConnectionsPerHost | int | `200` |  |
+| wso2.config.transport.http.blocking.sender.securedEnable | bool | `true` |  |
+| wso2.config.transport.http.blocking.sender.securedEnableClientCaching | bool | `true` |  |
+| wso2.config.transport.http.blocking.sender.securedOmitSoap12Action | bool | `true` |  |
+| wso2.config.transport.http.blocking.sender.securedProxyHost | string | `""` |  |
+| wso2.config.transport.http.blocking.sender.securedProxyPort | int | `nil` |  |
+| wso2.config.transport.http.blocking.sender.securedSoTimeout | int | `60000` |  |
+| wso2.config.transport.http.blocking.sender.securedTransferEncoding | string | `"chunked"` |  |
+| wso2.config.transport.http.blocking.sender.soTimeout | int | `60000` |  |
+| wso2.config.transport.http.blocking.sender.transferEncoding | string | `"chunked"` |  |
+| wso2.config.transport.http.nonBlocking.coreWorkerPoolSize | int | `400` | number of core threads used by the executor pool |
+| wso2.config.transport.http.nonBlocking.disableConnectionKeepalive | bool | `false` | Enables/disables backend HTTP connection close after the request is served |
+| wso2.config.transport.http.nonBlocking.enableMessageSizeValidation | bool | `false` | If this property is enabled and the payload exceeds the size specified by the 'maxMessageSizeBytes' property, the Micro Integrator will discontinue reading the input stream |
+| wso2.config.transport.http.nonBlocking.forceJsonValidation | bool | `false` | Validates JSON messages by parsing the input message |
+| wso2.config.transport.http.nonBlocking.forceXmlValidation | bool | `false` | This property validates badly formed XML messages by building the whole XML document |
+| wso2.config.transport.http.nonBlocking.ioBufferSize | int | `16384` | Memory buffer allocated when reading data into the memory from the underlying socket/file channels |
+| wso2.config.transport.http.nonBlocking.listener.bindAddress | string | `""` |  |
+| wso2.config.transport.http.nonBlocking.listener.certificateRevocationCacheDelay | int | `1000` |  |
+| wso2.config.transport.http.nonBlocking.listener.certificateRevocationCacheSize | int | `1024` |  |
+| wso2.config.transport.http.nonBlocking.listener.certificateRevocationVerifierEnable | bool | `false` |  |
+| wso2.config.transport.http.nonBlocking.listener.enable | bool | `true` |  |
+| wso2.config.transport.http.nonBlocking.listener.keystore.fileName | string | `"wso2carbon.jks"` |  |
+| wso2.config.transport.http.nonBlocking.listener.keystore.keyPassword | string | `""` |  |
+| wso2.config.transport.http.nonBlocking.listener.keystore.password | string | `""` |  |
+| wso2.config.transport.http.nonBlocking.listener.keystore.type | string | `"JKS"` |  |
+| wso2.config.transport.http.nonBlocking.listener.port | int | `8280` |  |
+| wso2.config.transport.http.nonBlocking.listener.preferredCiphers | string | `"TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256"` |  |
+| wso2.config.transport.http.nonBlocking.listener.securedBindAddress | string | `""` |  |
+| wso2.config.transport.http.nonBlocking.listener.securedEnable | bool | `true` |  |
+| wso2.config.transport.http.nonBlocking.listener.securedPort | int | `8243` |  |
+| wso2.config.transport.http.nonBlocking.listener.securedProtocols | string | `"TLSv1,TLSv1.1,TLSv1.2"` |  |
+| wso2.config.transport.http.nonBlocking.listener.securedWsdlEprPrefix | string | `""` |  |
+| wso2.config.transport.http.nonBlocking.listener.sslProfile.filePath | string | `"conf/sslprofiles/listenerprofiles.xml"` |  |
+| wso2.config.transport.http.nonBlocking.listener.sslProfile.readInterval | int | `30000` |  |
+| wso2.config.transport.http.nonBlocking.listener.truststore.fileName | string | `"client-truststore.jks"` |  |
+| wso2.config.transport.http.nonBlocking.listener.truststore.password | string | `""` |  |
+| wso2.config.transport.http.nonBlocking.listener.truststore.type | string | `"JKS"` |  |
+| wso2.config.transport.http.nonBlocking.listener.verifyClient | string | `""` |  |
+| wso2.config.transport.http.nonBlocking.listener.wsdlEprPrefix | string | `""` |  |
+| wso2.config.transport.http.nonBlocking.maxHttpConnectionPerHostPort | int | `32767` | Maximum number of connections allowed per host port |
+| wso2.config.transport.http.nonBlocking.maxMessageSizeBytes | int | `2147483647` | If the size of the payload exceeds this value, the Micro Integrator will discontinue reading the input stream. Only applicable if the enableMessageSizeValidation property is enabled |
+| wso2.config.transport.http.nonBlocking.maxOpenConnections | int | `-1` | Restrict the number of simultaneously opened connections |
+| wso2.config.transport.http.nonBlocking.maxWorkerPoolSize | int | `400` | This is the maximum number of threads in the worker thread pool |
+| wso2.config.transport.http.nonBlocking.preserveHttpHeaders | list | `["Content-Type"]` | Header field/s of messages passing through the EI that need to be preserved |
+| wso2.config.transport.http.nonBlocking.preserveHttpServerName | bool | `true` |  |
+| wso2.config.transport.http.nonBlocking.preserveHttpUserAgent | bool | `false` | Preserves the HTTP user agent header |
+| wso2.config.transport.http.nonBlocking.reverseProxyMode | bool | `false` |  |
+| wso2.config.transport.http.nonBlocking.sender.certificateRevocationCacheDelay | int | `1000` |  |
+| wso2.config.transport.http.nonBlocking.sender.certificateRevocationCacheSize | int | `1024` |  |
+| wso2.config.transport.http.nonBlocking.sender.certificateRevocationVerifierEnable | bool | `false` |  |
+| wso2.config.transport.http.nonBlocking.sender.enable | bool | `true` |  |
+| wso2.config.transport.http.nonBlocking.sender.hostnameVerifier | string | `""` |  |
+| wso2.config.transport.http.nonBlocking.sender.keystore.fileName | string | `"wso2carbon.jks"` |  |
+| wso2.config.transport.http.nonBlocking.sender.keystore.keyPassword | string | `""` |  |
+| wso2.config.transport.http.nonBlocking.sender.keystore.password | string | `""` |  |
+| wso2.config.transport.http.nonBlocking.sender.keystore.type | string | `"JKS"` |  |
+| wso2.config.transport.http.nonBlocking.sender.nonProxyHosts | string | `""` |  |
+| wso2.config.transport.http.nonBlocking.sender.proxyHost | string | `""` |  |
+| wso2.config.transport.http.nonBlocking.sender.proxyPort | string | `nil` |  |
+| wso2.config.transport.http.nonBlocking.sender.securedEnable | bool | `true` |  |
+| wso2.config.transport.http.nonBlocking.sender.securedProtocols | string | `""` |  |
+| wso2.config.transport.http.nonBlocking.sender.securedProxyHost | string | `""` |  |
+| wso2.config.transport.http.nonBlocking.sender.securedProxyPort | string | `nil` |  |
+| wso2.config.transport.http.nonBlocking.sender.sslProfile.filePath | string | `"conf/sslprofiles/senderprofiles.xml"` |  |
+| wso2.config.transport.http.nonBlocking.sender.sslProfile.readInterval | int | `30000` |  |
+| wso2.config.transport.http.nonBlocking.sender.truststore.fileName | string | `"client-truststore.jks"` |  |
+| wso2.config.transport.http.nonBlocking.sender.truststore.password | string | `""` |  |
+| wso2.config.transport.http.nonBlocking.sender.truststore.type | string | `"JKS"` |  |
+| wso2.config.transport.http.nonBlocking.sender.warnOnHttp500 | string | `""` |  |
+| wso2.config.transport.http.nonBlocking.socketTimeout | int | `180000` | This is the maximum period of inactivity between two consecutive data packets, specified in milliseconds |
+| wso2.config.transport.http.nonBlocking.workerPoolQueueLength | int | `-1` | Defines the length of the queue that is used to hold runnable tasks to be executed by the worker pool |
+| wso2.config.transport.jms.listener | list | `[{"name":"","parameters":{"initial_naming_factory":"","provider_url":"","session_transaction":true}}]` | JMS Listener configurations in blocking mode |
+| wso2.config.transport.jms.listener[0] | object | `{"name":"","parameters":{"initial_naming_factory":"","provider_url":"","session_transaction":true}}` | JMS Listener name in blocking mode |
+| wso2.config.transport.jms.listener[0].parameters | object | `{"initial_naming_factory":"","provider_url":"","session_transaction":true}` | JMS Listener parameters in blocking mode |
+| wso2.config.transport.jms.sender | list | `[{"name":"","parameters":{"initial_naming_factory":"","provider_url":""}}]` | JMS Sender configurations in blocking mode |
+| wso2.config.transport.jms.sender[0] | object | `{"name":"","parameters":{"initial_naming_factory":"","provider_url":""}}` | JMS Sender name in blocking mode |
+| wso2.config.transport.jms.sender[0].parameters | object | `{"initial_naming_factory":"","provider_url":""}` | JMS Sender parameters in blocking mode |
 | wso2.config.transport.jndi.connectionFactories | list | `[{"name":"","url":""}]` | List of JNDI connection factories |
 | wso2.config.transport.jndi.connectionFactories[0] | object | `{"name":"","url":""}` | JNDI connection factory name |
 | wso2.config.transport.jndi.connectionFactories[0].url | string | `""` | JNDI connection factory url |
@@ -182,12 +208,12 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.config.transport.jndi.topic | list | `[{"jndiName":"","physicalName":""}]` | List of topics that are defined in the JMS broker |
 | wso2.config.transport.jndi.topic[0] | object | `{"jndiName":"","physicalName":""}` | JNDI topic name |
 | wso2.config.transport.jndi.topic[0].physicalName | string | `""` | Actual topic name |
-| wso2.config.transport.rabbitmq.listener | list | `[{"name":"","parameters":null}]` | RabbitMQ Listener configurations |
-| wso2.config.transport.rabbitmq.listener[0] | object | `{"name":"","parameters":null}` | RabbitMQ Listener name |
-| wso2.config.transport.rabbitmq.listener[0].parameters | list | `nil` | RabbitMQ Listener parameters (https://apim.docs.wso2.com/en/4.1.0/reference/config-catalog-mi/#rabbitmq-listener) |
-| wso2.config.transport.rabbitmq.sender | list | `[{"name":"","parameters":null}]` | RabbitMQ Sender configurations |
-| wso2.config.transport.rabbitmq.sender[0] | object | `{"name":"","parameters":null}` | RabbitMQ Sender name |
-| wso2.config.transport.rabbitmq.sender[0].parameters | list | `nil` | RabbitMQ Sender parameters (https://apim.docs.wso2.com/en/4.1.0/reference/config-catalog-mi/#rabbitmq-sender) |
+| wso2.config.transport.rabbitmq.listener | list | `[{"name":"","parameters":null}]` | RabbitMQ Listener configurations in blocking mode |
+| wso2.config.transport.rabbitmq.listener[0] | object | `{"name":"","parameters":null}` | RabbitMQ Listener name in blocking mode |
+| wso2.config.transport.rabbitmq.listener[0].parameters | list | `nil` | RabbitMQ Listener parameters in blocking mode (https://apim.docs.wso2.com/en/4.1.0/reference/config-catalog-mi/#rabbitmq-listener) |
+| wso2.config.transport.rabbitmq.sender | list | `[{"name":"","parameters":null}]` | RabbitMQ Sender configurations in blocking mode |
+| wso2.config.transport.rabbitmq.sender[0] | object | `{"name":"","parameters":null}` | RabbitMQ Sender name in blocking mode |
+| wso2.config.transport.rabbitmq.sender[0].parameters | list | `nil` | RabbitMQ Sender parameters in blocking mode (https://apim.docs.wso2.com/en/4.1.0/reference/config-catalog-mi/#rabbitmq-sender) |
 | wso2.config.transport.vfs.listener.customParameters | list | `nil` | List of custom parameters for VFS listener |
 | wso2.config.transport.vfs.listener.enable | bool | `true` |  |
 | wso2.config.transport.vfs.listener.keystore.alias | string | `"wso2carbon"` |  |

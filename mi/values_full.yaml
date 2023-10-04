@@ -187,37 +187,22 @@ wso2:
       # -- Password for signing in to the API Manager runtime
       password: ""
     transport:
-      rabbitmq:
-        # -- RabbitMQ Sender configurations
-        sender:
-        # -- RabbitMQ Sender name
-        - name: ""
-          # -- (list) RabbitMQ Sender parameters (https://apim.docs.wso2.com/en/4.1.0/reference/config-catalog-mi/#rabbitmq-sender)
-          parameters:
-        # -- RabbitMQ Listener configurations
+      # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#vfs-transport
+      vfs:
         listener:
-        # -- RabbitMQ Listener name
-        - name: ""
-          # -- (list) RabbitMQ Listener parameters (https://apim.docs.wso2.com/en/4.1.0/reference/config-catalog-mi/#rabbitmq-listener)
-          parameters:
-      jms:
-        # -- JMS Sender configurations
+          enable: true
+          keystore:
+            fileName: "wso2carbon.jks"
+            type: "JKS"
+            password: ""
+            keyPassword: ""
+            alias: "wso2carbon"
+          # -- (list) List of custom parameters for VFS listener
+          customParameters:
         sender:
-        # -- JMS Sender name
-        - name: ""
-          # -- JMS Sender parameters
-          parameters:
-            initial_naming_factory: ""
-            provider_url: ""
-        # -- JMS Listener configurations
-        listener:
-        # -- JMS Listener name
-        - name: ""
-          # -- JMS Listener parameters
-          parameters:
-            initial_naming_factory: ""
-            provider_url: ""
-            session_transaction: true
+          enable: true
+          # -- (list) List of custom parameters for VFS sender
+          customParameters:
       jndi:
         # -- List of JNDI connection factories
         connectionFactories:
@@ -237,108 +222,155 @@ wso2:
         - jndiName: ""
           # -- Actual queue name
           physicalName: ""
+      rabbitmq:
+        # -- RabbitMQ Sender configurations in blocking mode
+        sender:
+        # -- RabbitMQ Sender name in blocking mode
+        - name: ""
+          # -- (list) RabbitMQ Sender parameters in blocking mode (https://apim.docs.wso2.com/en/4.1.0/reference/config-catalog-mi/#rabbitmq-sender)
+          parameters:
+        # -- RabbitMQ Listener configurations in blocking mode
+        listener:
+        # -- RabbitMQ Listener name in blocking mode
+        - name: ""
+          # -- (list) RabbitMQ Listener parameters in blocking mode (https://apim.docs.wso2.com/en/4.1.0/reference/config-catalog-mi/#rabbitmq-listener)
+          parameters:
+      jms:
+        # -- JMS Sender configurations in blocking mode
+        sender:
+        # -- JMS Sender name in blocking mode
+        - name: ""
+          # -- JMS Sender parameters in blocking mode
+          parameters:
+            initial_naming_factory: ""
+            provider_url: ""
+        # -- JMS Listener configurations in blocking mode
+        listener:
+        # -- JMS Listener name in blocking mode
+        - name: ""
+          # -- JMS Listener parameters in blocking mode
+          parameters:
+            initial_naming_factory: ""
+            provider_url: ""
+            session_transaction: true
       http:
-        # -- This is the maximum period of inactivity between two consecutive data packets, specified in milliseconds
-        socketTimeout: 180000
-        # -- number of core threads used by the executor pool
-        coreWorkerPoolSize: 400
-        # -- This is the maximum number of threads in the worker thread pool
-        maxWorkerPoolSize: 400
-        # -- Defines the length of the queue that is used to hold runnable tasks to be executed by the worker pool
-        workerPoolQueueLength: -1
-        # -- Memory buffer allocated when reading data into the memory from the underlying socket/file channels
-        ioBufferSize: 16384
-        # -- Maximum number of connections allowed per host port
-        maxHttpConnectionPerHostPort: 32767
-        # -- Preserves the HTTP user agent header
-        preserveHttpUserAgent: false
-        preserveHttpServerName: true
-        # -- Header field/s of messages passing through the EI that need to be preserved
-        preserveHttpHeaders: ["Content-Type"]
-        # -- Enables/disables backend HTTP connection close after the request is served
-        disableConnectionKeepalive: false
-        # -- If this property is enabled and the payload exceeds the size specified by the 'maxMessageSizeBytes' property, the Micro Integrator will discontinue reading the input stream
-        enableMessageSizeValidation: false
-        # -- If the size of the payload exceeds this value, the Micro Integrator will discontinue reading the input stream. Only applicable if the enableMessageSizeValidation property is enabled
-        maxMessageSizeBytes: 2147483647
-        # -- Restrict the number of simultaneously opened connections
-        maxOpenConnections: -1
-        # -- This property validates badly formed XML messages by building the whole XML document
-        forceXmlValidation: false
-        # -- Validates JSON messages by parsing the input message
-        forceJsonValidation: false
-        reverseProxyMode: false
-        # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#https-transport-non-blocking-mode
-        listener:
-          enable: true
-          port: 8280
-          wsdlEprPrefix: ""
-          bindAddress: ""
-          securedEnable: true
-          securedPort: 8243
-          securedWsdlEprPrefix: ""
-          securedBindAddress: ""
-          securedProtocols: "TLSv1,TLSv1.1,TLSv1.2"
-          verifyClient: ""
-          preferredCiphers: "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256"
-          certificateRevocationVerifierEnable: false
-          certificateRevocationCacheSize: 1024
-          certificateRevocationCacheDelay: 1000
-          sslProfile:
-            filePath: "conf/sslprofiles/listenerprofiles.xml"
-            readInterval: 3600000
-          keystore:
-            fileName: "wso2carbon.jks"
-            type: "JKS"
-            password: ""
-            keyPassword: ""
-          truststore:
-            fileName: "client-truststore.jks"
-            type: "JKS"
-            password: ""
-        # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#https-transport-non-blocking-mode
-        sender:
-          enable: true
-          warnOnHttp500: ""
-          proxyHost: ""
-          proxyPort:
-          securedProxyHost: ""
-          securedProxyPort:
-          nonProxyHosts: ""
-          hostnameVerifier: ""
-          securedProtocols: ""
-          certificateRevocationVerifierEnable: false
-          certificateRevocationCacheSize: 1024
-          certificateRevocationCacheDelay: 1000
-          securedEnable: true
-          sslProfile:
-            filePath: "conf/sslprofiles/senderprofiles.xml"
-            readInterval: 600000
-          keystore:
-            fileName: "wso2carbon.jks"
-            type: "JKS"
-            password: ""
-            keyPassword: ""
-          truststore:
-            fileName: "client-truststore.jks"
-            type: "JKS"
-            password: ""
-      # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#vfs-transport
-      vfs:
-        listener:
-          enable: true
-          keystore:
-            fileName: "wso2carbon.jks"
-            type: "JKS"
-            password: ""
-            keyPassword: ""
-            alias: "wso2carbon"
-          # -- (list) List of custom parameters for VFS listener
-          customParameters:
-        sender:
-          enable: true
-          # -- (list) List of custom parameters for VFS sender
-          customParameters:
+        blocking:
+          listener:
+            enable: true
+            port: 8280
+            hostname: ""
+            originServer: ""
+            requestTimeout: ""
+            requestTcpNoDelay: ""
+            requestCoreThreadPoolSize: ""
+            requestMaxThreadPoolSize: ""
+            threadKeepaliveTime: ""
+            threadKeepaliveTimeUnit: ""
+          sender:
+            enable: true
+            enableClientCaching: true
+            transferEncoding: "chunked"
+            defaultConnectionsPerHost: 200
+            omitSoap12Action: true
+            soTimeout: 60000
+            proxyHost: ""
+            # -- (int)
+            proxyPort:
+            securedEnable: true
+            securedEnableClientCaching: true
+            securedTransferEncoding: "chunked"
+            securedDefaultConnectionsPerHost: 200
+            securedOmitSoap12Action: true
+            securedSoTimeout: 60000
+            securedProxyHost: ""
+            # -- (int)
+            securedProxyPort:
+        nonBlocking:
+          # -- This is the maximum period of inactivity between two consecutive data packets, specified in milliseconds
+          socketTimeout: 180000
+          # -- number of core threads used by the executor pool
+          coreWorkerPoolSize: 400
+          # -- This is the maximum number of threads in the worker thread pool
+          maxWorkerPoolSize: 400
+          # -- Defines the length of the queue that is used to hold runnable tasks to be executed by the worker pool
+          workerPoolQueueLength: -1
+          # -- Memory buffer allocated when reading data into the memory from the underlying socket/file channels
+          ioBufferSize: 16384
+          # -- Maximum number of connections allowed per host port
+          maxHttpConnectionPerHostPort: 32767
+          # -- Preserves the HTTP user agent header
+          preserveHttpUserAgent: false
+          preserveHttpServerName: true
+          # -- Header field/s of messages passing through the EI that need to be preserved
+          preserveHttpHeaders: ["Content-Type"]
+          # -- Enables/disables backend HTTP connection close after the request is served
+          disableConnectionKeepalive: false
+          # -- If this property is enabled and the payload exceeds the size specified by the 'maxMessageSizeBytes' property, the Micro Integrator will discontinue reading the input stream
+          enableMessageSizeValidation: false
+          # -- If the size of the payload exceeds this value, the Micro Integrator will discontinue reading the input stream. Only applicable if the enableMessageSizeValidation property is enabled
+          maxMessageSizeBytes: 2147483647
+          # -- Restrict the number of simultaneously opened connections
+          maxOpenConnections: -1
+          # -- This property validates badly formed XML messages by building the whole XML document
+          forceXmlValidation: false
+          # -- Validates JSON messages by parsing the input message
+          forceJsonValidation: false
+          reverseProxyMode: false
+          # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#https-transport-non-blocking-mode
+          listener:
+            enable: true
+            port: 8280
+            wsdlEprPrefix: ""
+            bindAddress: ""
+            securedEnable: true
+            securedPort: 8243
+            securedWsdlEprPrefix: ""
+            securedBindAddress: ""
+            securedProtocols: "TLSv1,TLSv1.1,TLSv1.2"
+            verifyClient: ""
+            preferredCiphers: "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256"
+            certificateRevocationVerifierEnable: false
+            certificateRevocationCacheSize: 1024
+            certificateRevocationCacheDelay: 1000
+            sslProfile:
+              filePath: "conf/sslprofiles/listenerprofiles.xml"
+              readInterval: 30000
+            keystore:
+              fileName: "wso2carbon.jks"
+              type: "JKS"
+              password: ""
+              keyPassword: ""
+            truststore:
+              fileName: "client-truststore.jks"
+              type: "JKS"
+              password: ""
+          # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#https-transport-non-blocking-mode
+          sender:
+            enable: true
+            warnOnHttp500: ""
+            proxyHost: ""
+            proxyPort:
+            securedProxyHost: ""
+            securedProxyPort:
+            nonProxyHosts: ""
+            hostnameVerifier: ""
+            securedProtocols: ""
+            certificateRevocationVerifierEnable: false
+            certificateRevocationCacheSize: 1024
+            certificateRevocationCacheDelay: 1000
+            securedEnable: true
+            sslProfile:
+              filePath: "conf/sslprofiles/senderprofiles.xml"
+              readInterval: 30000
+            keystore:
+              fileName: "wso2carbon.jks"
+              type: "JKS"
+              password: ""
+              keyPassword: ""
+            truststore:
+              fileName: "client-truststore.jks"
+              type: "JKS"
+              password: ""
     # Refer https://apim.docs.wso2.com/en/latest/reference/config-catalog-mi/#message-mediation
     mediation:
       synapse:
