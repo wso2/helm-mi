@@ -476,6 +476,25 @@ wso2:
         blocking:
         - contentType: ""
           class: ""
+    # -- ManagementAPI related configurations. (https://apim.docs.wso2.com/en/latest/install-and-setup/setup/mi-setup/security/securing_management_api/)
+    managementApi:
+      cors:
+        enabled: true
+        allowedOrigins: "*"
+        allowedHeaders: "Authorization, Content-Type"
+      authorizationHandler:
+        enable: true
+        # -- (list) Enable authorization for additional resources
+        resources: ["/users"]
+      jwtTokenSecurityHandler:
+        enable: true
+        tokenStoreConfig:
+          maxSize: 200
+          cleanUpInterval: 600
+          removeOldestTokenOnOverflow: true
+        tokenConfig:
+          expiry: 3600
+          size: 2048
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)

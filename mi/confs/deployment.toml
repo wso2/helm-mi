@@ -927,3 +927,52 @@ sender.parameter.{{ $key }} = {{ $value }}
 {{- end }}
 {{- end }}
 {{- end }}
+
+{{- if .Values.wso2.config.managementApi }}
+{{- if .Values.wso2.config.managementApi.cors }}
+[management_api.cors]
+{{- if .Values.wso2.config.managementApi.cors.enabled }}
+enabled = {{ .Values.wso2.config.managementApi.cors.enabled }}
+{{- end }}
+{{- if .Values.wso2.config.managementApi.cors.allowedOrigins }}
+allowed_origins = {{ .Values.wso2.config.managementApi.cors.allowedOrigins | quote }}
+{{- end }}
+{{- if .Values.wso2.config.managementApi.cors.allowedHeaders }}
+allowed_headers = {{ .Values.wso2.config.managementApi.cors.allowedHeaders | quote }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.wso2.config.managementApi.jwtTokenSecurityHandler }}
+[management_api.jwt_token_security_handler]
+{{- if .Values.wso2.config.managementApi.jwtTokenSecurityHandler.enable }}
+enable = {{ .Values.wso2.config.managementApi.jwtTokenSecurityHandler.enable }}
+{{- end }}
+{{- if .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenStoreConfig.maxSize }}
+token_store_config.max_size = {{ .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenStoreConfig.maxSize }}
+{{- end }}
+{{- if .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenStoreConfig.cleanUpInterval }}
+token_store_config.clean_up_interval = {{ .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenStoreConfig.cleanUpInterval }}
+{{- end }}
+{{- if .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenStoreConfig.removeOldestTokenOnOverflow }}
+token_store_config.remove_oldest_token_on_overflow = {{ .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenStoreConfig.removeOldestTokenOnOverflow }}
+{{- end }}
+{{- if .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenConfig.expiry }}
+token_config.expiry = {{ .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenConfig.expiry }}
+{{- end }}
+{{- if .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenConfig.size }}
+token_config.size = {{ .Values.wso2.config.managementApi.jwtTokenSecurityHandler.tokenConfig.size }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.wso2.config.managementApi.authorizationHandler }}
+[management_api.authorization_handler]
+{{- if .Values.wso2.config.managementApi.authorizationHandler.enable }}
+enable = {{ .Values.wso2.config.managementApi.authorizationHandler.enable }}
+{{- end }}
+
+{{- range $key, $value := .Values.wso2.config.managementApi.authorizationHandler.resources }}
+[[management_api.authorization_handler.resources]]
+path = {{ $value | quote }}
+{{ end }}
+{{- end }}
+{{- end }}

@@ -54,6 +54,8 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.config.keyStore.primary.fileName | string | `"wso2carbon.jks"` | Primary keystore file name |
 | wso2.config.keyStore.primary.keyPassword | string | `""` | Primary keystore key password |
 | wso2.config.keyStore.primary.password | string | `""` | Primary keystore password |
+| wso2.config.managementApi | object | `{"authorizationHandler":{"enable":true,"resources":["/users"]},"cors":{"allowedHeaders":"Authorization, Content-Type","allowedOrigins":"*","enabled":true},"jwtTokenSecurityHandler":{"enable":true,"tokenConfig":{"expiry":3600,"size":2048},"tokenStoreConfig":{"cleanUpInterval":600,"maxSize":200,"removeOldestTokenOnOverflow":true}}}` | ManagementAPI related configurations. (https://apim.docs.wso2.com/en/latest/install-and-setup/setup/mi-setup/security/securing_management_api/) |
+| wso2.config.managementApi.authorizationHandler.resources | list | `["/users"]` | Enable authorization for additional resources |
 | wso2.config.mediation.flow.statistics.captureAll | bool | `false` |  |
 | wso2.config.mediation.flow.statistics.enable | bool | `false` |  |
 | wso2.config.mediation.flow.tracer.collectMediationProperties | bool | `false` |  |
