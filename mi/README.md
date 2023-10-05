@@ -22,7 +22,12 @@ This module contains the Helm resources required to deploy WSO2 Micro Integrator
 Currently, the MI helm charts are tested with the following cluster providers,
 
 * [Amazon Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks/)
+
+    Refer [EKS Configs](./EXAMPLES.md#amazon-elastic-kubernetes-service-eks) section to configure the required parameters to run MI in EKS.
+
 * [Azure Kubernetes Service (AKS)](https://azure.microsoft.com/en-us/services/kubernetes-service/)
+
+    Refer [AKS Configs](./EXAMPLES.md#azure-kubernetes-service-aks) section to configure the required parameters to run MI in AKS.
 
 ## Helm chart configurations
 
