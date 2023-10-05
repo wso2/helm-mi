@@ -11,7 +11,16 @@ This module contains the Helm resources required to deploy WSO2 Micro Integrator
 
 - A running Kubernetes cluster (AKS, EKS, etc.)
 
-- Ingress controller for routing traffic. The recommendation is to use [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/deploy/) suitable for your cloud environment.
+- Ingress controller for routing traffic. The recommendation is to use [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/deploy/) suitable for your cloud environment. Basic configurations for the NGINX Ingress Controller are as follows. Other supported ingress controllers specific to provider can be fount at [Supported Cluster providers](./EXAMPLES.md#supported-cluster-providers).
+
+```yaml
+wso2:
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+```
 
 - If you are enabling secure vault configurations for the product, you need to configure the secret manager service of the respective cloud provider. Since the secrets are encrypted using the internal keystore password, that password should be included in the key vault so that it can be resolved using a CSI driver when the helm charts are deployed.
 
