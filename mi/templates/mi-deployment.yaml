@@ -148,32 +148,32 @@ spec:
             - name: keystores
               mountPath: /home/wso2carbon/wso2mi-{{ .Values.wso2.deployment.BuildVersion }}/repository/resources/security/{{ .Values.wso2.config.keyStore.internal.fileName }}
               subPath: {{ .Values.wso2.config.keyStore.internal.fileName }}
-            {{- if and (.Values.wso2.config.keyStore.transport) (.Values.wso2.config.keyStore.transport.listener) }}
+            {{- if and (.Values.wso2.config.transport) (.Values.wso2.config.transport.http) (.Values.wso2.config.transport.http.nonBlocking) (.Values.wso2.config.transport.http.nonBlocking.listener) (.Values.wso2.config.transport.http.nonBlocking.listener.keystore) }}
               # Transport listener keystore
             - name: keystores
-              mountPath: /home/wso2carbon/wso2mi-{{ .Values.wso2.deployment.BuildVersion }}/repository/resources/security/{{ .Values.wso2.config.keyStore.transport.listener.fileName }}
+              mountPath: /home/wso2carbon/wso2mi-{{ .Values.wso2.deployment.BuildVersion }}/repository/resources/security/{{ .Values.wso2.config.transport.http.nonBlocking.listener.keystore.fileName }}
               subPath: {{ .Values.wso2.config.keyStore.transport.listener.fileName }}
             {{- end }}
-            {{- if and (.Values.wso2.config.keyStore.transport) (.Values.wso2.config.keyStore.transport.sender) }}
+            {{- if and (.Values.wso2.config.transport) (.Values.wso2.config.transport.http) (.Values.wso2.config.transport.http.nonBlocking) (.Values.wso2.config.transport.http.nonBlocking.sender) (.Values.wso2.config.transport.http.nonBlocking.sender.keystore) }}
               # Transport sender keystore
             - name: keystores
-              mountPath: /home/wso2carbon/wso2mi-{{ .Values.wso2.deployment.BuildVersion }}/repository/resources/security/{{ .Values.wso2.config.keyStore.transport.sender.fileName }}
+              mountPath: /home/wso2carbon/wso2mi-{{ .Values.wso2.deployment.BuildVersion }}/repository/resources/security/{{ .Values.wso2.config.transport.http.nonBlocking.sender.keystore.fileName }}
               subPath: {{ .Values.wso2.config.keyStore.transport.sender.fileName }}
             {{- end }}
               # Primary Truststore
             - name: keystores
               mountPath: /home/wso2carbon/wso2mi-{{ .Values.wso2.deployment.BuildVersion }}/repository/resources/security/{{ .Values.wso2.config.trustStore.primary.fileName }}
               subPath: {{ .Values.wso2.config.trustStore.primary.fileName }}
-            {{- if and (.Values.wso2.config.trustStore.transport) (.Values.wso2.config.trustStore.transport.listener) }}
+            {{- if and (.Values.wso2.config.transport) (.Values.wso2.config.transport.http) (.Values.wso2.config.transport.http.nonBlocking) (.Values.wso2.config.transport.http.nonBlocking.listener) (.Values.wso2.config.transport.http.nonBlocking.listener.truststore) }}
               # Transport listener Truststore
             - name: keystores
-              mountPath: /home/wso2carbon/wso2mi-{{ .Values.wso2.deployment.BuildVersion }}/repository/resources/security/{{ .Values.wso2.config.trustStore.transport.listener.fileName }}
+              mountPath: /home/wso2carbon/wso2mi-{{ .Values.wso2.deployment.BuildVersion }}/repository/resources/security/{{ .Values.wso2.config.transport.http.nonBlocking.listener.truststore.fileName }}
               subPath: {{ .Values.wso2.config.trustStore.transport.listener.fileName }}
             {{- end }}
-            {{- if and (.Values.wso2.config.trustStore.transport) (.Values.wso2.config.trustStore.transport.sender) }}
+            {{- if and (.Values.wso2.config.transport) (.Values.wso2.config.transport.http) (.Values.wso2.config.transport.http.nonBlocking) (.Values.wso2.config.transport.http.nonBlocking.sender) (.Values.wso2.config.transport.http.nonBlocking.sender.truststore) }}
               # Transport sender Truststore
             - name: keystores
-              mountPath: /home/wso2carbon/wso2mi-{{ .Values.wso2.deployment.BuildVersion }}/repository/resources/security/{{ .Values.wso2.config.trustStore.transport.sender.fileName }}
+              mountPath: /home/wso2carbon/wso2mi-{{ .Values.wso2.deployment.BuildVersion }}/repository/resources/security/{{ .Values.wso2.config.transport.http.nonBlocking.sender.truststore.fileName }}
               subPath: {{ .Values.wso2.config.trustStore.transport.sender.fileName }}
             {{- end }}
             {{- end }}

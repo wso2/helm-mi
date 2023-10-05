@@ -6,7 +6,7 @@ This doc gives the sample configurations which can be used as values for the Hel
 
 Currently, the MI helm charts are tested with the following cluster providers,
 
-* [Amazon Elastic Kubernetes Service (EKS)](https://aws.amazon.com/eks/)
+### Amazon Elastic Kubernetes Service (EKS)
 
 To use EKS, set the provider as `aws` and define the necessary configurations under `aws` sections as follows,
 ```yaml
@@ -23,7 +23,36 @@ aws:
         secretKey: "<secret_key>"
 ```
 
-* [Azure Kubernetes Service (AKS)](https://azure.microsoft.com/en-us/services/kubernetes-service/)
+When running in EKS, [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller) can be used as the ingress controller. To use it as the ingress controller for MI, update the `ingress` section as follows,
+
+**Note**: The current tested version of the controller is 2.6.x.
+
+> [!IMPORTANT]
+> 1. Create a SSL certificate using the AWS Certificate Manager (ACM) and replace the `<CERT_ARN>` with the certificate ARN.
+> 2. If the AWS Load Balancer Controller is not installed in the cluster, install it using the [installation guide](https://github.com/kubernetes-sigs/aws-load-balancer-controller/blob/main/docs/deploy/installation.md).
+> 3. Following annotations are required to be added to enable the AWS Load Balancer Controller. Depending on the use case, additional annotations might be required. Refer [AWS Load Balancer Controller annotations](https://kubernetes-sigs.github.io/aws-load-balancer-controller/latest/guide/ingress/annotations/) for more information.
+
+```yaml
+wso2:
+  ingress:
+    # -- Enable Ingress for MI
+    enabled: true
+    # -- Ingress class name
+    ingressClassName: "alb"
+    # -- Ingress annotations
+    annotations:
+      alb.ingress.kubernetes.io/group.name: mi-dev-alb
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+      alb.ingress.kubernetes.io/certificate-arn: <CERT_ARN>
+      alb.ingress.kubernetes.io/backend-protocol: HTTPS
+      alb.ingress.kubernetes.io/healthcheck-protocol: 'HTTP'
+      alb.ingress.kubernetes.io/healthcheck-port: '9201'
+      alb.ingress.kubernetes.io/healthcheck-path: /healthz
+```
+
+### Azure Kubernetes Service (AKS)
 
 To use EKS, set the provider as `azure` and define the necessary configurations under `azure` sections as follows,
 
@@ -56,7 +85,7 @@ azure:
 
 ## MI User store configurations
 
-By default the file-based user store will be enabled. The following sample configuration shows how to use a RDBMS user store.
+By default the file-based user store will be enabled. The following sample configuration shows how to use a RDBMS user store. It is recommended to include the JDBC driver in your Docker image so that MI can connect to the databases without any issues. If you are not adding the driver to the image itself, you might have to modify the helm charts and mount the driver to the deplyoments.
 
 ```yaml
 wso2:
@@ -66,7 +95,7 @@ wso2:
         # Disable file based userstore
         enabled: false
       rdbms:
-        url: "jdbc:mysql://localhost:3306/userdb"
+        url: "jdbc:mysql://<DB_HOST>:<DB_PORT>/<USER_DB_NAME>"
         username: "root"
         password: "root"
         jdbc:
