@@ -423,74 +423,74 @@ class = {{ $value.class | quote }}
 {{- if .Values.wso2.config.messageFormatters.nonBlocking }}
 [message_formatters]
 {{- if .Values.wso2.config.messageFormatters.nonBlocking.formUrlencoded }}
-form_urlencoded = {{ .Values.wso2.config.messageFormatters.nonBlocking.formUrlencoded }}
+form_urlencoded = {{ .Values.wso2.config.messageFormatters.nonBlocking.formUrlencoded | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.nonBlocking.multipartFormData }}
-multipart_form_data = {{ .Values.wso2.config.messageFormatters.nonBlocking.multipartFormData }}
+multipart_form_data = {{ .Values.wso2.config.messageFormatters.nonBlocking.multipartFormData | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.nonBlocking.applicationXml }}
-application_xml = {{ .Values.wso2.config.messageFormatters.nonBlocking.applicationXml }}
+application_xml = {{ .Values.wso2.config.messageFormatters.nonBlocking.applicationXml | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.nonBlocking.textXml }}
-text_xml = {{ .Values.wso2.config.messageFormatters.nonBlocking.textXml }}
+text_xml = {{ .Values.wso2.config.messageFormatters.nonBlocking.textXml | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.nonBlocking.soapXml }}
-soap_xml = {{ .Values.wso2.config.messageFormatters.nonBlocking.soapXml }}
+soap_xml = {{ .Values.wso2.config.messageFormatters.nonBlocking.soapXml | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.nonBlocking.textPlain }}
-text_plain = {{ .Values.wso2.config.messageFormatters.nonBlocking.textPlain }}
+text_plain = {{ .Values.wso2.config.messageFormatters.nonBlocking.textPlain | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.nonBlocking.applicationJson }}
-application_json = {{ .Values.wso2.config.messageFormatters.nonBlocking.applicationJson }}
+application_json = {{ .Values.wso2.config.messageFormatters.nonBlocking.applicationJson | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.nonBlocking.jsonBadgerfish }}
-json_badgerfish = {{ .Values.wso2.config.messageFormatters.nonBlocking.jsonBadgerfish }}
+json_badgerfish = {{ .Values.wso2.config.messageFormatters.nonBlocking.jsonBadgerfish | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.nonBlocking.textJavascript }}
-text_javascript = {{ .Values.wso2.config.messageFormatters.nonBlocking.textJavascript }}
+text_javascript = {{ .Values.wso2.config.messageFormatters.nonBlocking.textJavascript | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.nonBlocking.octetStream }}
-octet_stream = {{ .Values.wso2.config.messageFormatters.nonBlocking.octetStream }}
+octet_stream = {{ .Values.wso2.config.messageFormatters.nonBlocking.octetStream | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.nonBlocking.applicationBinary }}
-application_binary = {{ .Values.wso2.config.messageFormatters.nonBlocking.applicationBinary }}
+application_binary = {{ .Values.wso2.config.messageFormatters.nonBlocking.applicationBinary | quote }}
 {{- end }}
 {{- end }}
 
 {{- if .Values.wso2.config.messageFormatters.blocking }}
 [blocking.message_formatters]
 {{- if .Values.wso2.config.messageFormatters.blocking.formUrlencoded }}
-form_urlencoded = {{ .Values.wso2.config.messageFormatters.blocking.formUrlencoded }}
+form_urlencoded = {{ .Values.wso2.config.messageFormatters.blocking.formUrlencoded | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.blocking.multipartFormData }}
-multipart_form_data = {{ .Values.wso2.config.messageFormatters.blocking.multipartFormData }}
+multipart_form_data = {{ .Values.wso2.config.messageFormatters.blocking.multipartFormData | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.blocking.applicationXml }}
-application_xml = {{ .Values.wso2.config.messageFormatters.blocking.applicationXml }}
+application_xml = {{ .Values.wso2.config.messageFormatters.blocking.applicationXml | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.blocking.textXml }}
-text_xml = {{ .Values.wso2.config.messageFormatters.blocking.textXml }}
+text_xml = {{ .Values.wso2.config.messageFormatters.blocking.textXml | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.blocking.soapXml }}
-soap_xml = {{ .Values.wso2.config.messageFormatters.blocking.soapXml }}
+soap_xml = {{ .Values.wso2.config.messageFormatters.blocking.soapXml | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.blocking.textPlain }}
-text_plain = {{ .Values.wso2.config.messageFormatters.blocking.textPlain }}
+text_plain = {{ .Values.wso2.config.messageFormatters.blocking.textPlain | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.blocking.applicationJson }}
-application_json = {{ .Values.wso2.config.messageFormatters.blocking.applicationJson }}
+application_json = {{ .Values.wso2.config.messageFormatters.blocking.applicationJson | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.blocking.jsonBadgerfish }}
-json_badgerfish = {{ .Values.wso2.config.messageFormatters.blocking.jsonBadgerfish }}
+json_badgerfish = {{ .Values.wso2.config.messageFormatters.blocking.jsonBadgerfish | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.blocking.textJavascript }}
-text_javascript = {{ .Values.wso2.config.messageFormatters.blocking.textJavascript }}
+text_javascript = {{ .Values.wso2.config.messageFormatters.blocking.textJavascript | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.blocking.octetStream }}
-octet_stream = {{ .Values.wso2.config.messageFormatters.blocking.octetStream }}
+octet_stream = {{ .Values.wso2.config.messageFormatters.blocking.octetStream | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageFormatters.blocking.applicationBinary }}
-application_binary = {{ .Values.wso2.config.messageFormatters.blocking.applicationBinary }}
+application_binary = {{ .Values.wso2.config.messageFormatters.blocking.applicationBinary | quote }}
 {{- end }}
 {{- end }}
 
@@ -513,62 +513,62 @@ class = {{ $value.class | quote }}
 {{- if .Values.wso2.config.messageBuilders.nonBlocking }}
 [message_builders]
 {{- if .Values.wso2.config.messageBuilders.nonBlocking.applicationXml }}
-application_xml = {{ .Values.wso2.config.messageBuilders.nonBlocking.applicationXml }}
+application_xml = {{ .Values.wso2.config.messageBuilders.nonBlocking.applicationXml | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageBuilders.nonBlocking.formUrlencoded }}
-form_urlencoded = {{ .Values.wso2.config.messageBuilders.nonBlocking.formUrlencoded }}
+form_urlencoded = {{ .Values.wso2.config.messageBuilders.nonBlocking.formUrlencoded | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageBuilders.nonBlocking.multipartFormData }}
-multipart_form_data = {{ .Values.wso2.config.messageBuilders.nonBlocking.multipartFormData }}
+multipart_form_data = {{ .Values.wso2.config.messageBuilders.nonBlocking.multipartFormData | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageBuilders.nonBlocking.textPlain }}
-text_plain = {{ .Values.wso2.config.messageBuilders.nonBlocking.textPlain }}
+text_plain = {{ .Values.wso2.config.messageBuilders.nonBlocking.textPlain | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageBuilders.nonBlocking.applicationJson }}
-application_json = {{ .Values.wso2.config.messageBuilders.nonBlocking.applicationJson }}
+application_json = {{ .Values.wso2.config.messageBuilders.nonBlocking.applicationJson | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageBuilders.nonBlocking.jsonBadgerfish }}
-json_badgerfish = {{ .Values.wso2.config.messageBuilders.nonBlocking.jsonBadgerfish }}
+json_badgerfish = {{ .Values.wso2.config.messageBuilders.nonBlocking.jsonBadgerfish | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageBuilders.nonBlocking.textJavascript }}
-text_javascript = {{ .Values.wso2.config.messageBuilders.nonBlocking.textJavascript }}
+text_javascript = {{ .Values.wso2.config.messageBuilders.nonBlocking.textJavascript | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageBuilders.nonBlocking.octetStream }}
-octet_stream = {{ .Values.wso2.config.messageBuilders.nonBlocking.octetStream }}
+octet_stream = {{ .Values.wso2.config.messageBuilders.nonBlocking.octetStream | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageBuilders.nonBlocking.applicationBinary }}
-application_binary = {{ .Values.wso2.config.messageBuilders.nonBlocking.applicationBinary }}
+application_binary = {{ .Values.wso2.config.messageBuilders.nonBlocking.applicationBinary | quote }}
 {{- end }}
 {{- end }}
 
 {{- if .Values.wso2.config.messageBuilders.blocking }}
 [blocking.message_builders]
 {{- if .Values.wso2.config.messageBuilders.blocking.applicationXml }}
-application_xml = {{ .Values.wso2.config.messageBuilders.blocking.applicationXml }}
+application_xml = {{ .Values.wso2.config.messageBuilders.blocking.applicationXml | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageBuilders.blocking.formUrlencoded }}
-form_urlencoded = {{ .Values.wso2.config.messageBuilders.blocking.formUrlencoded }}
+form_urlencoded = {{ .Values.wso2.config.messageBuilders.blocking.formUrlencoded | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageBuilders.blocking.multipartFormData }}
-multipart_form_data = {{ .Values.wso2.config.messageBuilders.blocking.multipartFormData }}
+multipart_form_data = {{ .Values.wso2.config.messageBuilders.blocking.multipartFormData | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageBuilders.blocking.textPlain }}
-text_plain = {{ .Values.wso2.config.messageBuilders.blocking.textPlain }}
+text_plain = {{ .Values.wso2.config.messageBuilders.blocking.textPlain | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageBuilders.blocking.applicationJson }}
-application_json = {{ .Values.wso2.config.messageBuilders.blocking.applicationJson }}
+application_json = {{ .Values.wso2.config.messageBuilders.blocking.applicationJson | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageBuilders.blocking.jsonBadgerfish }}
-json_badgerfish = {{ .Values.wso2.config.messageBuilders.blocking.jsonBadgerfish }}
+json_badgerfish = {{ .Values.wso2.config.messageBuilders.blocking.jsonBadgerfish | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageBuilders.blocking.textJavascript }}
-text_javascript = {{ .Values.wso2.config.messageBuilders.blocking.textJavascript }}
+text_javascript = {{ .Values.wso2.config.messageBuilders.blocking.textJavascript | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageBuilders.blocking.octetStream }}
-octet_stream = {{ .Values.wso2.config.messageBuilders.blocking.octetStream }}
+octet_stream = {{ .Values.wso2.config.messageBuilders.blocking.octetStream | quote }}
 {{- end }}
 {{- if .Values.wso2.config.messageBuilders.blocking.applicationBinary }}
-application_binary = {{ .Values.wso2.config.messageBuilders.blocking.applicationBinary }}
+application_binary = {{ .Values.wso2.config.messageBuilders.blocking.applicationBinary | quote }}
 {{- end }}
 {{- end }}
 
