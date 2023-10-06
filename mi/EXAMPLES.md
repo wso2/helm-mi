@@ -198,3 +198,44 @@ wso2:
         - contentType: "application/ld+json"
           class: "org.example.CustomJsonFormatter"
 ```
+
+## Mounting Keystore and Truststore using a Kubernetes Secret
+
+If you are not including the keystore and truststore into the docker image, you can mount them using a Kubernetes secret. The following sample configuration shows how to mount the keystore and truststore using a Kubernetes secret.
+
+**Pre-requisites**
+
+Create a Kubernetes secret with the keystore and truststore files. The secret should contain the primary keystore file, internal keystore file and  truststore file.
+
+> [!IMPORTANT]
+> 1. Make sure to use the same secret name when creating the secret and when configuring the helm chart.
+> 2. If you are using a different keystore file name and alias, make sure to update the helm chart configurations accordingly.
+> 3. In addition to the primary, internal keystores and truststore files, you can also include the keystores for HTTPS tranport as well. Refer [CONFIG](./CONFIG.md) and [Configuring Keystores for the Micro Integrator](https://apim.docs.wso2.com/en/latest/install-and-setup/setup/mi-setup/security/configuring_keystores/) for more information.
+
+Refer the following sample commands to create the secret and use it in the helm chart.
+
+```
+kubectl create secret generic mi-jks-secret --from-file=wso2carbon.jks --from-file=client-truststore.jks --from-file=wso2internal.jks -n mi-test
+```
+
+```yaml
+wso2:
+  deployment:
+    JKSSecretName: "mi-jks-secret"
+  config:
+    keyStore:
+      primary:
+        fileName: "wso2carbon.jks"
+        alias: "wso2carbon"
+        password: ""
+        keyPassword: ""
+      internal:
+        fileName: "wso2internal.jks"
+        alias: "wso2carbon"
+        password: ""
+        keyPassword: ""
+    trustStore:
+      primary:
+        fileName: "client-truststore.jks"
+        password: ""
+```
