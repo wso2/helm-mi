@@ -2,7 +2,11 @@
 Common prefix prepended to Kubernetes resources of this chart
 */}}
 {{- define "resource.prefix" -}}
+{{- if .Values.cloudName -}}
+{{ .Values.cloudName }}
+{{- else -}}
 {{- "cloud" }}
+{{- end -}}
 {{- end -}}
 
 {{/*
