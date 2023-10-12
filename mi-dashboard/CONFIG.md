@@ -8,11 +8,25 @@ A Helm chart for the deployment of WSO2 Micro Integrator Dashboard
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| aws.ecr.registry | string | `""` | AWS Elastic Container Registry |
+| aws.region | string | `""` | AWS region |
 | aws.secretManager.secretIdentifiers.internalKeystorePassword.secretKey | string | `""` | Secret key for internal keystore password |
 | aws.secretManager.secretIdentifiers.internalKeystorePassword.secretName | string | `""` | Secret name for internal keystore password |
 | aws.secretManager.secretProviderClass | string | `""` | AWS Secret Manager secret provider class name |
 | aws.serviceAccountName | string | `""` | AWS IAM serivce account name |
+| azure.keyVault.activeDirectory.servicePrincipal | object | `{"appId":"","clientSecret":""}` | Service Principal created for transacting with the target Azure Key Vault For advanced details refer to official documentation (https://github.com/Azure/secrets-store-csi-driver-provider-azure/blob/master/docs/service-principal-mode.md) |
+| azure.keyVault.activeDirectory.servicePrincipal.appId | string | `""` | Azure AD application name for fetching secrets via CSI secret store driver |
+| azure.keyVault.activeDirectory.servicePrincipal.clientSecret | string | `""` | Client secret of Azure AD application client |
+| azure.keyVault.activeDirectory.tenantId | string | `""` | Azure Active Directory tenant ID of the target Key Vault |
+| azure.keyVault.name | string | `""` | Name of the target Azure Key Vault instance |
+| azure.keyVault.resourceManager.resourceGroup | string | `""` | Name of the Azure Resource Group to which the target Azure Key Vault belongs |
+| azure.keyVault.resourceManager.subscriptionId | string | `""` | Subscription ID of the target Azure Key Vault |
+| azure.keyVault.secretIdentifiers.internalKeystorePassword | string | `""` | Secret name for internal keystore password |
+| azure.keyVault.secretProviderClass | string | `""` | Azure Secret Manager secret provider class name |
+| containerRegistry | string | `""` | Container registry |
+| gcp.secretManager.secretIdentifiers.internalKeystorePassword | string | `""` | Secret name for internal keystore password. Expected format is `projects/<PROJECT_ID>/secrets/<SECRET_NAME>/versions/<VERSION>` |
+| gcp.secretManager.secretProviderClass | string | `""` | GCP Secret Manager secret provider class name |
+| gcp.secretManager.serviceAccountKeySecret | string | `""` | K8s secret name which contains the JSON keyfile for the service account used to access the GCP Secret Manager |
+| provider | string | `""` | Kubernetes cluster provider. Supported values: azure, aws |
 | wso2.config.heartbeatPoolSize | int | `15` | Number of threads used by the executor pool to handle incoming requests from Micro Integrator runtimes |
 | wso2.config.keyStore.alias | string | `"wso2carbon"` | The keystore alias |
 | wso2.config.keyStore.fileName | string | `"dashboard.jks"` |  |
