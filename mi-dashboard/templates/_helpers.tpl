@@ -59,5 +59,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- printf "cp /mnt/secrets-store/%s ${WSO2_SERVER_HOME}/password-tmp" .Values.azure.keyVault.secretIdentifiers.internalKeystorePassword -}}
 {{- else if eq "aws" .Values.provider }}
 {{- printf "cp /mnt/secrets-store/%s ${WSO2_SERVER_HOME}/password-tmp" .Values.aws.secretManager.secretIdentifiers.internalKeystorePassword.secretKey -}}
+{{- else if eq "gcp" .Values.provider }}
+{{- printf "cp /mnt/secrets-store/INTERNAL_KEYSTORE_PASSWORD ${WSO2_SERVER_HOME}/password-tmp" -}}
 {{- end }}
 {{- end -}}
