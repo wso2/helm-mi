@@ -215,6 +215,11 @@ spec:
               secretProviderClass: {{ .Values.azure.keyVault.secretProviderClass }}
             nodePublishSecretRef:
               name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-secret-store-csi
+            {{- else if eq "gcp" .Values.provider }}
+            volumeAttributes:
+              secretProviderClass: {{ .Values.gcp.secretManager.secretProviderClass }}
+            nodePublishSecretRef:
+              name: {{ .Values.gcp.secretManager.serviceAccountKeySecret }}
             {{- else if eq "aws" .Values.provider }}
             volumeAttributes:
               secretProviderClass: {{ .Values.aws.secretManager.secretProviderClass }}

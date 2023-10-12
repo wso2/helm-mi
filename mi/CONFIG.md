@@ -20,9 +20,12 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | azure.keyVault.name | string | `""` | Name of the target Azure Key Vault instance |
 | azure.keyVault.resourceManager.resourceGroup | string | `""` | Name of the Azure Resource Group to which the target Azure Key Vault belongs |
 | azure.keyVault.resourceManager.subscriptionId | string | `""` | Subscription ID of the target Azure Key Vault |
-| azure.keyVault.secretIdentifiers.internalKeystorePassword | string | `""` |  |
-| azure.keyVault.secretProviderClass | string | `""` |  |
+| azure.keyVault.secretIdentifiers.internalKeystorePassword | string | `""` | Secret name for internal keystore password |
+| azure.keyVault.secretProviderClass | string | `""` | Azure Secret Manager secret provider class name |
 | containerRegistry | string | `""` | Container registry |
+| gcp.secretManager.secretIdentifiers.internalKeystorePassword | string | `""` | Secret name for internal keystore password. Expected format is `projects/<PROJECT_ID>/secrets/<SECRET_NAME>/versions/<VERSION>` |
+| gcp.secretManager.secretProviderClass | string | `""` | GCP Secret Manager secret provider class name |
+| gcp.secretManager.serviceAccountKeySecret | string | `""` | K8s secret name which contains the JSON keyfile for the service account used to access the GCP Secret Manager |
 | provider | string | `""` | Kubernetes cluster provider. Supported values: azure, aws |
 | wso2.config.admin.createAdminAccount | bool | `false` | Create super admin account |
 | wso2.config.admin.password | string | `""` | Super admin password |
