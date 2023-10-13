@@ -83,6 +83,61 @@ azure:
       resourceGroup: "<>"
 ```
 
+### Google Kubernetes Engine (GKE)
+
+To use GKE, set the provider as `gcp` and define the necessary configurations under `gcp` sections as follows,
+
+```yaml
+provider: "gcp"
+gcp:
+  secretManager:
+    secretProviderClass: "<secret_provider_class_name>"
+    serviceAccountKeySecret: "<k8s_secret_for_service_account_key>"
+    secretIdentifiers:
+      internalKeystorePassword: "<>"
+```
+
+When we enable WSO2 secure vault, GCP [Secret Manager](https://cloud.google.com/secret-manager) will be used to store the Internal Keystore password. You will need to satisfy the following pre-requisites to use GCP Secret Manager.
+
+1. Creating a Service account to access the secret manager. You can change `SA-INTERNAL-KEYSTORE-SECRET` to a different name, but if you do, make sure to change it in later steps too.
+
+```
+gcloud iam service-accounts create SA-INTERNAL-KEYSTORE-SECRET
+```
+
+2. Attaching the role to the Service account. Replace `<SECRET_NAME>` and `<PROJECT_ID>` with the actual values. `SECRET_NAME` is the name of the secret created in GCP Secret Manager to store the Internal Keystore password.
+
+```
+gcloud secrets add-iam-policy-binding <SECRET_NAME> --member="serviceAccount:SA-INTERNAL-KEYSTORE-SECRET@<PROJECT_ID>.iam.gserviceaccount.com" --role="roles/secretmanager.secretAccessor"
+```
+
+3. Download the JSON keyfile for the service account
+
+```
+gcloud iam service-accounts keys create key.json --iam-account=SA-INTERNAL-KEYSTORE-SECRET@<PROJECT_ID>.iam.gserviceaccount.com
+```
+
+4. Create a K8s secret with the key 'key.json' with a value of an exported GCP service account credential. Replace `<K8S_SECRET_NAME>` and `<NAMESPACE>` accordingly.
+Note: You will need to use the same `K8S_SECRET_NAME` for the `serviceAccountKeySecret` values in the helm chart.
+
+```
+kubectl create secret generic <K8S_SECRET_NAME> --from-file=key.json -n <NAMESPACE>
+```
+
+5. Install the Secrets CSI driver 
+
+```
+helm repo add secrets-store-csi-driver https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
+
+helm upgrade --install csi-secrets-store secrets-store-csi-driver/secrets-store-csi-driver --namespace kube-system
+```
+
+6. Install the GCP provider
+
+```
+kubectl apply -f https://raw.githubusercontent.com/GoogleCloudPlatform/secrets-store-csi-driver-provider-gcp/main/deploy/provider-gcp-plugin.yaml
+```
+
 ## MI User store configurations
 
 By default the file-based user store will be enabled. The following sample configuration shows how to use a RDBMS user store. It is recommended to include the JDBC driver in your Docker image so that MI can connect to the databases without any issues. If you are not adding the driver to the image itself, you might have to modify the helm charts and mount the driver to the deplyoments.

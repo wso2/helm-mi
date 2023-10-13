@@ -38,6 +38,10 @@ Currently, the MI helm charts are tested with the following cluster providers,
 
     Refer [AKS Configs](./EXAMPLES.md#azure-kubernetes-service-aks) section to configure the required parameters to run MI in AKS.
 
+* [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine)
+
+    Refer [GKE Configs](./EXAMPLES.md#google-kubernetes-engine-gke) section to configure the required parameters to run MI in GKE.
+
 ## Helm chart configurations
 
 The [values.yaml](./values.yaml) file contains the basic required parameters to deploy MI in a Kubernetes environment.
