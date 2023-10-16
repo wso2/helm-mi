@@ -16,13 +16,13 @@ metadata:
   name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-carbonapps
 spec:
   capacity:
-    storage: {{ .Values.wso2.deployment.mountCapps.storage.capacity }}
+    storage: {{ .Values.aws.storage.capacity }}
   volumeMode: Filesystem
   accessModes:
   - ReadWriteMany
-  storageClassName: {{ .Values.wso2.deployment.mountCapps.storage.storageClass }}
+  storageClassName: {{ .Values.aws.storage.storageClass }}
   persistentVolumeReclaimPolicy: Retain
   csi:
     driver: efs.csi.aws.com
-    volumeHandle: {{ .Values.wso2.deployment.mountCapps.storage.fileSystemId }}::{{ .Values.wso2.deployment.mountCapps.storage.cAppAccessPoint }}
+    volumeHandle: {{ .Values.aws.storage.fileSystemId }}::{{ .Values.aws.storage.cAppAccessPoint }}
 {{- end}}

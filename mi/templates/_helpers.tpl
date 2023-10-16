@@ -60,3 +60,20 @@ Create chart name and version as used by the chart label.
 {{- printf "cp /mnt/secrets-store/INTERNAL_KEYSTORE_PASSWORD ${WSO2_SERVER_HOME}/password-tmp" -}}
 {{- end }}
 {{- end -}}
+
+{{- define "capp-storage-capacity" -}}
+{{- if eq "aws" .Values.provider }}
+{{- .Values.aws.storage.capacity -}}
+{{- else if eq "gcp" .Values.provider }}
+{{- .Values.gcp.storage.capacity -}}
+{{- end }}
+{{- end -}}
+
+{{- define "capp-storage-class-name" -}}
+{{- if eq "aws" .Values.provider }}
+{{- .Values.aws.storage.storageClass -}}
+{{- else if eq "gcp" .Values.provider }}
+{{- .Values.gcp.storage.storageClass -}}
+{{- end }}
+{{- end -}}
+

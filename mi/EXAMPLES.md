@@ -162,19 +162,54 @@ wso2:
 
 ## Mounting CApps using a Persistent Volume
 
-Incase the CApps are not burned into the docker image, We can use a persistent volume to mount the CApps. The following sample configuration shows how to mount the CApps using an EFS.
+Incase the CApps are not burned into the docker image, We can use a persistent volume to mount the CApps. The following sample configuration shows how to mount the CApps using a persistent volume.
+
+### Using EFS as the persistent volume when running in EKS
+
+1. Set mountCapps to true in the deployment section.
 
 ```yaml
 wso2:
   deployment:
-    mountCapps:
-      storage:
-        provisioner: "efs.csi.aws.com"
-        storageClass: "efs-sc"
-        capacity: "5Gi"
-        fileSystemId: "<replace_with_filesystem_id>"
-        cAppAccessPoint: "<replace_with_accesspoint_id>"
-        directoryPerms: "0777"
+    mountCapps: true
+```
+
+2. Define the necessary configurations under `aws.storage` sections as follows,
+
+```yaml
+aws:
+  storage:
+    provisioner: "efs.csi.aws.com"
+    storageClass: "efs-sc"
+    capacity: "5Gi"
+    fileSystemId: "<replace_with_filesystem_id>"
+    cAppAccessPoint: "<replace_with_accesspoint_id>"
+    directoryPerms: "0777"
+```
+
+### Using GCP FileStore as the persistent volume when running in GKE
+
+**Prerequisites**: Deploy the Filstore CSI driver following the [Deploying the Driver](https://github.com/kubernetes-sigs/gcp-filestore-csi-driver/blob/master/README.md#deploying-the-driver) section in the GCP documentation.
+
+1. Set mountCapps to true in the deployment section.
+
+```yaml
+wso2:
+  deployment:
+    mountCapps: true
+```
+
+2. Define the necessary configurations under `aws.storage` sections as follows,
+
+```yaml
+gcp:
+  storage:
+    storageClass: "filestore-sc"
+    capacity: "1Gi"
+    volumeHandle: "modeInstance/<zone>/<filestore-instance-name>/<filestore-share-name>"
+    volumeAttributes:
+      ip: "<ip-address-of-the-filestore-instance>"
+      volume: "<filestore-share-name>"
 ```
 
 ## Enabling MI Dashboard
