@@ -13,6 +13,12 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | aws.secretManager.secretIdentifiers.internalKeystorePassword.secretName | string | `""` | Secret name for internal keystore password |
 | aws.secretManager.secretProviderClass | string | `""` | AWS Secret Manager secret provider class name |
 | aws.serviceAccountName | string | `""` | AWS IAM serivce account name |
+| aws.storage.cAppAccessPoint | string | `""` | EFS file system access point ID for mounting the CApps |
+| aws.storage.capacity | string | `""` | Persistent volume storage capacity |
+| aws.storage.directoryPerms | string | `"0777"` | Directory permissions for access point root directory creation |
+| aws.storage.fileSystemId | string | `""` | EFS file system ID |
+| aws.storage.provisioner | string | `"efs.csi.aws.com"` | Storage provisioner |
+| aws.storage.storageClass | string | `""` | Persistent volume storage class name |
 | azure.keyVault.activeDirectory.servicePrincipal | object | `{"appId":"","clientSecret":""}` | Service Principal created for transacting with the target Azure Key Vault For advanced details refer to official documentation (https://github.com/Azure/secrets-store-csi-driver-provider-azure/blob/master/docs/service-principal-mode.md) |
 | azure.keyVault.activeDirectory.servicePrincipal.appId | string | `""` | Azure AD application name for fetching secrets via CSI secret store driver |
 | azure.keyVault.activeDirectory.servicePrincipal.clientSecret | string | `""` | Client secret of Azure AD application client |
@@ -26,6 +32,11 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | gcp.secretManager.secretIdentifiers.internalKeystorePassword | string | `""` | Secret name for internal keystore password. Expected format is `projects/<PROJECT_ID>/secrets/<SECRET_NAME>/versions/<VERSION>` |
 | gcp.secretManager.secretProviderClass | string | `""` | GCP Secret Manager secret provider class name |
 | gcp.secretManager.serviceAccountKeySecret | string | `""` | K8s secret name which contains the JSON keyfile for the service account used to access the GCP Secret Manager |
+| gcp.storage.capacity | string | `""` | Persistent volume storage capacity |
+| gcp.storage.storageClass | string | `""` | Persistent volume storage class name |
+| gcp.storage.volumeAttributes.ip | string | `""` | Pre-provisioned Filestore instance IP |
+| gcp.storage.volumeAttributes.volume | string | `""` | Pre-provisioned Filestore instance share name |
+| gcp.storage.volumeHandle | string | `""` | Volume handle of the GCP Filestore instance. Format `modeInstance/<zone>/<filestore-instance-name>/<filestore-share-name>` |
 | provider | string | `""` | Kubernetes cluster provider. Supported values: azure, aws |
 | wso2.config.admin.createAdminAccount | bool | `false` | Create super admin account |
 | wso2.config.admin.password | string | `""` | Super admin password |
@@ -280,13 +291,7 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.deployment.image.digest | string | `""` | Container image digest |
 | wso2.deployment.image.pullPolicy | string | `"Always"` | Container image pull policy. Refer (https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
 | wso2.deployment.image.repository | string | `""` | Container image repository name |
-| wso2.deployment.mountCapps | object | `{"storage":{"cAppAccessPoint":null,"capacity":"","directoryPerms":null,"fileSystemId":null,"provisioner":"","storageClass":""}}` | Incase the CApps are not burned into the docker image, the following configurations can be used to mount the CApps using a persistent volume |
-| wso2.deployment.mountCapps.storage.cAppAccessPoint | string | `nil` | EFS file system access point ID for mounting the CApps |
-| wso2.deployment.mountCapps.storage.capacity | string | `""` | Persistent volume storage capacity |
-| wso2.deployment.mountCapps.storage.directoryPerms | string | `nil` | Directory permissions for access point root directory creation |
-| wso2.deployment.mountCapps.storage.fileSystemId | string | `nil` | EFS file system ID |
-| wso2.deployment.mountCapps.storage.provisioner | string | `""` | Storage provisioner |
-| wso2.deployment.mountCapps.storage.storageClass | string | `""` | Persistent volume storage class name |
+| wso2.deployment.mountCapps | bool | `false` | Incase the CApps are not burned into the docker image, set the following to `true` to mount the CApps using a persistent volume |
 | wso2.deployment.pdb | object | `{"enabled":false,"minAvailable":1}` | Pod disruption budget configurations (https://kubernetes.io/docs/tasks/run-application/configure-pdb/) |
 | wso2.deployment.pdb.enabled | bool | `false` | Enable/Disable pod disruption budget |
 | wso2.deployment.pdb.minAvailable | int | `1` | Min available pods for pod disruption budget |

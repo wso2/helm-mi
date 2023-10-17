@@ -13,12 +13,12 @@
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: {{ .Values.wso2.deployment.mountCapps.storage.storageClass }}
-provisioner: {{ .Values.wso2.deployment.mountCapps.storage.provisioner }}
+  name: {{ .Values.aws.storage.storageClass }}
+provisioner: {{ .Values.aws.storage.provisioner }}
 parameters:
   provisioningMode: efs-ap
-  fileSystemId: {{ .Values.wso2.deployment.mountCapps.storage.fileSystemId | quote }}
-  directoryPerms: {{ .Values.wso2.deployment.mountCapps.storage.directoryPerms | quote }}
+  fileSystemId: {{ .Values.aws.storage.fileSystemId | quote }}
+  directoryPerms: {{ .Values.aws.storage.directoryPerms | quote }}
   uid: {{ .Values.wso2.deployment.securityContext.runAsUser | quote }}
   gid: {{ .Values.wso2.deployment.securityContext.runAsUser | quote }}
 {{- end}}

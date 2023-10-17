@@ -46,6 +46,7 @@ spec:
       {{- end }}
       securityContext:
         runAsUser: {{ .Values.wso2.deployment.securityContext.runAsUser }}
+        fsGroup: {{ .Values.wso2.deployment.securityContext.runAsUser }}
         {{- if .Values.wso2.deployment.securityContext.seccompProfile }}
         seccompProfile:
           type: RuntimeDefault
