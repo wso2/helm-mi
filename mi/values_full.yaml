@@ -670,3 +670,5 @@ wso2:
       enabled: false
     # -- Incase the CApps are not burned into the docker image, set the following to `true` to mount the CApps using a persistent volume
     mountCapps: false
+    # -- List of Command line arguments passed to startup script
+    cmdArgs:
