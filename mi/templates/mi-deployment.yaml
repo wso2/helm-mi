@@ -67,10 +67,13 @@ spec:
         - name: wso2mi
           image: {{ .Values.containerRegistry }}/{{ .Values.wso2.deployment.image.repository }}@{{ .Values.wso2.deployment.image.digest }}
           imagePullPolicy: {{ .Values.wso2.deployment.image.pullPolicy }}
-          {{- if .Values.wso2.deployment.synapseTest.enabled }}
           args:
+            {{- if .Values.wso2.deployment.synapseTest.enabled }}
             - "-DsynapseTest=true"
-          {{- end }}
+            {{- end }}
+            {{- range .Values.wso2.deployment.cmdArgs }}
+            - "{{ . }}"
+            {{- end }}
           startupProbe:
             exec:
               command:
