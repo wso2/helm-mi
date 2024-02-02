@@ -1,0 +1,24 @@
+
+{{- if .Values.wso2.config.fileProperties }}
+# -------------------------------------------------------------------------------------
+#
+# Copyright (c) 2024, WSO2 LLC. (http://www.wso2.com). All Rights Reserved.
+#
+# This software is the property of WSO2 LLC. and its suppliers, if any.
+# Dissemination of any information or reproduction of any material contained 
+# herein is strictly forbidden, unless permitted by WSO2 in accordance with the 
+# WSO2 Commercial License available at https://wso2.com/licenses/eula/3.2
+#
+# --------------------------------------------------------------------------------------
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-file-properties
+  namespace : {{ .Release.Namespace }}
+data:
+  file.properties: |-
+{{- range $key, $value := .Values.wso2.config.fileProperties }}
+    {{ $key }}={{ $value }}
+{{- end }}
+{{- end }}

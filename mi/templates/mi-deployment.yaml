@@ -192,6 +192,11 @@ spec:
               mountPath: /home/wso2carbon/wso2-config-volume/conf/security/secret-conf.properties
               subPath: secret-conf.properties
             {{- end }}
+            {{- if .Values.wso2.config.fileProperties }}
+            - name: wso2mi-file-properties
+              mountPath: /home/wso2carbon/wso2-config-volume/conf/file.properties
+              subPath: file.properties
+            {{- end }}
       volumes:
         - name: wso2mi-toml
           configMap:
@@ -235,4 +240,9 @@ spec:
         - name: wso2mi-secret-properties
           configMap:
             name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-secret-properties
+        {{- end }}
+        {{- if .Values.wso2.config.fileProperties }}
+        - name: wso2mi-file-properties
+          configMap:
+            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-file-properties
         {{- end }}

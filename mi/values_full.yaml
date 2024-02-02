@@ -567,6 +567,8 @@ wso2:
         tokenConfig:
           expiry: 3600
           size: 2048
+    # -- (list) List of properties
+    fileProperties:
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)

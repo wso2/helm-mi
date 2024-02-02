@@ -275,6 +275,18 @@ wso2:
       class: "org.wso2.carbon.test.gateway.SecHandler"
 ```
 
+## Adding properties to configuration file.
+
+You can use a configuration file to load the parameter values to the properties file stored in the <MI_HOME>/conf directory, which you can use to store the parameter values that should be injected to your synapse configuration.
+
+```yaml
+wso2:
+  config:
+    fileProperties:
+      prop1: value1
+      prop2: value2
+```
+
 ## Defining a custom message formatter
 
 Similar configurations can be used to define a custom message builder as well. Refer `wso2.config.messageFormatters` and `wso2.config.messageBuilders` sections in [CONFIG](./CONFIG.md).
