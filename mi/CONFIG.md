@@ -60,6 +60,7 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.config.dashboard.heartbeatInterval | int | `5` | The time interval (in seconds) between two heartbeats sent from the Micro Integrator to the dashboard server |
 | wso2.config.dashboard.nodeId | string | pod name | The node ID of the Micro Integrator deployment |
 | wso2.config.dashboard.url | string | `""` | MI Dashboard URL |
+| wso2.config.fileProperties | list | `nil` | List of properties |
 | wso2.config.keyStore.internal.alias | string | `"wso2carbon"` | Internal keystore alias |
 | wso2.config.keyStore.internal.fileName | string | `"wso2carbon.jks"` | Internal keystore file name |
 | wso2.config.keyStore.internal.keyPassword | string | `""` | Internal keystore key password |
