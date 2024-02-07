@@ -279,6 +279,13 @@ password = {{ .Values.wso2.config.serviceCatalog.password | quote }}
 {{- end }}
 {{- end }}
 
+{{ if .Values.wso2.config.synapseProperties }}
+[synapse_properties]
+{{- range $key, $value := .Values.wso2.config.synapseProperties }}
+{{ $key | squote }} = {{ $value }}
+{{- end }}
+{{- end }}
+
 {{- if .Values.wso2.config.mediation }}
 [mediation]
 {{- if .Values.wso2.config.mediation.synapse }}

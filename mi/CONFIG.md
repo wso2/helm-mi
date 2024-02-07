@@ -121,6 +121,7 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.config.serviceCatalog.password | string | `""` | Password for signing in to the API Manager runtime |
 | wso2.config.serviceCatalog.username | string | `""` | User name for signing in to the API Manager runtime |
 | wso2.config.synapseHandlers | list | `[{"class":"","name":""}]` | List of synapse handlers with the name and the implementation class |
+| wso2.config.synapseProperties | list | `nil` | List of synapse properties |
 | wso2.config.transport.http.blocking.listener.enable | bool | `true` |  |
 | wso2.config.transport.http.blocking.listener.hostname | string | `""` |  |
 | wso2.config.transport.http.blocking.listener.originServer | string | `""` |  |

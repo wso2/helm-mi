@@ -287,6 +287,17 @@ wso2:
       prop2: value2
 ```
 
+## Defining synapse properties
+For commonly used synapse properties you can use the properties under `wso2.config.mediation.synapse` in the Helm values. If you need to pass any other parameter to the `synapse.properties` file you need to define them under `wso2.config.synapseProperties` as follows,
+
+```yaml
+wso2:
+  config:
+    synapseProperties:
+      synapse.json.to.xml.processing.instruction.enabled: true
+      freemarker.template.base.path: '"/home/test"'
+```
+
 ## Defining a custom message formatter
 
 Similar configurations can be used to define a custom message builder as well. Refer `wso2.config.messageFormatters` and `wso2.config.messageBuilders` sections in [CONFIG](./CONFIG.md).

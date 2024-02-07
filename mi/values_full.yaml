@@ -476,6 +476,8 @@ wso2:
       sequenceAnalytics: true
       # -- Enable/Disable publishing endpoint analytics data
       endpointAnalytics: true
+    # -- (list) List of synapse properties
+    synapseProperties:
     # -- (list) List of synapse handlers with the name and the implementation class
     synapseHandlers:
     - name: ""
