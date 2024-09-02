@@ -65,7 +65,7 @@ spec:
                 topologyKey: topology.kubernetes.io/zone
       containers:
         - name: wso2mi
-          image: {{ .Values.containerRegistry }}/{{ .Values.wso2.deployment.image.repository }}@{{ .Values.wso2.deployment.image.digest }}
+          image: {{ .Values.containerRegistry }}/{{ .Values.wso2.deployment.image.repository }}{{- if .Values.wso2.deployment.image.digest }}@{{ .Values.wso2.deployment.image.digest }}{{- else }}:{{ .Values.wso2.deployment.image.tag }}{{- end }}
           imagePullPolicy: {{ .Values.wso2.deployment.image.pullPolicy }}
           args:
             {{- if .Values.wso2.deployment.synapseTest.enabled }}
@@ -114,10 +114,10 @@ spec:
               protocol: TCP
             - containerPort: {{ add 9164 .Values.wso2.config.portOffset -10 }}
               protocol: TCP
-          {{- if .Values.wso2.deployment.synapseTest.enabled }}
+            {{- if .Values.wso2.deployment.synapseTest.enabled }}
             - containerPort: {{ add 9008 .Values.wso2.config.portOffset -10 }}
               protocol: TCP
-          {{- end }}
+            {{- end }}
           env:
             - name: JAVA_MEM_OPTS
               value: "-Xms{{ .Values.wso2.deployment.resources.jvm.memory.xms }} -Xmx{{ .Values.wso2.deployment.resources.jvm.memory.xmx }}"
@@ -126,12 +126,12 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.name
-          {{- if .Values.wso2.deployment.envs }}
+            {{- if .Values.wso2.deployment.envs }}
             {{- range $key, $val := .Values.wso2.deployment.envs }}
             - name: {{ $key }}
               value: {{ $val | quote }}
             {{- end }}
-          {{- end }}
+            {{- end }}
           volumeMounts:
             - name: wso2mi-toml
               mountPath: /home/wso2carbon/wso2-config-volume/conf/deployment.toml
@@ -246,3 +246,10 @@ spec:
           configMap:
             name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-file-properties
         {{- end }}
+      {{- if .Values.wso2.deployment.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.wso2.deployment.imagePullSecrets }}
+      {{- else if and .Values.wso2.subscription.username .Values.wso2.subscription.password }}
+      imagePullSecrets:
+        - name: wso2micro-integrator-deployment-creds
+      {{- end }}

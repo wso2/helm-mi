@@ -1,10 +1,10 @@
 # -- Kubernetes cluster provider. Supported values: azure, aws
 provider: ""
 # -- Container registry
-containerRegistry: ""
+containerRegistry: "docker.wso2.com"
 # AWS service configurations
 aws:
-  # -- AWS IAM serivce account name
+  # -- AWS IAM service account name
   serviceAccountName: ""
   # -- AWS region
   region: ""
@@ -42,6 +42,11 @@ azure:
       # -- Name of the Azure Resource Group to which the target Azure Key Vault belongs
       resourceGroup: ""
 wso2:
+  subscription:
+    # -- WSO2 subscription username
+    username: ""
+    # -- WSO2 subscription password
+    password: ""
   ingress:
     # -- Enable Ingress for MI
     enabled: true
@@ -82,45 +87,49 @@ wso2:
         # -- Primary keystore alias
         alias: "wso2carbon"
         # -- Primary keystore password
-        password: ""
+        password: "wso2carbon"
         # -- Primary keystore key password
-        keyPassword: ""
+        keyPassword: "wso2carbon"
       internal:
         # -- Internal keystore file name
         fileName: "wso2carbon.jks"
         # -- Internal keystore alias
         alias: "wso2carbon"
         # -- Internal keystore password
-        password: ""
+        password: "wso2carbon"
         # -- Internal keystore key password
-        keyPassword: ""
+        keyPassword: "wso2carbon"
     trustStore:
       primary:
         # -- Primary truststore file name
         fileName: "client-truststore.jks"
         # -- Primary truststore password
-        password: ""
+        password: "wso2carbon"
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
-      apparmor: true
+      apparmor: false
       # -- Enable/Disable seccomp profile (https://kubernetes.io/docs/tutorials/security/seccomp/)
       seccompProfile: true
       # -- The UID to run the entrypoint of the container process
       runAsUser: ""
     # -- Hostname of the Micro Integrator deployment
-    hostname: ""
+    hostname: "mi.wso2.com"
     # -- Build version of the Micro Integrator
-    BuildVersion: "4.2.0"
+    BuildVersion: "4.3.0"
     # -- K8s secret name which contains JKS files
     JKSSecretName: ""
+    # -- imagePullSecrets for private docker registry
+    imagePullSecrets: ""
     image:
       # -- Container image repository name
-      repository: ""
+      repository: "wso2mi"
       # -- Container image digest
       digest: ""
+      # -- Container image tag
+      tag: "4.3.0"
       # -- Container image pull policy. Refer (https://kubernetes.io/docs/concepts/containers/images/#updating-images)
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
 
     # -- Kubernetes Probes (https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
     probes:
