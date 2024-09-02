@@ -1,3 +1,4 @@
+{{- if .Values.wso2.ingress.metrics }}
 # ------------------------------------------------------------------------------------
 # Copyright (c) 2021, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 #
@@ -19,11 +20,11 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
+  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-metrics
   namespace : {{ .Release.Namespace }}
-{{- if .Values.wso2.ingress.annotations }}
+{{- if .Values.wso2.ingress.metrics.annotations }}
   annotations:
-{{ toYaml .Values.wso2.ingress.annotations | indent 4 }}
+{{ toYaml .Values.wso2.ingress.metrics.annotations | indent 4 }}
 {{- if .Values.wso2.ingress.ratelimit.enabled }}
     nginx.ingress.kubernetes.io/configuration-snippet: |
       limit_req zone={{ .Values.wso2.ingress.ratelimit.zoneName }} burst={{ .Values.wso2.ingress.ratelimit.burstLimit }} nodelay;                                                   
@@ -34,16 +35,17 @@ spec:
   ingressClassName: {{ .Values.wso2.ingress.ingressClassName }}
   tls:
     - hosts:
-        - {{ .Values.wso2.deployment.hostname | quote }}
+      - {{ .Values.wso2.deployment.hostname | quote }}
       secretName: {{ .Values.wso2.ingress.tlsSecret }}
   rules:
     - host: {{ .Values.wso2.deployment.hostname | quote }}
       http:
         paths:
-          - path: /
-            pathType: Prefix
+          - path: /healthz
+            pathType: Exact
             backend:
               service:
                 name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
                 port:
-                  number: {{ .Values.wso2.config.serverPort }}
+                  number: {{ add 9201 .Values.wso2.config.portOffset -10 }}
+{{- end}}

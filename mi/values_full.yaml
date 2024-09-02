@@ -4,7 +4,7 @@ provider: ""
 containerRegistry: ""
 # AWS service configurations
 aws:
-  # -- AWS IAM serivce account name
+  # -- AWS IAM service account name
   serviceAccountName: ""
   # -- AWS region
   region: ""
@@ -82,6 +82,11 @@ gcp:
       # -- Pre-provisioned Filestore instance share name
       volume: ""
 wso2:
+  subscription:
+    # -- WSO2 subscription username
+    username: ""
+    # -- WSO2 subscription password
+    password: ""
   ingress:
     # -- Enable Ingress for MI
     enabled: true
@@ -585,11 +590,15 @@ wso2:
     BuildVersion: "4.2.0"
     # -- K8s secret name which contains JKS files
     JKSSecretName: ""
+    # -- imagePullSecrets for private docker registry
+    imagePullSecrets: ""
     image:
       # -- Container image repository name
       repository: ""
       # -- Container image digest
       digest: ""
+      # -- Container image tag
+      tag: ""
       # -- Container image pull policy. Refer (https://kubernetes.io/docs/concepts/containers/images/#updating-images)
       pullPolicy: Always
 

@@ -1,13 +1,20 @@
-# -------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------
+# Copyright (c) 2021, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 #
-# Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com). All Rights Reserved.
+# WSO2 Inc. licenses this file to you under the Apache License,
+# Version 2.0 (the "License"); you may not use this file except
+# in compliance with the License.
+# You may obtain a copy of the License at
 #
-# This software is the property of WSO2 LLC. and its suppliers, if any.
-# Dissemination of any information or reproduction of any material contained 
-# herein is strictly forbidden, unless permitted by WSO2 in accordance with the 
-# WSO2 Commercial License available at https://wso2.com/licenses/eula/3.2
+# http://www.apache.org/licenses/LICENSE-2.0
 #
-# --------------------------------------------------------------------------------------
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied. See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#------------------------------------------------------------------------------------
 
 apiVersion: apps/v1
 kind: Deployment
@@ -65,7 +72,7 @@ spec:
                 topologyKey: topology.kubernetes.io/zone
       containers:
         - name: wso2mi
-          image: {{ .Values.containerRegistry }}/{{ .Values.wso2.deployment.image.repository }}@{{ .Values.wso2.deployment.image.digest }}
+          image: "{{- if .Values.containerRegistry -}}{{ .Values.containerRegistry }}/{{ end }}{{ .Values.wso2.deployment.image.repository }}{{- if .Values.wso2.deployment.image.digest -}}@{{ .Values.wso2.deployment.image.digest }}{{- else -}}:{{ .Values.wso2.deployment.image.tag }}{{- end }}"
           imagePullPolicy: {{ .Values.wso2.deployment.image.pullPolicy }}
           args:
             {{- if .Values.wso2.deployment.synapseTest.enabled }}
@@ -114,10 +121,10 @@ spec:
               protocol: TCP
             - containerPort: {{ add 9164 .Values.wso2.config.portOffset -10 }}
               protocol: TCP
-          {{- if .Values.wso2.deployment.synapseTest.enabled }}
+            {{- if .Values.wso2.deployment.synapseTest.enabled }}
             - containerPort: {{ add 9008 .Values.wso2.config.portOffset -10 }}
               protocol: TCP
-          {{- end }}
+            {{- end }}
           env:
             - name: JAVA_MEM_OPTS
               value: "-Xms{{ .Values.wso2.deployment.resources.jvm.memory.xms }} -Xmx{{ .Values.wso2.deployment.resources.jvm.memory.xmx }}"
@@ -126,12 +133,12 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.name
-          {{- if .Values.wso2.deployment.envs }}
+            {{- if .Values.wso2.deployment.envs }}
             {{- range $key, $val := .Values.wso2.deployment.envs }}
             - name: {{ $key }}
               value: {{ $val | quote }}
             {{- end }}
-          {{- end }}
+            {{- end }}
           volumeMounts:
             - name: wso2mi-toml
               mountPath: /home/wso2carbon/wso2-config-volume/conf/deployment.toml
@@ -246,3 +253,10 @@ spec:
           configMap:
             name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-file-properties
         {{- end }}
+      {{- if .Values.wso2.deployment.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.wso2.deployment.imagePullSecrets }}
+      {{- else if and .Values.wso2.subscription.username .Values.wso2.subscription.password }}
+      imagePullSecrets:
+        - name: wso2micro-integrator-deployment-creds
+      {{- end }}
