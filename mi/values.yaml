@@ -1,6 +1,6 @@
 # -- Kubernetes cluster provider. Supported values: azure, aws
 provider: ""
-# -- Container registry
+# -- Container registry (When running on a local Kubernetes cluster, make this empty)
 containerRegistry: "docker.wso2.com"
 # AWS service configurations
 aws:
