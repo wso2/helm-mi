@@ -1,7 +1,7 @@
 # -- Kubernetes cluster provider. Supported values: azure, aws
 provider: ""
 # -- Container registry (When running on a local Kubernetes cluster using local image, make this empty)
-containerRegistry: "docker.wso2.com"
+containerRegistry: "wso2"
 # AWS service configurations
 aws:
   # -- AWS IAM service account name
@@ -51,9 +51,10 @@ wso2:
     # -- Enable Ingress for MI
     enabled: true
     # -- Ingress class name
-    ingressClassName: ""
+    ingressClassName: "nginx"
     # -- (list) Ingress annotations
     annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     # -- K8s TLS secret for configured hostname
     tlsSecret: ""
     ratelimit:
@@ -63,6 +64,10 @@ wso2:
       zoneName: ""
       # -- Ingress ratelimit burst limit
       burstLimit: ""
+      # -- Enable Ingress for metrics
+      metrics:
+        annotations:
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
   config:
     # -- Port offset for Micro Integrator (https://apim.docs.wso2.com/en/latest/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/#changing-the-default-mi-ports)
     portOffset: 10
@@ -87,32 +92,32 @@ wso2:
         # -- Primary keystore alias
         alias: "wso2carbon"
         # -- Primary keystore password
-        password: ""
+        password: "wso2carbon"
         # -- Primary keystore key password
-        keyPassword: ""
+        keyPassword: "wso2carbon"
       internal:
         # -- Internal keystore file name
         fileName: "wso2carbon.jks"
         # -- Internal keystore alias
         alias: "wso2carbon"
         # -- Internal keystore password
-        password: ""
+        password: "wso2carbon"
         # -- Internal keystore key password
-        keyPassword: ""
+        keyPassword: "wso2carbon"
     trustStore:
       primary:
         # -- Primary truststore file name
         fileName: "client-truststore.jks"
         # -- Primary truststore password
-        password: ""
+        password: "wso2carbon"
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
-      apparmor: true
+      apparmor: false
       # -- Enable/Disable seccomp profile (https://kubernetes.io/docs/tutorials/security/seccomp/)
-      seccompProfile: true
+      seccompProfile: false
       # -- The UID to run the entrypoint of the container process
-      runAsUser: ""
+      runAsUser: "802"
     # -- Hostname of the Micro Integrator deployment
     hostname: "mi.wso2.com"
     # -- Build version of the Micro Integrator
