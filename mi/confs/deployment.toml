@@ -265,6 +265,12 @@ node_id = {{ .Values.wso2.config.dashboard.nodeId | quote }}
 {{- else }}
 node_id = "$env{POD_NAME}"
 {{- end }}
+{{- if .Values.wso2.config.dashboard.managementHostname }}
+management_hostname = {{ .Values.wso2.config.dashboard.managementHostname | quote }}
+{{- end }}
+{{- if .Values.wso2.config.dashboard.managementPort }}
+management_port = {{ .Values.wso2.config.dashboard.managementPort }}
+{{- end }}
 {{- end }}
 
 {{ if .Values.wso2.config.serviceCatalog }}

@@ -28,6 +28,14 @@ wso2:
     metrics:
       annotations:
         nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    # Configure management ingress
+    management:
+      # Hostname for the Micro Integrator management endpoint.
+      hostname: "mi.wso2.com"
+      # Annotations for the Micro Integrator management Ingress.
+      annotations:
+        kubernetes.io/ingress.class: "nginx"
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
   config:
     # -- Port offset for Micro Integrator (https://apim.docs.wso2.com/en/latest/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/#changing-the-default-mi-ports)
     portOffset: 10
@@ -70,6 +78,21 @@ wso2:
         fileName: "client-truststore.jks"
         # -- Primary truststore password
         password: "wso2carbon"
+    dashboard:
+      # -- MI Dashboard URL
+      url: "https://icp.wso2.com/dashboard/api"
+      # -- The time interval (in seconds) between two heartbeats sent from the Micro Integrator to the dashboard server
+      heartbeatInterval: 5
+      # -- The group ID of the Micro Integrator deployment
+      # @default -- release name
+      groupId: "mi_dev"
+      # -- The node ID of the Micro Integrator deployment
+      # @default -- pod name
+      nodeId: "dev_node_2"
+      # -- The service name of the Micro Integrator
+      managementHostname: "<MI_SERVICE_NAME>>"
+      # -- The management port of the Micro Integrator
+      managementPort: 9164
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)

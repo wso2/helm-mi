@@ -71,7 +71,7 @@ spec:
                 topologyKey: topology.kubernetes.io/zone
       containers:
         - name: wso2mi-dashboard
-          image: {{ .Values.containerRegistry }}/{{ .Values.wso2.deployment.image.repository }}@{{ .Values.wso2.deployment.image.digest }}
+          image: "{{- if .Values.containerRegistry -}}{{ .Values.containerRegistry }}/{{ end }}{{ .Values.wso2.deployment.image.repository }}{{- if .Values.wso2.deployment.image.digest -}}@{{ .Values.wso2.deployment.image.digest }}{{- else -}}:{{ .Values.wso2.deployment.image.tag }}{{- end }}"
           imagePullPolicy: {{ .Values.wso2.deployment.image.pullPolicy }}
           startupProbe:
             exec:
