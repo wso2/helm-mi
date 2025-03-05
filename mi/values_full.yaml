@@ -587,7 +587,7 @@ wso2:
     # -- Hostname of the Micro Integrator deployment
     hostname: ""
     # -- Build version of the Micro Integrator
-    BuildVersion: "4.2.0"
+    BuildVersion: "4.4.0"
     # -- K8s secret name which contains JKS files
     JKSSecretName: ""
     # -- imagePullSecrets for private docker registry
