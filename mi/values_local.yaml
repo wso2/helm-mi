@@ -77,11 +77,11 @@ wso2:
       # -- Enable/Disable seccomp profile (https://kubernetes.io/docs/tutorials/security/seccomp/)
       seccompProfile: false
       # -- The UID to run the entrypoint of the container process
-      runAsUser: "802"
+      runAsUser: "10802"
     # -- Hostname of the Micro Integrator deployment
     hostname: "mi.wso2.com"
     # -- Build version of the Micro Integrator
-    BuildVersion: "4.3.0"
+    BuildVersion: "4.4.0"
     # -- K8s secret name which contains JKS files
     JKSSecretName: ""
     # -- imagePullSecrets for private docker registry
@@ -92,7 +92,7 @@ wso2:
       # -- Container image digest
       digest: ""
       # -- Container image tag
-      tag: "4.3.0"
+      tag: "4.4.0"
       # -- Container image pull policy. Refer (https://kubernetes.io/docs/concepts/containers/images/#updating-images)
       pullPolicy: IfNotPresent
 
