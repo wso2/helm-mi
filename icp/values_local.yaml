@@ -28,71 +28,35 @@ wso2:
     metrics:
       annotations:
         nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    # Configure management ingress
-    management:
-      # Hostname for the Micro Integrator management endpoint.
-      hostname: "mi.wso2.com"
-      # Annotations for the Micro Integrator management Ingress.
-      annotations:
-        kubernetes.io/ingress.class: "nginx"
-        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+  
+ # Integration Control Plane (ICP) product configurations
   config:
-    # -- Port offset for Micro Integrator (https://apim.docs.wso2.com/en/latest/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/#changing-the-default-mi-ports)
-    portOffset: 10
-    admin:
-      # -- Super admin username
+    miUserstore:
+      # -- The user name for signing in to the Micro Integrator runtimes
       username: ""
-      # -- Super admin password
+      # -- The user password for signing in to the Micro Integrator runtimes.
       password: ""
-      # -- Create super admin account
-      createAdminAccount: false
-    userstore:
-      file:
-        # -- Enable/Disable file based userstore
-        enabled: true
     secureVault:
       # -- Enable/Disable secure vault
       enabled: false
     keyStore:
-      primary:
-        # -- Primary keystore file name
-        fileName: "wso2carbon.jks"
-        # -- Primary keystore alias
-        alias: "wso2carbon"
-        # -- Primary keystore password
-        password: "wso2carbon"
-        # -- Primary keystore key password
-        keyPassword: "wso2carbon"
-      internal:
-        # -- Internal keystore file name
-        fileName: "wso2carbon.jks"
-        # -- Internal keystore alias
-        alias: "wso2carbon"
-        # -- Internal keystore password
-        password: "wso2carbon"
-        # -- Internal keystore key password
-        keyPassword: "wso2carbon"
+      #  -- The keystore file name
+      fileName: "dashboard.jks"
+      # -- The keystore alias
+      alias: "wso2carbon"
+      # -- The keystore password
+      password: "wso2carbon"
+      # -- The keystore key password
+      keyPassword: "wso2carbon"
     trustStore:
-      primary:
-        # -- Primary truststore file name
-        fileName: "client-truststore.jks"
-        # -- Primary truststore password
-        password: "wso2carbon"
-    icp:
-      # -- ICP URL
-      url: "https://icp.wso2.com/dashboard/api"
-      # -- The time interval (in seconds) between two heartbeats sent from the Micro Integrator to the ICP server
-      heartbeatInterval: 5
-      # -- The group ID of the Micro Integrator deployment
-      # @default -- release name
-      groupId: "mi_dev"
-      # -- The node ID of the Micro Integrator deployment
-      # @default -- pod name
-      nodeId: "dev_node_2"
-      # -- The service name of the Micro Integrator
-      managementHostname: "<MI_SERVICE_NAME>>"
-      # -- The management port of the Micro Integrator
-      managementPort: 9164
+      # -- The truststore file name
+      fileName: "client-trustore.jks"
+      # -- The truststore password
+      password: "wso2carbon"
+    # -- Number of threads used by the executor pool to handle incoming requests from Micro Integrator runtimes
+    heartbeatPoolSize: 15
+    # -- ICP server port
+    serverPort: 9743
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
@@ -102,20 +66,20 @@ wso2:
       # -- The UID to run the entrypoint of the container process
       runAsUser: "802"
     # -- Hostname of the Micro Integrator deployment
-    hostname: "mi.wso2.com"
+    hostname: "icp.wso2.com"
     # -- Build version of the Micro Integrator
-    BuildVersion: "4.3.0"
+    BuildVersion: "1.0.0"
     # -- K8s secret name which contains JKS files
     JKSSecretName: ""
     # -- imagePullSecrets for private docker registry
     imagePullSecrets: ""
     image:
       # -- Container image repository name
-      repository: "wso2mi"
+      repository: "wso2-integration-control-plane"
       # -- Container image digest
       digest: ""
       # -- Container image tag
-      tag: "4.3.0"
+      tag: "1.0.0"
       # -- Container image pull policy. Refer (https://kubernetes.io/docs/concepts/containers/images/#updating-images)
       pullPolicy: IfNotPresent
 
@@ -124,7 +88,7 @@ wso2:
       # -- Startup probe executed prior to Liveness Probe taking over
       startup:
         # -- Number of seconds after the container has started before startup probes are initiated
-        initialDelaySeconds: 5
+        initialDelaySeconds: 15
         # -- How often (in seconds) to perform the probe
         periodSeconds: 3
         # -- Number of attempts

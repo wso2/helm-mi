@@ -56,7 +56,7 @@ gcp:
       internalKeystorePassword: ""
 wso2:
   ingress:
-    # -- Enable Ingress for MI Dashboard
+    # -- Enable Ingress for ICP
     enabled: true
     # -- Ingress class name
     ingressClassName: ""
@@ -79,10 +79,10 @@ wso2:
       seccompProfile: true
       # -- The UID to run the entrypoint of the container process
       runAsUser: ""
-    # -- Hostname of the MI Dashboard deployment
+    # -- Hostname of the ICP deployment
     hostname: ""
-    # -- Build version of the MI Dashboard
-    BuildVersion: "4.2.0"
+    # -- Build version of the ICP
+    BuildVersion: "4.3.0"
     # -- K8s secret name which contains JKS files
     JKSSecretName: ""
     image:
@@ -157,10 +157,10 @@ wso2:
           # -- The maximum amount of memory that should be allocated for the JVM
           xmx: "1024m"
 
-    # -- Environment variables for the MI Dashboard deployment
+    # -- Environment variables for the ICP deployment
     envs:
 
-  # Micro Integrator Dashboard product configurations
+  # Integration Control Plane (ICP) product configurations
   config:
     miUserstore:
       # -- The user name for signing in to the Micro Integrator runtimes
@@ -186,5 +186,5 @@ wso2:
       password: ""
     # -- Number of threads used by the executor pool to handle incoming requests from Micro Integrator runtimes
     heartbeatPoolSize: 15
-    # -- MI Dashboard server port
+    # -- ICP server port
     serverPort: 9743

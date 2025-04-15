@@ -1,8 +1,8 @@
-# mi-dashboard
+# icp
 
-![Version: 4.2.0-0](https://img.shields.io/badge/Version-4.2.0--0-informational?style=flat-square) ![AppVersion: 4.2.0](https://img.shields.io/badge/AppVersion-4.2.0-informational?style=flat-square)
+![Version: 1.0.0-0](https://img.shields.io/badge/Version-1.0.0--0-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
 
-A Helm chart for the deployment of WSO2 Micro Integrator Dashboard
+A Helm chart for the deployment of WSO2 Integration Control Plane
 
 ## Values
 
@@ -35,14 +35,14 @@ A Helm chart for the deployment of WSO2 Micro Integrator Dashboard
 | wso2.config.miUserstore.password | string | `""` | The user password for signing in to the Micro Integrator runtimes. |
 | wso2.config.miUserstore.username | string | `""` | The user name for signing in to the Micro Integrator runtimes |
 | wso2.config.secureVault.enabled | bool | `false` | Enable/Disable secure vault |
-| wso2.config.serverPort | int | `9743` | MI Dashboard server port |
+| wso2.config.serverPort | int | `9743` | ICP server port |
 | wso2.config.trustStore.fileName | string | `"client-trustore.jks"` | The truststore file name |
 | wso2.config.trustStore.password | string | `""` | The truststore password |
-| wso2.deployment.BuildVersion | string | `"4.2.0"` | Build version of the MI Dashboard |
+| wso2.deployment.BuildVersion | string | `"1.0.0"` | Build version of the ICP |
 | wso2.deployment.JKSSecretName | string | `""` | K8s secret name which contains JKS files |
 | wso2.deployment.cpuUtilizationPercentage | int | `75` | Average CPU utilization percentage for HPA |
-| wso2.deployment.envs | string | `nil` | Environment variables for the MI Dashboard deployment |
-| wso2.deployment.hostname | string | `""` | Hostname of the MI Dashboard deployment |
+| wso2.deployment.envs | string | `nil` | Environment variables for the ICP deployment |
+| wso2.deployment.hostname | string | `""` | Hostname of the ICP deployment |
 | wso2.deployment.image.digest | string | `""` | Container image digest |
 | wso2.deployment.image.pullPolicy | string | `"Always"` | Container image pull policy. Refer (https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
 | wso2.deployment.image.repository | string | `""` | Container image repository name |
@@ -72,7 +72,7 @@ A Helm chart for the deployment of WSO2 Micro Integrator Dashboard
 | wso2.deployment.strategy.rollingUpdate.maxSurge | int | `1` | The maximum number of pods that can be scheduled above the desired number of pods. |
 | wso2.deployment.strategy.rollingUpdate.maxUnavailable | int | `0` | The maximum number of pods that can be unavailable during the update. |
 | wso2.ingress.annotations | list | `nil` | Ingress annotations |
-| wso2.ingress.enabled | bool | `true` | Enable Ingress for MI Dashboard |
+| wso2.ingress.enabled | bool | `true` | Enable Ingress for ICP |
 | wso2.ingress.ingressClassName | string | `""` | Ingress class name |
 | wso2.ingress.ratelimit.burstLimit | string | `""` | Ingress ratelimit burst limit |
 | wso2.ingress.ratelimit.enabled | bool | `false` | Ingress rate limit |
