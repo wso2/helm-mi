@@ -183,6 +183,8 @@ wso2:
           driver: ""
           # -- (list) JDBC connection pool parameters of the User Database
           poolParameters:
+            maxAcive: 50
+            maxWait: 60000
       ldap:
         type: "read_only_ldap"
         class: "org.wso2.micro.integrator.security.user.core.ldap.ReadOnlyLDAPUserStoreManager"
