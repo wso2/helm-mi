@@ -36,6 +36,10 @@ wso2:
       username: ""
       # -- The user password for signing in to the Micro Integrator runtimes.
       password: ""
+    userstore:
+      file:
+        # -- Enable/Disable file based userstore
+        enabled: true  
     secureVault:
       # -- Enable/Disable secure vault
       enabled: false

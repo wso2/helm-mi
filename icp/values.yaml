@@ -167,6 +167,58 @@ wso2:
       username: ""
       # -- The user password for signing in to the Micro Integrator runtimes.
       password: ""
+    userstore:
+      file:
+        # -- Enable/Disable file based userstore
+        enabled: true
+      rdbms:
+        # -- User Database URL
+        url: ""
+        # -- User Database username
+        username: ""
+        # -- User Database password
+        password: ""
+        jdbc:
+          # -- JDBC driver class name of the User Database
+          driver: ""
+          # -- (list) JDBC connection pool parameters of the User Database
+          poolParameters:
+      ldap:
+        type: "read_only_ldap"
+        class: "org.wso2.micro.integrator.security.user.core.ldap.ReadOnlyLDAPUserStoreManager"
+        connectionUrl: ""
+        connectionName: ""
+        connectionPassword: ""
+        anonymousBind: false
+        userSearchBase: ""
+        userNameAttribute: ""
+        userNameSearchFilter: ""
+        userNameListFilter: ""
+        displayNameAttribute: ""
+        readGroups: true
+        groupSearchBase: ""
+        groupNameAttribute: ""
+        groupNameSearchFilter: ""
+        groupNameListFilter: ""
+        membershipAttribute: ""
+        backLinksEnabled: false
+        usernameJavaRegex: "[a-zA-Z0-9._\\-|//]{3,30}$"
+        rolenameJavaRegex: "[a-zA-Z0-9._\\-|//]{3,30}$"
+        passwordJavaRegex: "^[\\S]{5,30}$"
+        scimEnabled: false
+        passwordHashMethod: "PLAIN_TEXT"
+        multiAttributeSeparator: ","
+        maxUserNameListLength: 100
+        maxRoleNameListLength: 100
+        userRolesCacheEnabled: true
+        connectionPoolingEnabled: true
+        ldapConnectionTimeout: 5000
+        # -- (int)
+        readTimeout:
+        # -- (int)
+        retryAttempts:
+        replaceEscapeCharactersAtUserLogin: true
+        readOnly: false
     secureVault:
       # -- Enable/Disable secure vault
       enabled: false

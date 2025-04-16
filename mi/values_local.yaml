@@ -28,14 +28,6 @@ wso2:
     metrics:
       annotations:
         nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    # -- Configure management ingress
-    management:
-      # -- Hostname for the Micro Integrator management endpoint.
-      hostname: "mi.wso2.com"
-      # -- Annotations for the Micro Integrator management Ingress.
-      annotations:
-        kubernetes.io/ingress.class: "nginx"
-        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
   config:
     # -- Port offset for Micro Integrator (https://apim.docs.wso2.com/en/latest/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/#changing-the-default-mi-ports)
     portOffset: 10

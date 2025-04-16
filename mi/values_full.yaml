@@ -104,18 +104,6 @@ wso2:
       zoneName: ""
       # -- Ingress ratelimit burst limit
       burstLimit: ""
-    # -- Configure Ingress for metrics
-    metrics:
-      annotations:
-        nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    # -- Configure Ingress for management
-    management:
-      # -- Hostname for the Micro Integrator management endpoint.
-      hostname: ""
-      # -- Annotations for the Micro Integrator management Ingress.
-      annotations:
-        kubernetes.io/ingress.class: "nginx"
-        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
   config:
     # -- Port offset for Micro Integrator (https://apim.docs.wso2.com/en/latest/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/#changing-the-default-mi-ports)
     portOffset: 10
