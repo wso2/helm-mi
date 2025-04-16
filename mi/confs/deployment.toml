@@ -251,7 +251,7 @@ service_catalog_password = {{ .Values.wso2.config.serviceCatalog.password | quot
 
 {{ if .Values.wso2.config.icp }}
 [dashboard_config]
-icp_url = {{ .Values.wso2.config.icp.url | quote }}
+dashboard_url = {{ .Values.wso2.config.icp.url | quote }}
 {{- if .Values.wso2.config.icp.heartbeatInterval }}
 heartbeat_interval = {{ .Values.wso2.config.icp.heartbeatInterval }}
 {{- end }}

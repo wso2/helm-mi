@@ -82,7 +82,7 @@ wso2:
     # -- Hostname of the ICP deployment
     hostname: ""
     # -- Build version of the ICP
-    BuildVersion: "4.3.0"
+    BuildVersion: "1.0.0"
     # -- K8s secret name which contains JKS files
     JKSSecretName: ""
     image:

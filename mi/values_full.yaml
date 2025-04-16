@@ -81,6 +81,7 @@ gcp:
       ip: ""
       # -- Pre-provisioned Filestore instance share name
       volume: ""
+
 wso2:
   subscription:
     # -- WSO2 subscription username
@@ -103,6 +104,18 @@ wso2:
       zoneName: ""
       # -- Ingress ratelimit burst limit
       burstLimit: ""
+    # -- Configure Ingress for metrics
+    metrics:
+      annotations:
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    # -- Configure Ingress for management
+    management:
+      # -- Hostname for the Micro Integrator management endpoint.
+      hostname: ""
+      # -- Annotations for the Micro Integrator management Ingress.
+      annotations:
+        kubernetes.io/ingress.class: "nginx"
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
   config:
     # -- Port offset for Micro Integrator (https://apim.docs.wso2.com/en/latest/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/#changing-the-default-mi-ports)
     portOffset: 10
@@ -210,17 +223,26 @@ wso2:
         fileName: "client-truststore.jks"
         # -- Primary truststore password
         password: ""
-    dashboard:
-      # -- MI Dashboard URL
-      url: ""
-      # -- The time interval (in seconds) between two heartbeats sent from the Micro Integrator to the dashboard server
+    icp:
+      # -- ICP URL
+      url: "https://{hostname/ip}:{port}/dashboard/api/"
+      # -- The time interval (in seconds) between two heartbeats sent from the Micro Integrator to the ICP server
       heartbeatInterval: 5
       # -- The group ID of the Micro Integrator deployment
       # @default -- release name
-      groupId: ""
+      groupId: "mi_dev"
       # -- The node ID of the Micro Integrator deployment
       # @default -- pod name
-      nodeId: ""
+      nodeId: "dev_node_2"
+      # -- The service name of the Micro Integrator
+      managementHostname: ""
+      # -- If communicating via Ingress, use the following configuration:
+      # managementHostname = "<INGRESS_HOSTNAME>"
+      # -- If communicating via Service instead, use the following configuration:
+      # managementHostname = "<SERVICE_NAME>"
+      # management_port = <SERVICE_PORT>
+      # -- The management port of the Micro Integrator
+      managementPort: 9164
     # -- Required if you want the Micro Integrator to publish integation services to the Service Catalog in the API Publisher (https://apim.docs.wso2.com/en/4.1.0/tutorials/integration-tutorials/service-catalog-tutorial/#step-3-configure-the-micro-integrator)
     serviceCatalog:
       # -- Enable/Disable service catalog
