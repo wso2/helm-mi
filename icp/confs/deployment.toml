@@ -18,7 +18,7 @@ enable = {{ .Values.wso2.config.userstore.file.enabled }}
 {{- if not .Values.wso2.config.userstore.file.enabled }}
 [user_store]
 {{- if .Values.wso2.config.userstore.rdbms }}
-class = "org.wso2.micro.integrator.security.user.core.jdbc.JDBCUserStoreManager"
+class = "org.wso2.dashboard.security.user.core.jdbc.JDBCUserStoreManager"
 type = "database"
 {{- if .Values.wso2.config.userstore.rdbms.jdbc.driver }}
 driver_name = {{ .Values.wso2.config.userstore.rdbms.jdbc.driver | quote }}
@@ -32,11 +32,12 @@ username = {{ .Values.wso2.config.userstore.rdbms.username | quote }}
 {{- if .Values.wso2.config.userstore.rdbms.password }}
 password = {{ .Values.wso2.config.userstore.rdbms.password | quote }}
 {{- end }}
-{{- if .Values.wso2.config.userstore.rdbms.jdbc.poolParameters.maxAcive }}
-pool_options.maxActive = {{ .Values.wso2.config.userstore.jdbc.poolParameters.maxAcive | 50 }}
+{{- range $key, $value := .Values.wso2.config.userstore.rdbms.jdbc.poolParameters }}
+{{ if typeIs "string" $value }}
+pool_options.{{ $key }} = {{ $value | quote }}
+{{- else }}
+pool_options.{{ $key }} = {{ $value }}
 {{- end }}
-{{- if .Values.wso2.config.userstore.rdbms.jdbc.poolParameters.maxWait }}
-pool_options.maxWait = {{ .Values.wso2.config.userstore.rdbms.jdbc.poolParameters.maxWait | 60000 }}
 {{- end }}
 {{ else if .Values.wso2.config.userstore.ldap }}
 {{- if .Values.wso2.config.userStore.ldap.type }}

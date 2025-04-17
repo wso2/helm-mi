@@ -33,9 +33,9 @@ wso2:
   config:
     miUserstore:
       # -- The user name for signing in to the Micro Integrator runtimes
-      username: ""
+      username: "admin"
       # -- The user password for signing in to the Micro Integrator runtimes.
-      password: ""
+      password: "admin"
     userstore:
       file:
         # -- Enable/Disable file based userstore
