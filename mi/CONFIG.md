@@ -1,6 +1,6 @@
 # mi
 
-![Version: 4.2.0-0](https://img.shields.io/badge/Version-4.2.0--0-informational?style=flat-square) ![AppVersion: 4.2.0](https://img.shields.io/badge/AppVersion-4.2.0-informational?style=flat-square)
+![Version: 4.3.0-0](https://img.shields.io/badge/Version-4.3.0--0-informational?style=flat-square) ![AppVersion: 4.3.0](https://img.shields.io/badge/AppVersion-4.3.0-informational?style=flat-square)
 
 A Helm chart for the deployment of WSO2 Micro Integrator
 
@@ -280,7 +280,7 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.config.userstore.rdbms.password | string | `""` | User Database password |
 | wso2.config.userstore.rdbms.url | string | `""` | User Database URL |
 | wso2.config.userstore.rdbms.username | string | `""` | User Database username |
-| wso2.deployment.BuildVersion | string | `"4.2.0"` | Build version of the Micro Integrator |
+| wso2.deployment.BuildVersion | string | `"4.3.0"` | Build version of the Micro Integrator |
 | wso2.deployment.JKSSecretName | string | `""` | K8s secret name which contains JKS files |
 | wso2.deployment.cmdArgs | string | `nil` | List of Command line arguments passed to startup script |
 | wso2.deployment.envs | list | `nil` | Environment variables for the Micro integrator deployment |

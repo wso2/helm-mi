@@ -1,10 +1,10 @@
-# Sample configurations for WSO2 MI Dashboard Helm chart
+# Sample configurations for WSO2 Integration Control Plane (ICP) Helm chart
 
 This doc gives the sample configurations which can be used as values for the Helm chart.
 
 ## Supported Cluster providers
 
-Currently, the MI Dashboard helm charts are tested with the following cluster providers,
+Currently, the ICP helm charts are tested with the following cluster providers,
 
 ### Amazon Elastic Kubernetes Service (EKS)
 
@@ -23,7 +23,7 @@ aws:
         secretKey: "<secret_key>"
 ```
 
-When running in EKS, [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller) can be used as the ingress controller. To use it as the ingress controller for MI Dashboard, update the `ingress` section as follows,
+When running in EKS, [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller) can be used as the ingress controller. To use it as the ingress controller for ICP, update the `ingress` section as follows,
 
 **Note**: The current tested version of the controller is 2.6.x.
 
