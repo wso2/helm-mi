@@ -110,26 +110,6 @@ wso2:
 > The `values_local.yaml` is preconfigured to use a file-based user store by default. If you wish to proceed with this configuration, skip the following section. 
 > - You can use default ADMIN user [username='admin', password='admin'] for testing purposes.
 
-
-You can add new users to file-based user store by adding following configurations.
-```yaml
-wso2:
-    config:
-        userstore:
-            file:
-                enabled: true
-                users:
-                    # -- Add ADMIN User
-                    - name: "user-1"
-                      password: "pwd-1"
-                      is_admin: true
-                    # -- Add Non-Admin User
-                    - name: "user-2"
-                      password: "pwd-2"
-                      is_admin: false
-```
-Then you can access server with this newly added users.
-
 ###### LDAP user store
 
 Example for READ ONLY LDAP:
@@ -225,11 +205,11 @@ Follow these steps below to add JDBC driver:
         
 
 <div style="display: flex; justify-content: space-around; align-items: center;">
-    <figure style="width: 40%; height: 450px; text-align: center;">
+    <figure style="width: 40%; height: 450px; text-align: center; margin: 20px;">
         <img src="resources/project-structure.png" alt="Project Structure" />
         <figcaption>Add JDBC JAR to '/deployment/libs' folder</figcaption>
     </figure>
-    <figure style="width: 40%; height: 450px; text-align: center;">
+    <figure style="width: 40%; height: 450px; text-align: center; margin: 20px;">
         <img src="resources/create-docker-image.png" alt="Create Docker Image"/>
         <figcaption>Click Create Docker Image Button to build integration docker image</figcaption>
     </figure>
