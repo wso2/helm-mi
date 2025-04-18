@@ -6,11 +6,12 @@ This guide provides step-by-step instructions to deploy WSO2 Micro Integrator (M
 
 ## Prerequisites
 
-1. **Kubernetes Cluster**: Ensure you have an operational Kubernetes cluster (e.g. AKS, EKS, GKE, or a local Kubernetes cluster).
-2. **Helm**: Install Helm (version 3 or later) on your local machine.
-3. **Ingress Controller**: Deploy an ingress controller (e.g. [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/deploy/)).
-4. **Docker Images**: Acquire WSO2 product Docker images. Push them to a container registry (e.g. ACR, ECR, GCR) if necessary.
-5. **WSO2 Subscription**: A valid WSO2 subscription is required to access Docker images from the WSO2 private registry.
+1. **Git**: Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) on your machine.
+2. **Helm**: Install [Helm](https://helm.sh/docs/intro/install/) (version 3 or later) on your machine.
+3. **Kubernetes Cluster**: Ensure you have an operational Kubernetes cluster (e.g. AKS, EKS, GKE, or a local Kubernetes cluster).
+4. **Ingress Controller**: Deploy an ingress controller (e.g. [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/deploy/)).
+5. **Docker Images**: Acquire WSO2 product Docker images. Push them to a container registry (e.g. ACR, ECR, GCR) if necessary.
+6. **WSO2 Subscription**: A valid WSO2 subscription is required to access Docker images from the **WSO2 private registry**. If you don't have a subscription, sign up for a [ WSO2 Free Trial Subscription ](https://wso2.com/subscription/).
 
 ---
 
@@ -47,8 +48,8 @@ git fetch --all
 
 Checkout to your preferred MI runtime version branch:
 ```bash
-git checkout origin/4.3.x
 cd helm-mi
+git checkout origin/4.3.x
 ```
 
 ### 3. Create a Namespace
@@ -64,7 +65,7 @@ kubectl create namespace wso2-integration
  - Edit the `icp/values_local.yaml` file to configure ICP-specific parameters.
 
 ##### Container Registry and Server Image
-If you intend to use the WSO2 server image, obtain a subscription and update the following configurations:
+If you intend to use the WSO2 released server image, obtain a [subscription](https://wso2.com/subscription/) and update the following configurations:
 ```yaml
 containerRegistry: "wso2"
 
@@ -74,12 +75,13 @@ wso2:
         password: "<password>"
 ```
 
-If you are using your own customized MI server images, set `containerRegistry` to the specific registry:
+If you are using your own customized MI server images, set `containerRegistry` to the specific private docker registry:
 ```yaml
-containerRegistry: "<registry-name>"
+containerRegistry: "<private-registry-name>"
 
 wso2:
     deployment:
+        imagePullSecrets: "<image-pull-secret>"
         image:
         repository: "<image-name>"
         digest: "<image-digest>"
@@ -106,6 +108,7 @@ wso2:
 
 ###### LDAP user store
 
+Example for READ ONLY LDAP:
 ```yaml
 wso2:
     config:
@@ -120,9 +123,11 @@ wso2:
                 userSearchBase: "ou=Users,dc=wso2,dc=org"
 ```
 
+Refer to [MI documentation](https://mi.docs.wso2.com/en/latest/reference/config-catalog-mi/#external-user-store) for complete list of parameters.
+
 ###### RDBMS user store
 
-Refer to [MI documentation](https://mi.docs.wso2.com/en/latest/install-and-setup/setup/user-stores/setting-up-a-userstore-in-icp/#configure-an-rdbms-user-store:~:text=RDBMS%20user%20store-,%C2%B6,-Before%20you%20begin) for more information on supported RDBMS types.
+Refer to [MI documentation](https://mi.docs.wso2.com/en/latest/install-and-setup/setup/user-stores/setting-up-a-userstore-in-icp/#configure-an-rdbms-user-store:~:text=RDBMS%20user%20store-,%C2%B6,-Before%20you%20begin) for more information on supporting RDBMS types.
 
 Example for MySQL:
 ```yaml
@@ -182,7 +187,7 @@ wso2:
                 pullPolicy: IfNotPresent
     ```   
 
-> **Note**: For integration development, if you are using the [MI VSCode extension](https://marketplace.visualstudio.com/items/?itemName=WSO2.micro-integrator), you can add JDBC drivers by placing the JAR file in the `<PROJECT_DIR>/deployment/libs` folder and then clicking "Create Docker Image" under Deployment Options. This will build the Docker image and push it to the local registry. 
+> **Note**: For integration development, if you are using the [MI VSCode extension](https://marketplace.visualstudio.com/items/?itemName=WSO2.micro-integrator), you can **add JDBC drivers to MI server image** by placing the JAR file in the `<PROJECT_DIR>/deployment/libs` folder and then clicking "Create Docker Image" under Deployment Options. This will build the Docker image and push it to the local registry. 
 
 <div style="display: flex; justify-content: space-around; align-items: center;">
     <div style="display: flex; justify-content: space-around; align-items: center;">
@@ -202,13 +207,15 @@ wso2:
 #### Deploy MI
 Navigate to the `mi` directory and deploy MI using Helm:
 ```bash
-helm install wso2-mi ./mi -f values_local.yaml --namespace wso2-integration
+cd mi
+helm install wso2-mi ./ -f values_local.yaml --namespace wso2-integration
 ```
 
 #### Deploy ICP
 Navigate to the `icp` directory and deploy ICP using Helm:
 ```bash
-helm install wso2-icp ./icp -f values_local.yaml --namespace wso2-integration
+cd icp
+helm install wso2-icp ./ -f values_local.yaml --namespace wso2-integration
 ```
 
 ### 6. Verify the Deployment
@@ -231,16 +238,28 @@ Confirm ingress resources:
 kubectl get ingress -n wso2-integration
 ```
 
-### 7. Access the Integration Control Plane (ICP)
+### 7. Access the MI and Integration Control Plane (ICP) 
 
-Access the ICP dashboard within the cluster at `https://<icp-pod-name>:9743/login`.
+#### Access within the cluster
 
-> **Note**: If you are deploying a local setup, perform port forwarding to access ICP as follows:
->
-> ```bash
->    kubectl port-forward pod/<icp-pod-name> -n wso2-integration 8080:9743
-> ```
-> Then, you can access the ICP dashboard at `https://localhost:8080/login`.
+Access the ICP dashboard at `https://icp.wso2.com:9743/login`.
+Invoke the MI integrations as `curl https://mi.wso2.com/<resource-path> -k`.
+
+#### Invoke without Ingress controller
+
+You can also invoke the MI integration solutions and ICP without going through the Ingress controller by using the [port-forward](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/#forward-a-local-port-to-a-port-on-the-pod) method for pods/services.
+
+For ICP:
+ ```bash
+    kubectl port-forward pod/<icp-pod-name> -n wso2-integration 8080:9743
+ ```
+Then, you can access the ICP dashboard at `https://localhost:8080/login`.
+
+For MI Integrations:
+```bash
+    kubectl port-forward service/<service-name> -n wso2-integration 8290:8290
+ ```
+Then, you can access the ICP dashboard at `https://localhost:8080/login`.
 
 ---
 
