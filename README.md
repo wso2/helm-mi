@@ -206,16 +206,14 @@ Follow these steps below to add JDBC driver:
 >   - COPY libs/*.jar ${WSO2_SERVER_HOME}/lib/
         
 
-<div style="display: flex; flex-direction: column; align-items: center;">
-    <figure style="width: 80%; height: auto; text-align: center; margin: 20px;">
-        <img src="resources/project-structure.png" alt="Project Structure" />
-        <figcaption>Add JDBC JAR to '/deployment/libs' folder</figcaption>
-    </figure>
-    <figure style="width: 80%; height: auto; text-align: center; margin: 20px;">
-        <img src="resources/create-docker-image.png" alt="Create Docker Image"/>
-        <figcaption>Click Create Docker Image Button to build integration docker image</figcaption>
-    </figure>
-</div>
+<figure style="width: 80%; height: auto; text-align: center; margin: 20px;">
+    <img src="resources/project-structure.png" alt="Project Structure" />
+    <figcaption>Add JDBC JAR to '/deployment/libs' folder</figcaption>
+</figure>
+<figure style="width: 80%; height: auto; text-align: center; margin: 20px;">
+    <img src="resources/create-docker-image.png" alt="Create Docker Image"/>
+    <figcaption>Click Create Docker Image Button to build integration docker image</figcaption>
+</figure>
 
 ### 5. Deploy MI and ICP
 
