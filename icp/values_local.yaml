@@ -110,24 +110,17 @@ wso2:
 
     # -- Number of deployment replicas
     replicas: 1
-    # -- Horizontal Pod Autoscaler (HPA) configurations (https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
-    hpa:
-      # -- Enable/Disable Horizontal Pod Autoscaler (HPA)
-      enabled: false
-      # -- Min replica count for HPA
-      minReplicas: 1
-      # -- Max replica count for HPA
-      maxReplicas: 2
-      # -- Average CPU utilization percentage for HPA
-      cpuUtilizationPercentage: 75
-      # -- Average memory utilization percentage for HPA
-      memoryUtilizationPercentage: 75
+    # HPA configurations
+    # -- Min replica count for HPA (https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
+    minReplicas: 1
+    # -- Max replica count for HPA (https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/)
+    maxReplicas: 2
+    # -- Average CPU utilization percentage for HPA
+    cpuUtilizationPercentage: 75
+    # -- Average memory utilization percentage for HPA
+    memoryUtilizationPercentage: 75
     # -- Pod disruption budget configurations (https://kubernetes.io/docs/tasks/run-application/configure-pdb/)
-    pdb:
-      # -- Enable/Disable pod disruption budget
-      enabled: false
-      # -- Min available pods for pod disruption budget
-      minAvailable: 1
+    minAvailable: 1
 
     strategy:
       rollingUpdate:
