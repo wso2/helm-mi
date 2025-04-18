@@ -128,7 +128,7 @@ wso2:
                       password: "pwd-2"
                       is_admin: false
 ```
-Then you can log into ICP with this newly added users.
+Then you can access server with this newly added users.
 
 ###### LDAP user store
 
@@ -151,8 +151,6 @@ Refer to [MI documentation](https://mi.docs.wso2.com/en/latest/reference/config-
 
 ###### RDBMS user store
 
-Refer to [MI documentation](https://mi.docs.wso2.com/en/latest/install-and-setup/setup/user-stores/setting-up-a-userstore-in-icp/#configure-an-rdbms-user-store:~:text=RDBMS%20user%20store-,%C2%B6,-Before%20you%20begin) for more information on supporting RDBMS types.
-
 Example for MySQL:
 ```yaml
 wso2:
@@ -170,10 +168,15 @@ wso2:
                     maxActive: 50
                     maxWait: 60000
 ```
+
+Refer to [MI documentation](https://mi.docs.wso2.com/en/latest/install-and-setup/setup/user-stores/setting-up-a-userstore-in-icp/#configure-an-rdbms-user-store:~:text=RDBMS%20user%20store-,%C2%B6,-Before%20you%20begin) for more information on supporting RDBMS types.
+
+
 > [!NOTE] 
 > When using RDBMS, the JDBC driver must be added to the `<SERVER_HOME>/lib` folder. To achieve this, you need to build a custom server image. 
 
-Follow the steps below to add JDBC driver:
+
+Follow these steps below to add JDBC driver:
  1. Create the Dockerfile 
     - Base Images:
         * MI: `wso2/wso2mi:4.3.0`
@@ -214,6 +217,7 @@ Follow the steps below to add JDBC driver:
                 pullPolicy: IfNotPresent
     ```   
 
+
 > [!TIP] 
 > For integration development, if you are using the [MI VSCode extension](https://marketplace.visualstudio.com/items/?itemName=WSO2.micro-integrator), you can **add JDBC drivers to MI server image** by placing the JAR file in the `<PROJECT_DIR>/deployment/libs` folder and then clicking "Create Docker Image" under Deployment Options. This will build the Docker image and push it to the local registry. 
 > - Add following instruction to '<PROJECT_DIR>/deployment/docker/Dockerfile'. Please make sure that only JDBC driver resides in '<PROJECT_DIR>/deployment/libs' folder.
@@ -221,16 +225,14 @@ Follow the steps below to add JDBC driver:
         
 
 <div style="display: flex; justify-content: space-around; align-items: center;">
-    <div style="display: flex; justify-content: space-around; align-items: center;">
-        <figure style="width: 40%; height: 450px; text-align: center;">
-            <img src="resources/project-structure.png" alt="Project Structure" />
-            <figcaption>Add JDBC JAR to '/deployment/libs' folder</figcaption>
-        </figure>
-        <figure style="width: 40%; height: 450px; text-align: center;">
-            <img src="resources/create-docker-image.png" alt="Create Docker Image"/>
-            <figcaption>Click Create Docker Image Button to build integration docker image</figcaption>
-        </figure>
-    </div>
+    <figure style="width: 40%; height: 450px; text-align: center;">
+        <img src="resources/project-structure.png" alt="Project Structure" />
+        <figcaption>Add JDBC JAR to '/deployment/libs' folder</figcaption>
+    </figure>
+    <figure style="width: 40%; height: 450px; text-align: center;">
+        <img src="resources/create-docker-image.png" alt="Create Docker Image"/>
+        <figcaption>Click Create Docker Image Button to build integration docker image</figcaption>
+    </figure>
 </div>
 
 ### 5. Deploy MI and ICP
@@ -258,8 +260,8 @@ kubectl get pods -n wso2-integration
 ```
 
 <figure style="width: 100%; height: auto; margin-left: 0px;">
-    <img src="resources/pods.png" alt="pods" />
     <figcaption style="text-align: center;">List of running pods</figcaption>
+    <img src="resources/pods.png" alt="pods" />
 </figure>
 
 #### Check Services
@@ -269,8 +271,8 @@ kubectl get svc -n wso2-integration
 ```
 
 <figure style="width: 100%; height: auto; margin-left: 0px; text-align: center;">
-    <img src="resources/services.png" alt="pods" />
     <figcaption style="text-align: center;">List of Services</figcaption>
+    <img src="resources/services.png" alt="pods" />
 </figure>
 
 #### Check Ingress
@@ -279,8 +281,8 @@ Confirm ingress resources:
 kubectl get ingress -n wso2-integration
 ```
 <figure style="width: 100%; height: auto; margin-left: 0px;">
-    <img src="resources/ingress.png" alt="pods" />
     <figcaption style="text-align: center;">List of ingress</figcaption>
+    <img src="resources/ingress.png" alt="pods" />
 </figure>
 
 > [!TIP]
@@ -293,8 +295,8 @@ kubectl get ingress -n wso2-integration
 kubectl logs <pod-name> -n wso2-integration
 ```
 <figure style="width: 100%; height: auto; margin-left: 0px;">
-    <img src="resources/server-logs.png" alt="server-logs" />
     <figcaption style="text-align: center;">Server Logs</figcaption>
+    <img src="resources/server-logs.png" alt="server-logs" />
 </figure>
 
 ### 7. Access the MI and Integration Control Plane (ICP) 
