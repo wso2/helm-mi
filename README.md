@@ -43,7 +43,6 @@ You can utilize either **Minikube** or **Rancher Desktop** to establish a local 
 Clone the Helm chart repository containing the MI and ICP Helm charts:
 ```bash
 git clone https://github.com/wso2/helm-mi.git
-git fetch --all
 ```
 
 Checkout to your preferred MI runtime version branch:
@@ -86,10 +85,10 @@ wso2:
     deployment:
         imagePullSecrets: "<image-pull-secret>"
         image:
-        repository: "<image-name>"
-        digest: "<image-digest>"
-        tag: "<image-tag>"
-        pullPolicy: IfNotPresent
+            repository: "<image-name>"
+            digest: "<image-digest>"
+            tag: "<image-tag>"
+            pullPolicy: IfNotPresent
 ```
 When running on a local Kubernetes cluster using a local image, leave this empty:
 ```yaml
@@ -98,10 +97,10 @@ containerRegistry: ""
 wso2:
     deployment:
         image:
-        repository: "<image-name>"
-        digest: "<image-digest>"
-        tag: "<image-tag>"
-        pullPolicy: IfNotPresent
+            repository: "<image-name>"
+            digest: "<image-digest>"
+            tag: "<image-tag>"
+            pullPolicy: IfNotPresent
 ```
 ##### User Stores
 ###### File-based user store (default)
@@ -158,20 +157,23 @@ Refer to [MI documentation](https://mi.docs.wso2.com/en/latest/install-and-setup
 
 Follow these steps below to add JDBC driver:
  1. Create the Dockerfile 
-    - Base Images:
+    - BASE_IMAGE:
         * MI: `wso2/wso2mi:4.3.0`
         * ICP: `wso2/wso2-integration-control-plane:1.0.0`
+    - WSO2_SERVER_HOME:
+        * MI: `/home/wso2carbon/wso2mi-4.3.0`
+        * ICP: `/home/wso2carbon/wso2-integration-control-plane-1.0.0`
     
     Example for MySQL:
 
     ```yaml
-        FROM <base-image>
+        FROM <BASE_IMAGE>
         USER root
         RUN apt-get update && \
             apt-get install -y wget && \
             apt-get clean && \
             rm -rf /var/lib/apt/lists/*
-        ENV WSO2_SERVER_HOME=/home/wso2carbon/wso2-integration-control-plane-1.0.0
+        ENV WSO2_SERVER_HOME=<WSO2_SERVER_HOME>
         RUN mkdir -p ${WSO2_SERVER_HOME}/lib
         ARG JDBC_DRIVER_URL=https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-j-8.0.33.tar.gz
         RUN wget -O /tmp/mysql-connector.tar.gz "${JDBC_DRIVER_URL}" && \
@@ -204,12 +206,12 @@ Follow these steps below to add JDBC driver:
 >   - COPY libs/*.jar ${WSO2_SERVER_HOME}/lib/
         
 
-<div style="display: flex; justify-content: space-around; align-items: center;">
-    <figure style="width: 40%; height: 450px; text-align: center; margin: 20px;">
+<div style="display: flex; flex-direction: column; align-items: center;">
+    <figure style="width: 80%; height: auto; text-align: center; margin: 20px;">
         <img src="resources/project-structure.png" alt="Project Structure" />
         <figcaption>Add JDBC JAR to '/deployment/libs' folder</figcaption>
     </figure>
-    <figure style="width: 40%; height: 450px; text-align: center; margin: 20px;">
+    <figure style="width: 80%; height: auto; text-align: center; margin: 20px;">
         <img src="resources/create-docker-image.png" alt="Create Docker Image"/>
         <figcaption>Click Create Docker Image Button to build integration docker image</figcaption>
     </figure>
@@ -281,10 +283,24 @@ kubectl logs <pod-name> -n wso2-integration
 
 ### 7. Access the MI and Integration Control Plane (ICP) 
 
-#### Access within the cluster
+#### Access through Ingress controller
 
-- Access the ICP dashboard at `https://icp.wso2.com:9743/login`.
-- Invoke the MI integrations as `curl https://mi.wso2.com/<resource-path> -k`.
+Please follow these steps 
+
+1. Get the external IP (EXTERNAL-IP) of the Ingress resources by listing the Kubernetes ingresses.
+    ```bash
+        kubectl get ingress -n wso2-integration
+    ```
+
+2. Add the host information to your /etc/hosts file.
+    ```bash
+    <EXTERNAL-IP>   mi.wso2.com 
+    <EXTERNAL-IP>   icp.wso2.com 
+    ```
+
+3. Now you can access as follows    
+    - Access the ICP dashboard at `https://icp.wso2.com/login`.
+    - Invoke the MI integrations as `curl https://mi.wso2.com/<resource-path> -k`.
 
 #### Invoke without Ingress controller
 
