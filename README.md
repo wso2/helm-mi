@@ -142,10 +142,10 @@ wso2:
                 username: "<username>"
                 password: "<password>"
                 jdbc:
-                driver: "com.mysql.jdbc.Driver"
-                poolParameters:
-                    maxActive: 50
-                    maxWait: 60000
+                    driver: "com.mysql.jdbc.Driver"
+                    poolParameters:
+                        maxActive: 50
+                        maxWait: 60000
 ```
 
 Refer to [MI documentation](https://mi.docs.wso2.com/en/latest/install-and-setup/setup/user-stores/setting-up-a-userstore-in-icp/#configure-an-rdbms-user-store:~:text=RDBMS%20user%20store-,%C2%B6,-Before%20you%20begin) for more information on supporting RDBMS types.
