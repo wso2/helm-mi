@@ -15,6 +15,15 @@ password = {{ .Values.wso2.config.miUserstore.password | quote }}
 [internal_apis.file_user_store]
 enable = {{ .Values.wso2.config.userstore.file.enabled }}
 
+{{- if .Values.wso2.config.userstore.file.enabled }}
+{{- range .Values.wso2.config.userstore.file.users }}
+[[internal_apis.users]]
+user.name = "{{ .name }}"
+user.password = "{{ .password }}"
+user.is_admin = {{ .is_admin }}
+{{- end }}
+{{- end }}
+
 {{- if not .Values.wso2.config.userstore.file.enabled }}
 [user_store]
 {{- if .Values.wso2.config.userstore.rdbms }}

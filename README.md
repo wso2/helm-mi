@@ -64,6 +64,9 @@ kubectl create namespace wso2-integration
  - Edit the `mi/values_local.yaml` file to configure MI-specific parameters.
  - Edit the `icp/values_local.yaml` file to configure ICP-specific parameters.
 
+> [!IMPORTANT] 
+> The configurations described below apply to both MI and ICP deployments. Ensure that the parameters are correctly set in the respective `values_local.yaml` files for seamless functionality.
+
 ##### Container Registry and Server Image
 If you intend to use the WSO2 released server image, obtain a [subscription](https://wso2.com/subscription/) and update the following configurations:
 ```yaml
@@ -103,8 +106,29 @@ wso2:
 ##### User Stores
 ###### File-based user store (default)
 
-> **Note**: The `values_local.yaml` is preconfigured to use a file-based user store by default. If you wish to proceed with this configuration, skip the following section.
-> 
+> [!NOTE] 
+> The `values_local.yaml` is preconfigured to use a file-based user store by default. If you wish to proceed with this configuration, skip the following section. 
+> - You can use default ADMIN user [username='admin', password='admin'] for testing purposes.
+
+
+You can add new users to file-based user store by adding following configurations.
+```yaml
+wso2:
+    config:
+        userstore:
+            file:
+                enabled: true
+                users:
+                    # -- Add ADMIN User
+                    - name: "user-1"
+                      password: "pwd-1"
+                      is_admin: true
+                    # -- Add Non-Admin User
+                    - name: "user-2"
+                      password: "pwd-2"
+                      is_admin: false
+```
+Then you can log into ICP with this newly added users.
 
 ###### LDAP user store
 
@@ -146,7 +170,10 @@ wso2:
                     maxActive: 50
                     maxWait: 60000
 ```
-> **Note**: When using RDBMS, the JDBC driver must be added to the `<SERVER_HOME>/lib` folder. To achieve this, you need to build a custom server image. Follow the steps below:
+> [!NOTE] 
+> When using RDBMS, the JDBC driver must be added to the `<SERVER_HOME>/lib` folder. To achieve this, you need to build a custom server image. 
+
+Follow the steps below to add JDBC driver:
  1. Create the Dockerfile 
     - Base Images:
         * MI: `wso2/wso2mi:4.3.0`
@@ -187,15 +214,19 @@ wso2:
                 pullPolicy: IfNotPresent
     ```   
 
-> **Note**: For integration development, if you are using the [MI VSCode extension](https://marketplace.visualstudio.com/items/?itemName=WSO2.micro-integrator), you can **add JDBC drivers to MI server image** by placing the JAR file in the `<PROJECT_DIR>/deployment/libs` folder and then clicking "Create Docker Image" under Deployment Options. This will build the Docker image and push it to the local registry. 
+> [!TIP] 
+> For integration development, if you are using the [MI VSCode extension](https://marketplace.visualstudio.com/items/?itemName=WSO2.micro-integrator), you can **add JDBC drivers to MI server image** by placing the JAR file in the `<PROJECT_DIR>/deployment/libs` folder and then clicking "Create Docker Image" under Deployment Options. This will build the Docker image and push it to the local registry. 
+> - Add following instruction to '<PROJECT_DIR>/deployment/docker/Dockerfile'. Please make sure that only JDBC driver resides in '<PROJECT_DIR>/deployment/libs' folder.
+>   - COPY libs/*.jar ${WSO2_SERVER_HOME}/lib/
+        
 
 <div style="display: flex; justify-content: space-around; align-items: center;">
     <div style="display: flex; justify-content: space-around; align-items: center;">
-        <figure style="width: 40%; height: 500px; text-align: center;">
+        <figure style="width: 40%; height: 450px; text-align: center;">
             <img src="resources/project-structure.png" alt="Project Structure" />
             <figcaption>Add JDBC JAR to '/deployment/libs' folder</figcaption>
         </figure>
-        <figure style="width: 40%; height: 500px; text-align: center;">
+        <figure style="width: 40%; height: 450px; text-align: center;">
             <img src="resources/create-docker-image.png" alt="Create Docker Image"/>
             <figcaption>Click Create Docker Image Button to build integration docker image</figcaption>
         </figure>
@@ -226,40 +257,68 @@ Ensure all pods are running:
 kubectl get pods -n wso2-integration
 ```
 
+<figure style="width: 100%; height: auto; margin-left: 0px;">
+    <img src="resources/pods.png" alt="pods" />
+    <figcaption style="text-align: center;">List of running pods</figcaption>
+</figure>
+
 #### Check Services
 Verify that services are exposed:
 ```bash
 kubectl get svc -n wso2-integration
 ```
 
+<figure style="width: 100%; height: auto; margin-left: 0px; text-align: center;">
+    <img src="resources/services.png" alt="pods" />
+    <figcaption style="text-align: center;">List of Services</figcaption>
+</figure>
+
 #### Check Ingress
 Confirm ingress resources:
 ```bash
 kubectl get ingress -n wso2-integration
 ```
+<figure style="width: 100%; height: auto; margin-left: 0px;">
+    <img src="resources/ingress.png" alt="pods" />
+    <figcaption style="text-align: center;">List of ingress</figcaption>
+</figure>
+
+> [!TIP]
+> The HOST of the Ingress is the hostname specified in the `values_local.yaml` file. The default values are,
+> - MI : mi.wso2.com
+> - ICP : icp.wso2.com
+
+#### Check Server Logs
+```bash
+kubectl logs <pod-name> -n wso2-integration
+```
+<figure style="width: 100%; height: auto; margin-left: 0px;">
+    <img src="resources/server-logs.png" alt="server-logs" />
+    <figcaption style="text-align: center;">Server Logs</figcaption>
+</figure>
 
 ### 7. Access the MI and Integration Control Plane (ICP) 
 
 #### Access within the cluster
 
-Access the ICP dashboard at `https://icp.wso2.com:9743/login`.
-Invoke the MI integrations as `curl https://mi.wso2.com/<resource-path> -k`.
+- Access the ICP dashboard at `https://icp.wso2.com:9743/login`.
+- Invoke the MI integrations as `curl https://mi.wso2.com/<resource-path> -k`.
 
 #### Invoke without Ingress controller
 
-You can also invoke the MI integration solutions and ICP without going through the Ingress controller by using the [port-forward](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/#forward-a-local-port-to-a-port-on-the-pod) method for pods/services.
+You can also invoke the MI integration solutions and ICP without going through the Ingress controller by using the [port-forward](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/#forward-a-local-port-to-a-port-on-the-pod) method for services.
 
 For ICP:
  ```bash
-    kubectl port-forward pod/<icp-pod-name> -n wso2-integration 8080:9743
+    kubectl port-forward service/cloud-wso2-icp -n wso2-integration 8080:9743
  ```
 Then, you can access the ICP dashboard at `https://localhost:8080/login`.
 
 For MI Integrations:
 ```bash
-    kubectl port-forward service/<service-name> -n wso2-integration 8290:8290
+    kubectl port-forward service/cloud-wso2-mi -n wso2-integration 8290:8290
  ```
-Then, you can access the ICP dashboard at `https://localhost:8080/login`.
+Then, you can invoke the MI integrations as `curl https://localhost:8290/<resource-path> -k`.
 
 ---
 
