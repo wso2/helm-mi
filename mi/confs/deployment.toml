@@ -2,6 +2,10 @@
 hostname = {{ .Values.wso2.deployment.hostname | quote }}
 offset  = {{ .Values.wso2.config.portOffset }}
 
+[internal_apis.file_user_store]
+enable = {{ .Values.wso2.config.userstore.file.enabled }}
+
+{{- if not .Values.wso2.config.userstore.file.enabled }}
 [user_store]
 {{- if .Values.wso2.config.userstore.rdbms }}
 class = "org.wso2.micro.integrator.security.user.core.jdbc.JDBCUserStoreManager"
@@ -109,9 +113,7 @@ read_only = {{ .Values.wso2.config.userStore.ldap.readOnly }}
 {{- else }}
 type = "read_only_ldap"
 {{- end }}
-
-[internal_apis.file_user_store]
-enable = {{ .Values.wso2.config.userstore.file.enabled }}
+{{- end }}
 
 [super_admin]
 username = {{ .Values.wso2.config.admin.username | quote }}
@@ -249,21 +251,27 @@ service_catalog_password = {{ .Values.wso2.config.serviceCatalog.password | quot
 {{- end }}
 {{- end }}
 
-{{ if .Values.wso2.config.dashboard }}
+{{ if .Values.wso2.config.icp }}
 [dashboard_config]
-dashboard_url = {{ .Values.wso2.config.dashboard.url | quote }}
-{{- if .Values.wso2.config.dashboard.heartbeatInterval }}
-heartbeat_interval = {{ .Values.wso2.config.dashboard.heartbeatInterval }}
+dashboard_url = {{ .Values.wso2.config.icp.url | quote }}
+{{- if .Values.wso2.config.icp.heartbeatInterval }}
+heartbeat_interval = {{ .Values.wso2.config.icp.heartbeatInterval }}
 {{- end }}
-{{- if .Values.wso2.config.dashboard.groupId }}
-group_id = {{ .Values.wso2.config.dashboard.groupId | quote }}
+{{- if .Values.wso2.config.icp.groupId }}
+group_id = {{ .Values.wso2.config.icp.groupId | quote }}
 {{- else }}
 group_id = {{ .Release.Name | quote }}
 {{- end }}
-{{- if .Values.wso2.config.dashboard.nodeId }}
-node_id = {{ .Values.wso2.config.dashboard.nodeId | quote }}
+{{- if .Values.wso2.config.icp.nodeId }}
+node_id = {{ .Values.wso2.config.icp.nodeId | quote }}
 {{- else }}
 node_id = "$env{POD_NAME}"
+{{- end }}
+{{- if .Values.wso2.config.icp.managementHostname }}
+management_hostname = {{ .Values.wso2.config.icp.managementHostname | quote }}
+{{- end }}
+{{- if .Values.wso2.config.icp.managementPort }}
+management_port = {{ .Values.wso2.config.icp.managementPort }}
 {{- end }}
 {{- end }}
 
