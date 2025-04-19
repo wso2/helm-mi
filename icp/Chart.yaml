@@ -1,3 +1,4 @@
+
 # ------------------------------------------------------------------------------------
 # Copyright (c) 2024, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
 #
@@ -17,9 +18,8 @@
 #------------------------------------------------------------------------------------
 
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-dashboard-log4j2-properties
-  namespace : {{ .Release.Namespace }}
-data:
-  log4j2.properties: {{ tpl (.Files.Get "confs/log4j2.properties") . | quote }}
+appVersion: "1.0.0"
+description: A Helm chart for the deployment of WSO2 Integration Control Plane (ICP)
+name: wso2-integration-control-plane
+version: 1.0.0-0
+icon: https://wso2.cachefly.net/wso2/sites/all/images/wso2logo.svg

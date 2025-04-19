@@ -22,7 +22,7 @@ metadata:
   name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   labels:
-{{ include "mi-dashboard.labels" . | indent 4 }}
+{{ include "icp.labels" . | indent 4 }}
   annotations:
     checkov.io/skip1: CKV_K8S_22=suppress read-only file system check
 spec:
@@ -38,12 +38,12 @@ spec:
   template:
     metadata:
       annotations:
-        checksum.mi.dashboard.toml: {{ include (print $.Template.BasePath "/mi-dashboard-conf.yaml") . | sha256sum }}
-        checksum.mi.dashboard.log4j2.properties: {{ include (print $.Template.BasePath "/mi-dashboard-log4j2-conf.yaml") . | sha256sum }}
-        checksum.mi.dashboard.secret.properties: {{ include (print $.Template.BasePath "/mi-dashboard-secret-conf.yaml") . | sha256sum }}
-        checksum.mi.dashboard.entrypoint.sh: {{ include (print $.Template.BasePath "/mi-dashboard-conf-entrypoint.yaml") . | sha256sum }}
+        checksum.icp.toml: {{ include (print $.Template.BasePath "/icp-conf.yaml") . | sha256sum }}
+        checksum.icp.log4j2.properties: {{ include (print $.Template.BasePath "/icp-log4j2-conf.yaml") . | sha256sum }}
+        checksum.icp.secret.properties: {{ include (print $.Template.BasePath "/icp-secret-conf.yaml") . | sha256sum }}
+        checksum.icp.entrypoint.sh: {{ include (print $.Template.BasePath "/icp-conf-entrypoint.yaml") . | sha256sum }}
         {{- if .Values.wso2.deployment.securityContext.apparmor }}
-        container.apparmor.security.beta.kubernetes.io/wso2mi-dashboard: "runtime/default"
+        container.apparmor.security.beta.kubernetes.io/wso2-integration-control-plane: "runtime/default"
         {{- end }}
       labels:
         deployment: {{ template "resource.prefix" . }}-{{ .Release.Name }}
@@ -70,8 +70,8 @@ spec:
                         - {{ template "resource.prefix" . }}-{{ .Release.Name }}
                 topologyKey: topology.kubernetes.io/zone
       containers:
-        - name: wso2mi-dashboard
-          image: {{ .Values.containerRegistry }}/{{ .Values.wso2.deployment.image.repository }}@{{ .Values.wso2.deployment.image.digest }}
+        - name: wso2-integration-control-plane
+          image: "{{- if .Values.containerRegistry -}}{{ .Values.containerRegistry }}/{{ end }}{{ .Values.wso2.deployment.image.repository }}{{- if .Values.wso2.deployment.image.digest -}}@{{ .Values.wso2.deployment.image.digest }}{{- else -}}:{{ .Values.wso2.deployment.image.tag }}{{- end }}"
           imagePullPolicy: {{ .Values.wso2.deployment.image.pullPolicy }}
           startupProbe:
             exec:
@@ -122,47 +122,47 @@ spec:
             {{- end }}
           {{- end }}
           volumeMounts:
-            - name: wso2mi-dashboard-toml
+            - name: wso2-integration-control-plane-toml
               mountPath: /home/wso2carbon/wso2-config-volume/conf/deployment.toml
               subPath: deployment.toml
-            - name: wso2mi-dashboard-log4j2-properties
+            - name: wso2-integration-control-plane-log4j2-properties
               mountPath: /home/wso2carbon/wso2-config-volume/conf/log4j2.properties
               subPath: log4j2.properties
               {{- if .Values.wso2.deployment.JKSSecretName }}
             - name: keystores
-              mountPath: /home/wso2carbon/wso2mi-dashboard-{{ .Values.wso2.deployment.BuildVersion }}/conf/security/{{ .Values.wso2.config.keyStore.fileName }}
+              mountPath: /home/wso2carbon/wso2-integration-control-plane-{{ .Values.wso2.deployment.BuildVersion }}/conf/security/{{ .Values.wso2.config.keyStore.fileName }}
               subPath: {{ .Values.wso2.config.keyStore.fileName }}
               {{- if and (.Values.wso2.config.sso) (.Values.wso2.config.sso.enabled) }}
             - name: keystores
-              mountPath: /home/wso2carbon/wso2mi-dashboard-{{ .Values.wso2.deployment.BuildVersion }}/conf/security/{{ .Values.wso2.config.trustStore.fileName }}
+              mountPath: /home/wso2carbon/wso2-integration-control-plane-{{ .Values.wso2.deployment.BuildVersion }}/conf/security/{{ .Values.wso2.config.trustStore.fileName }}
               subPath: {{ .Values.wso2.config.trustStore.fileName }}
               {{- end }}
               {{- end }}
             {{- if .Values.wso2.config.secureVault.enabled }}
-            - name: wso2mi-dashboard-secrets-volume
+            - name: wso2-integration-control-plane-secrets-volume
               mountPath: /mnt/secrets-store
               readOnly: true
-            - name: wso2mi-dashboard-entrypoint
+            - name: wso2-integration-control-plane-entrypoint
               mountPath: /home/wso2carbon/docker-entrypoint.sh
               subPath: docker-entrypoint.sh
-            - name: wso2mi-dashboard-secret-properties
+            - name: wso2-integration-control-plane-secret-properties
               mountPath: /home/wso2carbon/wso2-config-volume/conf/security/secret-conf.properties
               subPath: secret-conf.properties
             {{- end }}
       volumes:
-        - name: wso2mi-dashboard-toml
+        - name: wso2-integration-control-plane-toml
           configMap:
-            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-dashboard-toml
-        - name: wso2mi-dashboard-log4j2-properties
+            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-icp-toml
+        - name: wso2-integration-control-plane-log4j2-properties
           configMap:
-            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-dashboard-log4j2-properties
+            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-icp-log4j2-properties
         {{- if .Values.wso2.deployment.JKSSecretName }}
         - name: keystores
           secret:
             secretName: {{ .Values.wso2.deployment.JKSSecretName }}
         {{- end }}
         {{- if .Values.wso2.config.secureVault.enabled }}
-        - name: wso2mi-dashboard-secrets-volume
+        - name: wso2-integration-control-plane-secrets-volume
           csi:
             driver: secrets-store.csi.k8s.io
             readOnly: true
@@ -180,11 +180,11 @@ spec:
             volumeAttributes:
               secretProviderClass: {{ .Values.aws.secretManager.secretProviderClass }}
             {{- end }}
-        - name: wso2mi-dashboard-entrypoint
+        - name: wso2-integration-control-plane-entrypoint
           configMap:
-            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-dashboard-entrypoint
+            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-icp-entrypoint
             defaultMode: 0407
-        - name: wso2mi-dashboard-secret-properties
+        - name: wso2-integration-control-plane-secret-properties
           configMap:
-            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-dashboard-secret-properties
+            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-icp-secret-properties
         {{- end }}
