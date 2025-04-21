@@ -70,6 +70,17 @@ wso2:
         fileName: "client-truststore.jks"
         # -- Primary truststore password
         password: "wso2carbon"
+    icp:
+      # -- ICP URL
+      url: "https://icp.wso2.com/dashboard/api"
+      # -- The time interval (in seconds) between two heartbeats sent from the Micro Integrator to the ICP server
+      heartbeatInterval: 5
+      # -- The group ID of the Micro Integrator deployment
+      # @default -- release name
+      groupId: "mi_dev"
+      # -- The node ID of the Micro Integrator deployment
+      # @default -- pod name
+      nodeId: "dev_node_2"
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
