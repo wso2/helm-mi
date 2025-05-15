@@ -586,6 +586,29 @@ wso2:
           size: 2048
     # -- (list) List of properties
     fileProperties:
+    vault:
+      # -- HashiCorp Vault configurations
+      hashicorp:
+        # -- HashiCorp Vault URL
+        address:
+        # -- Static Token authentication
+        rootToken:
+        # -- AppRole authentication roleId
+        roleId:
+        # -- AppRole authentication secretId
+        secretId:
+        # -- All resources fetched from the HashiCorp vault are cached for this number of milliseconds
+        cacheableDuration: 15000
+        # -- The version of the HashiCorp secret engine
+        engineVersion: 2
+        # -- The namespace value specified here applies globally to HashiCorp secrets in all synapse configurations
+        namespace:
+        # -- The Trust store that is used for SSL communication with the HashiCorp server
+        trustStoreFile:
+        # -- The Key store that is used for SSL communication with the HashiCorp server
+        keyStoreFile:
+        # -- The password of the keystore file that is used for SSL communication
+        keyStorePassword:
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
