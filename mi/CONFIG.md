@@ -280,6 +280,17 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.config.userstore.rdbms.password | string | `""` | User Database password |
 | wso2.config.userstore.rdbms.url | string | `""` | User Database URL |
 | wso2.config.userstore.rdbms.username | string | `""` | User Database username |
+| wso2.config.vault.hashicorp | object | `{"address":null,"cacheableDuration":15000,"engineVersion":2,"keyStoreFile":null,"keyStorePassword":null,"namespace":null,"roleId":null,"rootToken":null,"secretId":null,"trustStoreFile":null}` | HashiCorp Vault configurations |
+| wso2.config.vault.hashicorp.address | string | `nil` | HashiCorp Vault URL |
+| wso2.config.vault.hashicorp.cacheableDuration | int | `15000` | All resources fetched from the HashiCorp vault are cached for this number of milliseconds |
+| wso2.config.vault.hashicorp.engineVersion | int | `2` | The version of the HashiCorp secret engine |
+| wso2.config.vault.hashicorp.keyStoreFile | string | `nil` | The Key store that is used for SSL communication with the HashiCorp server |
+| wso2.config.vault.hashicorp.keyStorePassword | string | `nil` | The password of the keystore file that is used for SSL communication |
+| wso2.config.vault.hashicorp.namespace | string | `nil` | The namespace value specified here applies globally to HashiCorp secrets in all synapse configurations |
+| wso2.config.vault.hashicorp.roleId | string | `nil` | AppRole authentication roleId |
+| wso2.config.vault.hashicorp.rootToken | string | `nil` | Static Token authentication |
+| wso2.config.vault.hashicorp.secretId | string | `nil` | AppRole authentication secretId |
+| wso2.config.vault.hashicorp.trustStoreFile | string | `nil` | The Trust store that is used for SSL communication with the HashiCorp server |
 | wso2.deployment.BuildVersion | string | `"4.4.0"` | Build version of the Micro Integrator |
 | wso2.deployment.JKSSecretName | string | `""` | K8s secret name which contains JKS files |
 | wso2.deployment.cmdArgs | string | `nil` | List of Command line arguments passed to startup script |
