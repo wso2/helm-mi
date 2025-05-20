@@ -112,6 +112,7 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.config.opentelemetry.host | string | `nil` | Hostname of the OpenTelemetry tracing system |
 | wso2.config.opentelemetry.port | string | `nil` | Port of the OpenTelemetry tracing system |
 | wso2.config.opentelemetry.type | string | `nil` | OpenTelemetry tracing system. Supported values: jaeger, zipkin, log and otlp |
+| wso2.config.opentelemetry.logs | string | `nil` | Enable logs for OpenTelemetry |
 | wso2.config.opentelemetry.url | string | `nil` | Url of the OpenTelemetry tracing system. Instead of ‘host’ and ‘port’, ‘url’ can be used |
 | wso2.config.portOffset | int | `10` | Port offset for Micro Integrator (https://apim.docs.wso2.com/en/latest/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/#changing-the-default-mi-ports) |
 | wso2.config.secureVault.enabled | bool | `false` | Enable/Disable secure vault |
@@ -284,6 +285,7 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.deployment.JKSSecretName | string | `""` | K8s secret name which contains JKS files |
 | wso2.deployment.cmdArgs | string | `nil` | List of Command line arguments passed to startup script |
 | wso2.deployment.envs | list | `nil` | Environment variables for the Micro integrator deployment |
+| wso2.deployment.annotations | list | `nil` | Annotations for the Micro integrator deployment |
 | wso2.deployment.hostname | string | `""` | Hostname of the Micro Integrator deployment |
 | wso2.deployment.hpa | object | `{"cpuUtilizationPercentage":75,"enabled":false,"maxReplicas":2,"memoryUtilizationPercentage":75,"minReplicas":1}` | Horizontal Pod Autoscaler (HPA) configurations (https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) |
 | wso2.deployment.hpa.cpuUtilizationPercentage | int | `75` | Average CPU utilization percentage for HPA |
