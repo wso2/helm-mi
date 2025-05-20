@@ -38,6 +38,11 @@ spec:
   template:
     metadata:
       annotations:
+        {{- if .Values.wso2.deployment.annotations }}
+        {{- range $key, $value := .Values.wso2.deployment.annotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
         checksum.mi.toml: {{ include (print $.Template.BasePath "/mi-conf.yaml") . | sha256sum }}
         checksum.mi.log4j2.properties: {{ include (print $.Template.BasePath "/mi-log4j2-conf.yaml") . | sha256sum }}
         checksum.mi.secret.properties: {{ include (print $.Template.BasePath "/mi-secret-conf.yaml") . | sha256sum }}
