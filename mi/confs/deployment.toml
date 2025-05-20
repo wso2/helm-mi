@@ -402,6 +402,9 @@ internal_https_api_port = {{ .Values.wso2.config.mediation.internalHttpsApiPort 
 {{- if .Values.wso2.config.opentelemetry.enable }}
 enable = {{ .Values.wso2.config.opentelemetry.enable }}
 {{- end }}
+{{- if .Values.wso2.config.opentelemetry.logs }}
+logs = {{ .Values.wso2.config.opentelemetry.logs }}
+{{- end }}
 {{- if .Values.wso2.config.opentelemetry.type }}
 type = {{ .Values.wso2.config.opentelemetry.type | quote }}
 {{- end }}
