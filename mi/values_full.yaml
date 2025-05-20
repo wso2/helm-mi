@@ -466,6 +466,8 @@ wso2:
     opentelemetry:
       # -- Enable/Disable OpenTelemetry
       enable: false
+      # -- Enable logs
+      logs:
       # -- OpenTelemetry tracing system. Supported values: jaeger, zipkin, log and otlp
       type:
       # -- Hostname of the OpenTelemetry tracing system
@@ -709,6 +711,12 @@ wso2:
     # -- (list) Environment variables for the Micro integrator deployment
     envs:
     # wso2_oh_sample_baseUrl: "http://localhost:8290/services/odata"
+    
+    # -- (list) Annotations for Micro Integrator deployment
+    annotations:
+      # prometheus.io/wso2-path: "/metric-service/metrics"
+      # prometheus.io/wso2-port: "9201"
+      # prometheus.io/wso2-scrape: "true"
 
     # Configure synapse testing
     synapseTest:
