@@ -60,7 +60,7 @@ spec:
         {{- if .Values.wso2.deployment.securityContext.enableRunAsUser }}
         runAsUser: {{ .Values.wso2.deployment.securityContext.runAsUser }}
         {{- end }}
-        {{- if .Values.deployment.securityContext.enableRunAsGroup }}
+        {{- if .Values.wso2.deployment.securityContext.enableRunAsGroup }}
         fsGroup: {{ .Values.wso2.deployment.securityContext.runAsGroup }}
         {{- else }}
         fsGroup: {{ .Values.wso2.deployment.securityContext.runAsUser }}
