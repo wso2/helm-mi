@@ -295,6 +295,7 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.deployment.BuildVersion | string | `"4.4.0"` | Build version of the Micro Integrator |
 | wso2.deployment.JKSSecretName | string | `""` | K8s secret name which contains JKS files |
 | wso2.deployment.cmdArgs | string | `nil` | List of Command line arguments passed to startup script |
+| wso2.deployment.configMaps | object | `{"entryPoint":{"defaultMode":"0407"}}` | Set UNIX permissions over the startup scripts |
 | wso2.deployment.envs | list | `nil` | Environment variables for the Micro integrator deployment |
 | wso2.deployment.annotations | list | `nil` | Annotations for the Micro integrator deployment |
 | wso2.deployment.hostname | string | `""` | Hostname of the Micro Integrator deployment |
@@ -328,8 +329,15 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.deployment.resources.requests.cpu | string | `"500m"` | The minimum amount of CPU that should be allocated for a Pod |
 | wso2.deployment.resources.requests.memory | string | `"512Mi"` | The minimum amount of memory that should be allocated for a Pod |
 | wso2.deployment.securityContext.apparmor | bool | `true` | Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/) |
-| wso2.deployment.securityContext.runAsUser | string | `""` | The UID to run the entrypoint of the container process |
-| wso2.deployment.securityContext.seccompProfile | bool | `true` | Enable/Disable seccomp profile (https://kubernetes.io/docs/tutorials/security/seccomp/) |
+| wso2.deployment.securityContext.enableRunAsGroup | bool | `false` |  |
+| wso2.deployment.securityContext.enableRunAsUser | bool | `true` |  |
+| wso2.deployment.securityContext.runAsGroup | string | `"10802"` | The GID to run the entrypoint of the container process |
+| wso2.deployment.securityContext.runAsUser | string | `"10802"` | The UID to run the entrypoint of the container process |
+| wso2.deployment.securityContext.seLinux.enabled | bool | `false` |  |
+| wso2.deployment.securityContext.seLinux.level | string | `"s0:c26,c0"` |  |
+| wso2.deployment.securityContext.seccompProfile | object | `{"enabled":true,"type":"RuntimeDefault"}` | Enable/Disable seccomp profile (https://kubernetes.io/docs/tutorials/security/seccomp/) |
+| wso2.deployment.securityContext.seccompProfile.enabled | bool | `true` | Enable/Disable seccomp profile |
+| wso2.deployment.securityContext.seccompProfile.type | string | `"RuntimeDefault"` | Seccomp profile type |
 | wso2.deployment.strategy.rollingUpdate.maxSurge | int | `1` | The maximum number of pods that can be scheduled above the desired number of pods. |
 | wso2.deployment.strategy.rollingUpdate.maxUnavailable | int | `0` | The maximum number of pods that can be unavailable during the update. |
 | wso2.deployment.synapseTest.enabled | bool | `false` | Enable/Disable synapse testing |

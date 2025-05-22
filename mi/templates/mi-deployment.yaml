@@ -57,11 +57,17 @@ spec:
       serviceAccountName: {{ .Values.aws.serviceAccountName }}
       {{- end }}
       securityContext:
+        {{- if .Values.wso2.deployment.securityContext.enableRunAsUser }}
         runAsUser: {{ .Values.wso2.deployment.securityContext.runAsUser }}
+        {{- end }}
+        {{- if .Values.deployment.securityContext.enableRunAsGroup }}
+        fsGroup: {{ .Values.wso2.deployment.securityContext.runAsGroup }}
+        {{- else }}
         fsGroup: {{ .Values.wso2.deployment.securityContext.runAsUser }}
-        {{- if .Values.wso2.deployment.securityContext.seccompProfile }}
+        {{- end }}
+        {{- if .Values.wso2.deployment.securityContext.seccompProfile.enabled }}
         seccompProfile:
-          type: RuntimeDefault
+          type: {{ .Values.wso2.deployment.securityContext.seccompProfile.type }}
         {{- end }}
       affinity:
         podAntiAffinity:
@@ -116,6 +122,10 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             runAsNonRoot: true
+            {{- if .Values.wso2.deployment.securityContext.seLinux.enabled }}
+            seLinuxOptions:
+              level: {{ .Values.wso2.deployment.securityContext.seLinux.level }}
+            {{- end }}
             capabilities:
               drop:
                 - all
@@ -248,7 +258,7 @@ spec:
         - name: wso2mi-entrypoint
           configMap:
             name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-entrypoint
-            defaultMode: 0407
+            defaultMode: {{ .Values.wso2.deployment.configMaps.entryPoint.defaultMode }}
         - name: wso2mi-secret-properties
           configMap:
             name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-secret-properties

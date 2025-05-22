@@ -110,9 +110,20 @@ wso2:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
       apparmor: true
       # -- Enable/Disable seccomp profile (https://kubernetes.io/docs/tutorials/security/seccomp/)
-      seccompProfile: true
+      seccompProfile:
+        # -- Enable/Disable seccomp profile
+        enabled: true
+        # -- Seccomp profile type
+        type: RuntimeDefault
+      enableRunAsUser: true
       # -- The UID to run the entrypoint of the container process
-      runAsUser: ""
+      runAsUser: "10802"
+      enableRunAsGroup: false
+      # -- The GID to run the entrypoint of the container process
+      runAsGroup: "10802"
+      seLinux:
+        enabled: false
+        level: "s0:c26,c0"
     # -- Hostname of the Micro Integrator deployment
     hostname: "mi.wso2.com"
     # -- Build version of the Micro Integrator
@@ -210,3 +221,7 @@ wso2:
     synapseTest:
       # -- Enable/Disable synapse testing
       enabled: false
+    # -- Set UNIX permissions over the startup scripts
+    configMaps:
+      entryPoint:
+        defaultMode: "0407"
