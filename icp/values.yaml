@@ -93,6 +93,8 @@ wso2:
     BuildVersion: "1.0.0"
     # -- K8s secret name which contains JKS files
     JKSSecretName: ""
+    # -- Image pull secrets for pulling the container image from a private registry
+    imagePullSecrets: ""
     image:
       # -- Container image repository name
       repository: ""

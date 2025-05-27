@@ -113,8 +113,7 @@ spec:
               level: {{ .Values.wso2.deployment.securityContext.seLinux.level }}
             {{- end }}
             capabilities:
-              drop:
-                - all
+              drop: ["ALL"]
           ports:
             - containerPort: {{ .Values.wso2.config.serverPort }}
               protocol: TCP
@@ -144,13 +143,13 @@ spec:
               subPath: {{ .Values.wso2.config.trustStore.fileName }}
               {{- end }}
               {{- end }}
+            - name: wso2-integration-control-plane-entrypoint
+              mountPath: /home/wso2carbon/docker-entrypoint.sh
+              subPath: docker-entrypoint.sh
             {{- if .Values.wso2.config.secureVault.enabled }}
             - name: wso2-integration-control-plane-secrets-volume
               mountPath: /mnt/secrets-store
               readOnly: true
-            - name: wso2-integration-control-plane-entrypoint
-              mountPath: /home/wso2carbon/docker-entrypoint.sh
-              subPath: docker-entrypoint.sh
             - name: wso2-integration-control-plane-secret-properties
               mountPath: /home/wso2carbon/wso2-config-volume/conf/security/secret-conf.properties
               subPath: secret-conf.properties
@@ -167,6 +166,10 @@ spec:
           secret:
             secretName: {{ .Values.wso2.deployment.JKSSecretName }}
         {{- end }}
+        - name: wso2-integration-control-plane-entrypoint
+          configMap:
+            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-icp-entrypoint
+            defaultMode: {{ .Values.wso2.deployment.configMaps.entryPoint.defaultMode }}
         {{- if .Values.wso2.config.secureVault.enabled }}
         - name: wso2-integration-control-plane-secrets-volume
           csi:
@@ -186,11 +189,11 @@ spec:
             volumeAttributes:
               secretProviderClass: {{ .Values.aws.secretManager.secretProviderClass }}
             {{- end }}
-        - name: wso2-integration-control-plane-entrypoint
-          configMap:
-            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-icp-entrypoint
-            defaultMode: {{ .Values.wso2.deployment.configMaps.entryPoint.defaultMode }}
         - name: wso2-integration-control-plane-secret-properties
           configMap:
             name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-icp-secret-properties
         {{- end }}
+      {{- if .Values.wso2.deployment.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ .Values.wso2.deployment.imagePullSecrets }}
+      {{- end }}

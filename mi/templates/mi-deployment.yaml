@@ -62,8 +62,6 @@ spec:
         {{- end }}
         {{- if .Values.wso2.deployment.securityContext.enableRunAsGroup }}
         fsGroup: {{ .Values.wso2.deployment.securityContext.runAsGroup }}
-        {{- else }}
-        fsGroup: {{ .Values.wso2.deployment.securityContext.runAsUser }}
         {{- end }}
         {{- if .Values.wso2.deployment.securityContext.seccompProfile.enabled }}
         seccompProfile:
@@ -127,8 +125,7 @@ spec:
               level: {{ .Values.wso2.deployment.securityContext.seLinux.level }}
             {{- end }}
             capabilities:
-              drop:
-                - all
+              drop: ["ALL"]
           ports:
             - containerPort: {{ add 8253 .Values.wso2.config.portOffset -10 }}
               protocol: TCP
@@ -207,13 +204,13 @@ spec:
             - name: wso2mi-secrets-volume
               mountPath: /mnt/secrets-store
               readOnly: true
-            - name: wso2mi-entrypoint
-              mountPath: /home/wso2carbon/docker-entrypoint.sh
-              subPath: docker-entrypoint.sh
             - name: wso2mi-secret-properties
               mountPath: /home/wso2carbon/wso2-config-volume/conf/security/secret-conf.properties
               subPath: secret-conf.properties
             {{- end }}
+            - name: wso2mi-entrypoint
+              mountPath: /home/wso2carbon/docker-entrypoint.sh
+              subPath: docker-entrypoint.sh
             {{- if .Values.wso2.config.fileProperties }}
             - name: wso2mi-file-properties
               mountPath: /home/wso2carbon/wso2-config-volume/conf/file.properties
@@ -236,6 +233,10 @@ spec:
           persistentVolumeClaim:
             claimName: {{ template "resource.prefix" . }}-{{ .Release.Name }}-carbonapps
         {{- end }}
+        - name: wso2mi-entrypoint
+          configMap:
+            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-entrypoint
+            defaultMode: {{ .Values.wso2.deployment.configMaps.entryPoint.defaultMode }}
         {{- if .Values.wso2.config.secureVault.enabled }}
         - name: wso2mi-secrets-volume
           csi:
@@ -255,10 +256,6 @@ spec:
             volumeAttributes:
               secretProviderClass: {{ .Values.aws.secretManager.secretProviderClass }}
             {{- end }}
-        - name: wso2mi-entrypoint
-          configMap:
-            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-entrypoint
-            defaultMode: {{ .Values.wso2.deployment.configMaps.entryPoint.defaultMode }}
         - name: wso2mi-secret-properties
           configMap:
             name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-secret-properties

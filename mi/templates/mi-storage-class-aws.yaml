@@ -29,7 +29,5 @@ parameters:
   uid: {{ .Values.wso2.deployment.securityContext.runAsUser | quote }}
   {{- if .Values.wso2.deployment.securityContext.enableRunAsGroup }}
   gid: {{ .Values.wso2.deployment.securityContext.runAsGroup | quote }}
-  {{- else }}
-  gid: {{ .Values.wso2.deployment.securityContext.runAsUser | quote }}
   {{- end }}
 {{- end}}

@@ -118,7 +118,7 @@ wso2:
       enableRunAsUser: true
       # -- The UID to run the entrypoint of the container process
       runAsUser: "10802"
-      enableRunAsGroup: false
+      enableRunAsGroup: true
       # -- The GID to run the entrypoint of the container process
       runAsGroup: "10802"
       seLinux:

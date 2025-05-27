@@ -329,7 +329,7 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.deployment.resources.requests.cpu | string | `"500m"` | The minimum amount of CPU that should be allocated for a Pod |
 | wso2.deployment.resources.requests.memory | string | `"512Mi"` | The minimum amount of memory that should be allocated for a Pod |
 | wso2.deployment.securityContext.apparmor | bool | `true` | Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/) |
-| wso2.deployment.securityContext.enableRunAsGroup | bool | `false` |  |
+| wso2.deployment.securityContext.enableRunAsGroup | bool | `true` |  |
 | wso2.deployment.securityContext.enableRunAsUser | bool | `true` |  |
 | wso2.deployment.securityContext.runAsGroup | string | `"10802"` | The GID to run the entrypoint of the container process |
 | wso2.deployment.securityContext.runAsUser | string | `"10802"` | The UID to run the entrypoint of the container process |
