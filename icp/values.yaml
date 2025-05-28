@@ -76,15 +76,25 @@ wso2:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
       apparmor: true
       # -- Enable/Disable seccomp profile (https://kubernetes.io/docs/tutorials/security/seccomp/)
-      seccompProfile: true
+      seccompProfile:
+        # -- Enable/Disable seccomp profile
+        enabled: true
+        # -- Seccomp profile type
+        type: RuntimeDefault
+      enableRunAsUser: true
       # -- The UID to run the entrypoint of the container process
-      runAsUser: ""
+      runAsUser: "802"
+      seLinux:
+        enabled: false
+        level: "s0:c26,c0"
     # -- Hostname of the ICP deployment
     hostname: ""
     # -- Build version of the ICP
     BuildVersion: "1.0.0"
     # -- K8s secret name which contains JKS files
     JKSSecretName: ""
+    # -- Image pull secrets for pulling the container image from a private registry
+    imagePullSecrets: ""
     image:
       # -- Container image repository name
       repository: ""
@@ -159,6 +169,10 @@ wso2:
 
     # -- Environment variables for the ICP deployment
     envs:
+    # -- Set UNIX permissions over the startup scripts
+    configMaps:
+      entryPoint:
+        defaultMode: "0407"
 
   # Integration Control Plane (ICP) product configurations
   config:
