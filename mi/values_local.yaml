@@ -86,7 +86,8 @@ wso2:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
       apparmor: false
       # -- Enable/Disable seccomp profile (https://kubernetes.io/docs/tutorials/security/seccomp/)
-      seccompProfile: false
+      seccompProfile:
+        enabled: false
       # -- The UID to run the entrypoint of the container process
       runAsUser: "10802"
     # -- Hostname of the Micro Integrator deployment
