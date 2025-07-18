@@ -83,7 +83,7 @@ wso2:
         type: RuntimeDefault
       enableRunAsUser: true
       # -- The UID to run the entrypoint of the container process
-      runAsUser: "802"
+      runAsUser: "10802"
       seLinux:
         enabled: false
         level: "s0:c26,c0"
