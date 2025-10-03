@@ -93,7 +93,7 @@ wso2:
     # -- Hostname of the Micro Integrator deployment
     hostname: "mi.wso2.com"
     # -- Build version of the Micro Integrator
-    BuildVersion: "4.4.0"
+    BuildVersion: "4.5.0"
     # -- K8s secret name which contains JKS files
     JKSSecretName: ""
     # -- imagePullSecrets for private docker registry
@@ -104,7 +104,7 @@ wso2:
       # -- Container image digest
       digest: ""
       # -- Container image tag
-      tag: "4.4.0"
+      tag: "4.5.0"
       # -- Container image pull policy. Refer (https://kubernetes.io/docs/concepts/containers/images/#updating-images)
       pullPolicy: IfNotPresent
 

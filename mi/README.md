@@ -1,4 +1,4 @@
-# Helm chart for the deployment of WSO2 Micro Integrator v4.4.0
+# Helm chart for the deployment of WSO2 Micro Integrator v4.5.0
 
 This module contains the Helm resources required to deploy WSO2 Micro Integrator in a Kubernetes environment.
 

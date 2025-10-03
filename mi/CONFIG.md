@@ -1,6 +1,6 @@
 # mi
 
-![Version: 4.4.0-0](https://img.shields.io/badge/Version-4.4.0--0-informational?style=flat-square) ![AppVersion: 4.4.0](https://img.shields.io/badge/AppVersion-4.4.0-informational?style=flat-square)
+![Version: 4.5.0-0](https://img.shields.io/badge/Version-4.5.0--0-informational?style=flat-square) ![AppVersion: 4.5.0](https://img.shields.io/badge/AppVersion-4.5.0-informational?style=flat-square)
 
 A Helm chart for the deployment of WSO2 Micro Integrator
 
@@ -292,7 +292,7 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.config.vault.hashicorp.rootToken | string | `nil` | Static Token authentication |
 | wso2.config.vault.hashicorp.secretId | string | `nil` | AppRole authentication secretId |
 | wso2.config.vault.hashicorp.trustStoreFile | string | `nil` | The Trust store that is used for SSL communication with the HashiCorp server |
-| wso2.deployment.BuildVersion | string | `"4.4.0"` | Build version of the Micro Integrator |
+| wso2.deployment.BuildVersion | string | `"4.5.0"` | Build version of the Micro Integrator |
 | wso2.deployment.JKSSecretName | string | `""` | K8s secret name which contains JKS files |
 | wso2.deployment.cmdArgs | string | `nil` | List of Command line arguments passed to startup script |
 | wso2.deployment.configMaps | object | `{"entryPoint":{"defaultMode":"0407"}}` | Set UNIX permissions over the startup scripts |
