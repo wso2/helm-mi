@@ -38,6 +38,11 @@ spec:
   template:
     metadata:
       annotations:
+        {{- if .Values.wso2.deployment.annotations }}
+        {{- range $key, $value := .Values.wso2.deployment.annotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
         checksum.mi.toml: {{ include (print $.Template.BasePath "/mi-conf.yaml") . | sha256sum }}
         checksum.mi.log4j2.properties: {{ include (print $.Template.BasePath "/mi-log4j2-conf.yaml") . | sha256sum }}
         checksum.mi.secret.properties: {{ include (print $.Template.BasePath "/mi-secret-conf.yaml") . | sha256sum }}
@@ -52,11 +57,15 @@ spec:
       serviceAccountName: {{ .Values.aws.serviceAccountName }}
       {{- end }}
       securityContext:
+        {{- if .Values.wso2.deployment.securityContext.enableRunAsUser }}
         runAsUser: {{ .Values.wso2.deployment.securityContext.runAsUser }}
-        fsGroup: {{ .Values.wso2.deployment.securityContext.runAsUser }}
-        {{- if .Values.wso2.deployment.securityContext.seccompProfile }}
+        {{- end }}
+        {{- if .Values.wso2.deployment.securityContext.enableRunAsGroup }}
+        fsGroup: {{ .Values.wso2.deployment.securityContext.runAsGroup }}
+        {{- end }}
+        {{- if .Values.wso2.deployment.securityContext.seccompProfile.enabled }}
         seccompProfile:
-          type: RuntimeDefault
+          type: {{ .Values.wso2.deployment.securityContext.seccompProfile.type }}
         {{- end }}
       affinity:
         podAntiAffinity:
@@ -111,9 +120,12 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             runAsNonRoot: true
+            {{- if .Values.wso2.deployment.securityContext.seLinux.enabled }}
+            seLinuxOptions:
+              level: {{ .Values.wso2.deployment.securityContext.seLinux.level }}
+            {{- end }}
             capabilities:
-              drop:
-                - all
+              drop: ["ALL"]
           ports:
             - containerPort: {{ add 8253 .Values.wso2.config.portOffset -10 }}
               protocol: TCP
@@ -192,13 +204,13 @@ spec:
             - name: wso2mi-secrets-volume
               mountPath: /mnt/secrets-store
               readOnly: true
-            - name: wso2mi-entrypoint
-              mountPath: /home/wso2carbon/docker-entrypoint.sh
-              subPath: docker-entrypoint.sh
             - name: wso2mi-secret-properties
               mountPath: /home/wso2carbon/wso2-config-volume/conf/security/secret-conf.properties
               subPath: secret-conf.properties
             {{- end }}
+            - name: wso2mi-entrypoint
+              mountPath: /home/wso2carbon/docker-entrypoint.sh
+              subPath: docker-entrypoint.sh
             {{- if .Values.wso2.config.fileProperties }}
             - name: wso2mi-file-properties
               mountPath: /home/wso2carbon/wso2-config-volume/conf/file.properties
@@ -221,6 +233,10 @@ spec:
           persistentVolumeClaim:
             claimName: {{ template "resource.prefix" . }}-{{ .Release.Name }}-carbonapps
         {{- end }}
+        - name: wso2mi-entrypoint
+          configMap:
+            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-entrypoint
+            defaultMode: {{ .Values.wso2.deployment.configMaps.entryPoint.defaultMode }}
         {{- if .Values.wso2.config.secureVault.enabled }}
         - name: wso2mi-secrets-volume
           csi:
@@ -240,10 +256,6 @@ spec:
             volumeAttributes:
               secretProviderClass: {{ .Values.aws.secretManager.secretProviderClass }}
             {{- end }}
-        - name: wso2mi-entrypoint
-          configMap:
-            name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-entrypoint
-            defaultMode: 0407
         - name: wso2mi-secret-properties
           configMap:
             name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-secret-properties

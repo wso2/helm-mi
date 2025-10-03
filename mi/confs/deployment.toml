@@ -402,6 +402,9 @@ internal_https_api_port = {{ .Values.wso2.config.mediation.internalHttpsApiPort 
 {{- if .Values.wso2.config.opentelemetry.enable }}
 enable = {{ .Values.wso2.config.opentelemetry.enable }}
 {{- end }}
+{{- if .Values.wso2.config.opentelemetry.logs }}
+logs = {{ .Values.wso2.config.opentelemetry.logs }}
+{{- end }}
 {{- if .Values.wso2.config.opentelemetry.type }}
 type = {{ .Values.wso2.config.opentelemetry.type | quote }}
 {{- end }}
@@ -1083,5 +1086,35 @@ enable = {{ .Values.wso2.config.managementApi.authorizationHandler.enable }}
 [[management_api.authorization_handler.resources]]
 path = {{ $value | quote }}
 {{ end }}
+{{- end }}
+{{- end }}
+
+{{ if and .Values.wso2.config.vault .Values.wso2.config.vault.hashicorp }}
+[[external_vault]]
+name = "hashicorp"
+address = {{ .Values.wso2.config.vault.hashicorp.address | quote }}
+{{- if .Values.wso2.config.vault.hashicorp.rootToken }}
+rootToken = {{ .Values.wso2.config.vault.hashicorp.rootToken | quote }}
+{{- else }}
+roleId = {{ .Values.wso2.config.vault.hashicorp.roleId | quote }}
+secretId = {{ .Values.wso2.config.vault.hashicorp.secretId | quote }}
+{{- end }}
+{{- if .Values.wso2.config.vault.hashicorp.cacheableDuration }}
+cacheableDuration = {{ .Values.wso2.config.vault.hashicorp.cacheableDuration | quote }}
+{{- end }}
+{{- if .Values.wso2.config.vault.hashicorp.engineVersion }}
+engineVersion = {{ .Values.wso2.config.vault.hashicorp.engineVersion | quote }}
+{{- end }}
+{{- if .Values.wso2.config.vault.hashicorp.namespace }}
+namespace = {{ .Values.wso2.config.vault.hashicorp.namespace | quote }}
+{{- end }}
+{{- if .Values.wso2.config.vault.hashicorp.trustStoreFile }}
+trustStoreFile = {{ .Values.wso2.config.vault.hashicorp.trustStoreFile | quote }}
+{{- end }}
+{{- if .Values.wso2.config.vault.hashicorp.keyStoreFile }}
+keyStoreFile = {{ .Values.wso2.config.vault.hashicorp.keyStoreFile | quote }}
+{{- end }}
+{{- if .Values.wso2.config.vault.hashicorp.keyStorePassword }}
+keyStorePassword = {{ .Values.wso2.config.vault.hashicorp.keyStorePassword | quote }}
 {{- end }}
 {{- end }}

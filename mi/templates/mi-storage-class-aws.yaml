@@ -27,5 +27,7 @@ parameters:
   fileSystemId: {{ .Values.aws.storage.fileSystemId | quote }}
   directoryPerms: {{ .Values.aws.storage.directoryPerms | quote }}
   uid: {{ .Values.wso2.deployment.securityContext.runAsUser | quote }}
-  gid: {{ .Values.wso2.deployment.securityContext.runAsUser | quote }}
+  {{- if .Values.wso2.deployment.securityContext.enableRunAsGroup }}
+  gid: {{ .Values.wso2.deployment.securityContext.runAsGroup | quote }}
+  {{- end }}
 {{- end}}

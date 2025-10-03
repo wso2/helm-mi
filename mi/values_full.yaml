@@ -466,6 +466,8 @@ wso2:
     opentelemetry:
       # -- Enable/Disable OpenTelemetry
       enable: false
+      # -- Enable logs
+      logs:
       # -- OpenTelemetry tracing system. Supported values: jaeger, zipkin, log and otlp
       type:
       # -- Hostname of the OpenTelemetry tracing system
@@ -586,14 +588,48 @@ wso2:
           size: 2048
     # -- (list) List of properties
     fileProperties:
+    vault:
+      # -- HashiCorp Vault configurations
+      hashicorp:
+        # -- HashiCorp Vault URL
+        address:
+        # -- Static Token authentication
+        rootToken:
+        # -- AppRole authentication roleId
+        roleId:
+        # -- AppRole authentication secretId
+        secretId:
+        # -- All resources fetched from the HashiCorp vault are cached for this number of milliseconds
+        cacheableDuration: 15000
+        # -- The version of the HashiCorp secret engine
+        engineVersion: 2
+        # -- The namespace value specified here applies globally to HashiCorp secrets in all synapse configurations
+        namespace:
+        # -- The Trust store that is used for SSL communication with the HashiCorp server
+        trustStoreFile:
+        # -- The Key store that is used for SSL communication with the HashiCorp server
+        keyStoreFile:
+        # -- The password of the keystore file that is used for SSL communication
+        keyStorePassword:
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
       apparmor: true
       # -- Enable/Disable seccomp profile (https://kubernetes.io/docs/tutorials/security/seccomp/)
-      seccompProfile: true
+      seccompProfile:
+        # -- Enable/Disable seccomp profile
+        enabled: true
+        # -- Seccomp profile type
+        type: RuntimeDefault
+      enableRunAsUser: true
       # -- The UID to run the entrypoint of the container process
-      runAsUser: ""
+      runAsUser: "10802"
+      enableRunAsGroup: false
+      # -- The GID to run the entrypoint of the container process
+      runAsGroup: "10802"
+      seLinux:
+        enabled: false
+        level: "s0:c26,c0"
     # -- Hostname of the Micro Integrator deployment
     hostname: ""
     # -- Build version of the Micro Integrator
@@ -686,6 +722,12 @@ wso2:
     # -- (list) Environment variables for the Micro integrator deployment
     envs:
     # wso2_oh_sample_baseUrl: "http://localhost:8290/services/odata"
+    
+    # -- (list) Annotations for Micro Integrator deployment
+    annotations:
+      # prometheus.io/wso2-path: "/metric-service/metrics"
+      # prometheus.io/wso2-port: "9201"
+      # prometheus.io/wso2-scrape: "true"
 
     # Configure synapse testing
     synapseTest:
@@ -695,3 +737,7 @@ wso2:
     mountCapps: false
     # -- List of Command line arguments passed to startup script
     cmdArgs:
+    # -- Set UNIX permissions over the startup scripts
+    configMaps:
+      entryPoint:
+        defaultMode: "0407"

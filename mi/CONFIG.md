@@ -112,6 +112,7 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.config.opentelemetry.host | string | `nil` | Hostname of the OpenTelemetry tracing system |
 | wso2.config.opentelemetry.port | string | `nil` | Port of the OpenTelemetry tracing system |
 | wso2.config.opentelemetry.type | string | `nil` | OpenTelemetry tracing system. Supported values: jaeger, zipkin, log and otlp |
+| wso2.config.opentelemetry.logs | string | `nil` | Enable logs for OpenTelemetry |
 | wso2.config.opentelemetry.url | string | `nil` | Url of the OpenTelemetry tracing system. Instead of ‘host’ and ‘port’, ‘url’ can be used |
 | wso2.config.portOffset | int | `10` | Port offset for Micro Integrator (https://apim.docs.wso2.com/en/latest/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/#changing-the-default-mi-ports) |
 | wso2.config.secureVault.enabled | bool | `false` | Enable/Disable secure vault |
@@ -280,10 +281,23 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.config.userstore.rdbms.password | string | `""` | User Database password |
 | wso2.config.userstore.rdbms.url | string | `""` | User Database URL |
 | wso2.config.userstore.rdbms.username | string | `""` | User Database username |
+| wso2.config.vault.hashicorp | object | `{"address":null,"cacheableDuration":15000,"engineVersion":2,"keyStoreFile":null,"keyStorePassword":null,"namespace":null,"roleId":null,"rootToken":null,"secretId":null,"trustStoreFile":null}` | HashiCorp Vault configurations |
+| wso2.config.vault.hashicorp.address | string | `nil` | HashiCorp Vault URL |
+| wso2.config.vault.hashicorp.cacheableDuration | int | `15000` | All resources fetched from the HashiCorp vault are cached for this number of milliseconds |
+| wso2.config.vault.hashicorp.engineVersion | int | `2` | The version of the HashiCorp secret engine |
+| wso2.config.vault.hashicorp.keyStoreFile | string | `nil` | The Key store that is used for SSL communication with the HashiCorp server |
+| wso2.config.vault.hashicorp.keyStorePassword | string | `nil` | The password of the keystore file that is used for SSL communication |
+| wso2.config.vault.hashicorp.namespace | string | `nil` | The namespace value specified here applies globally to HashiCorp secrets in all synapse configurations |
+| wso2.config.vault.hashicorp.roleId | string | `nil` | AppRole authentication roleId |
+| wso2.config.vault.hashicorp.rootToken | string | `nil` | Static Token authentication |
+| wso2.config.vault.hashicorp.secretId | string | `nil` | AppRole authentication secretId |
+| wso2.config.vault.hashicorp.trustStoreFile | string | `nil` | The Trust store that is used for SSL communication with the HashiCorp server |
 | wso2.deployment.BuildVersion | string | `"4.4.0"` | Build version of the Micro Integrator |
 | wso2.deployment.JKSSecretName | string | `""` | K8s secret name which contains JKS files |
 | wso2.deployment.cmdArgs | string | `nil` | List of Command line arguments passed to startup script |
+| wso2.deployment.configMaps | object | `{"entryPoint":{"defaultMode":"0407"}}` | Set UNIX permissions over the startup scripts |
 | wso2.deployment.envs | list | `nil` | Environment variables for the Micro integrator deployment |
+| wso2.deployment.annotations | list | `nil` | Annotations for the Micro integrator deployment |
 | wso2.deployment.hostname | string | `""` | Hostname of the Micro Integrator deployment |
 | wso2.deployment.hpa | object | `{"cpuUtilizationPercentage":75,"enabled":false,"maxReplicas":2,"memoryUtilizationPercentage":75,"minReplicas":1}` | Horizontal Pod Autoscaler (HPA) configurations (https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) |
 | wso2.deployment.hpa.cpuUtilizationPercentage | int | `75` | Average CPU utilization percentage for HPA |
@@ -315,8 +329,15 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.deployment.resources.requests.cpu | string | `"500m"` | The minimum amount of CPU that should be allocated for a Pod |
 | wso2.deployment.resources.requests.memory | string | `"512Mi"` | The minimum amount of memory that should be allocated for a Pod |
 | wso2.deployment.securityContext.apparmor | bool | `true` | Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/) |
-| wso2.deployment.securityContext.runAsUser | string | `""` | The UID to run the entrypoint of the container process |
-| wso2.deployment.securityContext.seccompProfile | bool | `true` | Enable/Disable seccomp profile (https://kubernetes.io/docs/tutorials/security/seccomp/) |
+| wso2.deployment.securityContext.enableRunAsGroup | bool | `true` |  |
+| wso2.deployment.securityContext.enableRunAsUser | bool | `true` |  |
+| wso2.deployment.securityContext.runAsGroup | string | `"10802"` | The GID to run the entrypoint of the container process |
+| wso2.deployment.securityContext.runAsUser | string | `"10802"` | The UID to run the entrypoint of the container process |
+| wso2.deployment.securityContext.seLinux.enabled | bool | `false` |  |
+| wso2.deployment.securityContext.seLinux.level | string | `"s0:c26,c0"` |  |
+| wso2.deployment.securityContext.seccompProfile | object | `{"enabled":true,"type":"RuntimeDefault"}` | Enable/Disable seccomp profile (https://kubernetes.io/docs/tutorials/security/seccomp/) |
+| wso2.deployment.securityContext.seccompProfile.enabled | bool | `true` | Enable/Disable seccomp profile |
+| wso2.deployment.securityContext.seccompProfile.type | string | `"RuntimeDefault"` | Seccomp profile type |
 | wso2.deployment.strategy.rollingUpdate.maxSurge | int | `1` | The maximum number of pods that can be scheduled above the desired number of pods. |
 | wso2.deployment.strategy.rollingUpdate.maxUnavailable | int | `0` | The maximum number of pods that can be unavailable during the update. |
 | wso2.deployment.synapseTest.enabled | bool | `false` | Enable/Disable synapse testing |
