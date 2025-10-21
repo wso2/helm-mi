@@ -4,12 +4,28 @@ port = {{ .Values.wso2.config.serverPort }}
 [heartbeat_config]
 pool_size = {{ .Values.wso2.config.heartbeatPoolSize }}
 
-[mi_user_store]
-username = {{ .Values.wso2.config.miUserstore.username | quote }}
+[mi_super_admin]
+username = {{ .Values.wso2.config.serviceAccount.mi.username | quote }}
 {{- if .Values.wso2.config.secureVault.enabled }}
 password = "$secret{mi_admin_password}"
 {{- else }}
-password = {{ .Values.wso2.config.miUserstore.password | quote }}
+password = {{ .Values.wso2.config.serviceAccount.mi.password | quote }}
+{{- end }}
+
+[bal_service_account]
+username = {{ .Values.wso2.config.serviceAccount.bi.username | quote }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+password = "$secret{bi_admin_password}"
+{{- else }}
+password = {{ .Values.wso2.config.serviceAccount.bi.password | quote }}
+{{- end }}
+
+[si_service_account]
+username = {{ .Values.wso2.config.serviceAccount.si.username | quote }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+password = "$secret{si_admin_password}"
+{{- else }}
+password = {{ .Values.wso2.config.serviceAccount.si.password | quote }}
 {{- end }}
 
 [internal_apis.file_user_store]
@@ -154,7 +170,6 @@ password = "{{ .Values.wso2.config.keyStore.password }}"
 key_password = "{{ .Values.wso2.config.keyStore.keyPassword }}"
 {{- end }}
 
-{{ if and (.Values.wso2.config.sso) (.Values.wso2.config.sso.enabled) }}
 [truststore]
 file_name = "conf/security/{{ .Values.wso2.config.trustStore.fileName }}"
 {{- if .Values.wso2.config.secureVault.enabled }}
@@ -163,24 +178,37 @@ password = "$secret{truststore_password}"
 password = "{{ .Values.wso2.config.trustStore.password }}"
 {{ end }}
 
+{{ if and (.Values.wso2.config.sso) (.Values.wso2.config.sso.enabled) }}
 [sso]
 enable = true
 client_id = {{ .Values.wso2.config.sso.clientId | quote }}
 base_url = {{ .Values.wso2.config.sso.baseUrl | quote }}
 jwt_issuer = {{ .Values.wso2.config.sso.jwtIssuer | quote }}
-resource_server_URLs = {{ .Values.wso2.config.sso.resourceServerUrls}}
+resource_server_URLs = [
+    {{- range .Values.wso2.config.sso.resourceServerURLs }}
+    "{{ . }}",
+    {{- end }}
+]
 sign_in_redirect_URL = {{ .Values.wso2.config.sso.signInRedirectUrl | quote }}
-{{- if .Values.wso2.config.sso.enablePKCE }}
-enable_PKCE = {{ .Values.wso2.config.sso.enablePKCE }}
-{{- end }}
-{{- if .Values.wso2.config.sso.trustedAudience }}
-additional_trusted_audience = {{ .Values.wso2.config.sso.trustedAudience }}
+admin_group_attribute = {{ .Values.wso2.config.sso.adminGroupAttribute | quote }}
+admin_groups = [
+    {{- range .Values.wso2.config.sso.adminGroups }}
+    "{{ . }}",
+    {{- end }}
+]
+
+{{- range .Values.wso2.config.sso.authorizationRequestParams }}
+[[sso.authorization_request.params]]
+key = "{{ .key }}"
+value = "{{ .value }}"
 {{- end }}
 {{- end }}
 
 {{- if .Values.wso2.config.secureVault.enabled }}
 [secrets]
-mi_admin_password = {{ .Values.wso2.config.miUserstore.password | quote }}
+mi_admin_password = {{ .Values.wso2.config.serviceAccount.mi.password | quote }}
+bi_admin_password = {{ .Values.wso2.config.serviceAccount.bi.password | quote }}
+si_admin_password = {{ .Values.wso2.config.serviceAccount.si.password | quote }}
 keystore_password = {{ .Values.wso2.config.keyStore.password | quote }}
 keystore_key_password = {{ .Values.wso2.config.keyStore.keyPassword | quote }}
 truststore_password = {{ .Values.wso2.config.trustStore.password | quote }}

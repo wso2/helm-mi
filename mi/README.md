@@ -1,6 +1,6 @@
-# Helm chart for the deployment of WSO2 Micro Integrator v4.5.0
+# Helm chart for the deployment of WSO2 Integrator: MI - v4.5.0
 
-This module contains the Helm resources required to deploy WSO2 Micro Integrator in a Kubernetes environment.
+This module contains the Helm resources required to deploy WSO2 Integrator: MI v4.5.0 in a Kubernetes environment.
 
 ## Prerequisites
 
@@ -13,18 +13,18 @@ This module contains the Helm resources required to deploy WSO2 Micro Integrator
 
 - Ingress controller for routing traffic. The recommendation is to use [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/deploy/) suitable for your cloud environment. Basic configurations for the NGINX Ingress Controller are as follows. Other supported ingress controllers specific to provider can be fount at [Supported Cluster providers](./EXAMPLES.md#supported-cluster-providers).
 
-```yaml
-wso2:
-  ingress:
-    enabled: true
-    ingressClassName: "nginx"
-    annotations:
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-```
+    ```yaml
+    wso2:
+      ingress:
+        enabled: true
+        ingressClassName: "nginx"
+        annotations:
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    ```
 
 - If you are enabling secure vault configurations for the product, you need to configure the secret manager service of the respective cloud provider. Since the secrets are encrypted using the internal keystore password, that password should be included in the key vault so that it can be resolved using a CSI driver when the helm charts are deployed.
 
-    For AWS, you need to deploy the `secrets-store-csi-driver-provider` and create the necessary IAM policies, OIDC providers, and IAM service accounts. Please refer the [documentation](https://github.com/aws/secrets-store-csi-driver-provider-aws) for more information and steps to follow.
+- For AWS, you need to deploy the `secrets-store-csi-driver-provider` and create the necessary IAM policies, OIDC providers, and IAM service accounts. Please refer the [documentation](https://github.com/aws/secrets-store-csi-driver-provider-aws) for more information and steps to follow.
 
 ## Supported Cluster providers
 
@@ -58,8 +58,8 @@ The [EXAMPLES](./EXAMPLES.md) file contains sample configurations which can be u
 
 3. Run the following command to generate the docs.
 
-**Note**: If `helm-docs` is not installed, refer [Installation](https://github.com/norwoodj/helm-docs#installation) first.
-
-```
-helm-docs -f values_full.yaml -o CONFIG.md
-```
+    >**Note**: If `helm-docs` is not installed, refer [Installation](https://github.com/norwoodj/helm-docs#installation) first.
+    >
+    >```
+    >helm-docs -f values_full.yaml -o CONFIG.md
+    >```

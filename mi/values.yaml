@@ -68,9 +68,9 @@ wso2:
     portOffset: 10
     admin:
       # -- Super admin username
-      username: ""
+      username: "admin"
       # -- Super admin password
-      password: ""
+      password: "admin"
       # -- Create super admin account
       createAdminAccount: false
     userstore:
@@ -87,24 +87,24 @@ wso2:
         # -- Primary keystore alias
         alias: "wso2carbon"
         # -- Primary keystore password
-        password: ""
+        password: "wso2carbon"
         # -- Primary keystore key password
-        keyPassword: ""
+        keyPassword: "wso2carbon"
       internal:
         # -- Internal keystore file name
         fileName: "wso2carbon.jks"
         # -- Internal keystore alias
         alias: "wso2carbon"
         # -- Internal keystore password
-        password: ""
+        password: "wso2carbon"
         # -- Internal keystore key password
-        keyPassword: ""
+        keyPassword: "wso2carbon"
     trustStore:
       primary:
         # -- Primary truststore file name
         fileName: "client-truststore.jks"
         # -- Primary truststore password
-        password: ""
+        password: "wso2carbon"
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)

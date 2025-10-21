@@ -1,5 +1,5 @@
 # -- Container registry (When running on a local Kubernetes cluster using local image, make this empty)
-containerRegistry: "wso2"
+containerRegistry: "docker.io"
 
 wso2:
   subscription:
@@ -8,7 +8,7 @@ wso2:
     # -- WSO2 subscription password
     password: ""
   ingress:
-    # -- Enable Ingress for MI
+    # -- Enable Ingress for ICP
     enabled: true
     # -- Ingress class name
     ingressClassName: "nginx"
@@ -31,11 +31,19 @@ wso2:
   
  # Integration Control Plane (ICP) product configurations
   config:
-    miUserstore:
-      # -- The user name for signing in to the Micro Integrator runtimes
-      username: "admin"
-      # -- The user password for signing in to the Micro Integrator runtimes.
-      password: "admin"
+    serviceAccount:
+      # -- The username for signing in to the WSO2 Integrator: MI runtimes
+      mi:
+        username: "admin"
+        password: "admin"
+      # -- The username for signing in to the WSO2 Integrator: BI runtimes
+      bi:
+        username: "bal_admin"
+        password: "bal_secret"
+      # -- The username for signing in to the WSO2 Integrator: SI runtimes
+      si:
+        username: "admin"
+        password: "admin"
     userstore:
       file:
         # -- Enable/Disable file based userstore
@@ -57,6 +65,9 @@ wso2:
       fileName: "client-trustore.jks"
       # -- The truststore password
       password: "wso2carbon"
+    sso:
+      # -- Enable/Disable Single Sign-On for ICP
+      enabled: false
     # -- Number of threads used by the executor pool to handle incoming requests from Micro Integrator runtimes
     heartbeatPoolSize: 15
     # -- ICP server port
@@ -66,7 +77,11 @@ wso2:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
       apparmor: false
       # -- Enable/Disable seccomp profile (https://kubernetes.io/docs/tutorials/security/seccomp/)
-      seccompProfile: false
+      seccompProfile:
+        # -- Enable/Disable seccomp profile
+        enabled: true
+        # -- Seccomp profile type
+        type: RuntimeDefault
       # -- The UID to run the entrypoint of the container process
       runAsUser: "10802"
     # -- Hostname of the Micro Integrator deployment
@@ -151,6 +166,5 @@ wso2:
           # -- The maximum amount of memory that should be allocated for the JVM
           xmx: "1024m"
 
-    # -- (list) Environment variables for the Micro integrator deployment
+    # -- (list) Environment variables for the ICP deployment
     envs:
-    # wso2_oh_sample_baseUrl: "http://localhost:8290/services/odata"
