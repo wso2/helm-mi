@@ -4,7 +4,7 @@ provider: ""
 containerRegistry: ""
 # AWS service configurations
 aws:
-  # -- AWS IAM serivce account name
+  # -- AWS IAM service account name
   serviceAccountName: ""
   # -- AWS region
   region: ""
@@ -169,6 +169,7 @@ wso2:
 
     # -- Environment variables for the ICP deployment
     envs:
+
     # -- Set UNIX permissions over the startup scripts
     configMaps:
       entryPoint:
@@ -176,11 +177,19 @@ wso2:
 
   # Integration Control Plane (ICP) product configurations
   config:
-    miUserstore:
-      # -- The user name for signing in to the Micro Integrator runtimes
-      username: ""
-      # -- The user password for signing in to the Micro Integrator runtimes.
-      password: ""
+    serviceAccount:
+      # -- The username for signing in to the WSO2 Integrator: MI runtimes
+      mi:
+        username: "admin"
+        password: "admin"
+      # -- The username for signing in to the WSO2 Integrator: BI runtimes
+      bi:
+        username: "bal_admin"
+        password: "bal_secret"
+      # -- The username for signing in to the WSO2 Integrator: SI runtimes
+      si:
+        username: "admin"
+        password: "admin"
     userstore:
       file:
         # -- Enable/Disable file based userstore
@@ -252,6 +261,30 @@ wso2:
       fileName: "client-trustore.jks"
       # -- The truststore password
       password: ""
+    sso:
+      # -- Enable/Disable Single Sign-On for ICP
+      enabled: false
+      # -- Client ID from Identity Provider
+      clientId: ""
+      # -- Identity Provider URL
+      baseUrl: ""
+      # -- Identity Provider issuer identifier
+      jwtIssuer: ""
+      # -- Integration Control Plane URLs
+      resourceServerURLs:
+        - ""
+      # -- Sign In redirect URL
+      signInRedirectUrl: ""
+      # -- Claim name for user groups
+      adminGroupAttribute: ""
+      # -- Groups with admin privileges
+      adminGroups:
+        - "admin"
+        - "tester"
+      # -- Custom authorization parameters
+      authorizationRequestParams:
+        - key: ""
+          value: ""
     # -- Number of threads used by the executor pool to handle incoming requests from Micro Integrator runtimes
     heartbeatPoolSize: 15
     # -- ICP server port
