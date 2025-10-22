@@ -57,5 +57,5 @@ The [EXAMPLES](./EXAMPLES.md) file contains sample configurations which can be u
     > **Note**: If `helm-docs` is not installed, refer [Installation](https://github.com/norwoodj/helm-docs#installation) first.
     >
     > ```
-    > helm-docs -f values.yaml -o CONFIG.md
+    > helm-docs -f values_full.yaml -o CONFIG.md
     > ```
