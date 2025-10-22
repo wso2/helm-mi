@@ -159,10 +159,10 @@ Follow these steps below to add JDBC driver:
  1. Create the Dockerfile 
     - BASE_IMAGE:
         * MI: `wso2/wso2mi:4.5.0`
-        * ICP: `wso2/wso2-integration-control-plane:1.0.0`
+        * ICP: `wso2/wso2-integration-control-plane:1.2.0`
     - WSO2_SERVER_HOME:
         * MI: `/home/wso2carbon/wso2mi-4.5.0`
-        * ICP: `/home/wso2carbon/wso2-integration-control-plane-1.0.0`
+        * ICP: `/home/wso2carbon/wso2-integration-control-plane-1.2.0`
     
     Example for MySQL:
 

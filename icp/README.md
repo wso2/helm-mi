@@ -1,4 +1,4 @@
-# Helm chart for the deployment of WSO2 Micro Integration Control Plane (ICP) v1.0.0
+# Helm chart for the deployment of WSO2 Micro Integration Control Plane (ICP) v1.2.0
 
 This module contains the Helm resources required to deploy WSO2 Integration Control Plane (ICP) in a Kubernetes environment.
 

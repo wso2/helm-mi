@@ -38,7 +38,7 @@ A Helm chart for the deployment of WSO2 Integration Control Plane
 | wso2.config.serverPort | int | `9743` | ICP server port |
 | wso2.config.trustStore.fileName | string | `"client-trustore.jks"` | The truststore file name |
 | wso2.config.trustStore.password | string | `""` | The truststore password |
-| wso2.deployment.BuildVersion | string | `"1.0.0"` | Build version of the ICP |
+| wso2.deployment.BuildVersion | string | `"1.2.0"` | Build version of the ICP |
 | wso2.deployment.JKSSecretName | string | `""` | K8s secret name which contains JKS files |
 | wso2.deployment.configMaps | object | `{"entryPoint":{"defaultMode":"0407"}}` | Set UNIX permissions over the startup scripts |
 | wso2.deployment.cpuUtilizationPercentage | int | `75` | Average CPU utilization percentage for HPA |
