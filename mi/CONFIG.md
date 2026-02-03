@@ -295,6 +295,7 @@ A Helm chart for the deployment of WSO2 Micro Integrator
 | wso2.deployment.image.pullPolicy | string | `"Always"` | Container image pull policy. Refer (https://kubernetes.io/docs/concepts/containers/images/#updating-images) |
 | wso2.deployment.image.repository | string | `""` | Container image repository name |
 | wso2.deployment.mountCapps | bool | `false` | Incase the CApps are not burned into the docker image, set the following to `true` to mount the CApps using a persistent volume |
+| wso2.deployment.nodeSelector | object | `{"key":"value"}` | Node selector for the Micro Integrator deployment |
 | wso2.deployment.pdb | object | `{"enabled":false,"minAvailable":1}` | Pod disruption budget configurations (https://kubernetes.io/docs/tasks/run-application/configure-pdb/) |
 | wso2.deployment.pdb.enabled | bool | `false` | Enable/Disable pod disruption budget |
 | wso2.deployment.pdb.minAvailable | int | `1` | Min available pods for pod disruption budget |

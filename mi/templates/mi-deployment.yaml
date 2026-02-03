@@ -58,6 +58,10 @@ spec:
         seccompProfile:
           type: RuntimeDefault
         {{- end }}
+      {{- with .Values.wso2.deployment.nodeSelector }}
+      nodeSelector:
+      {{ toYaml . | indent 8 }}
+      {{- end }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
