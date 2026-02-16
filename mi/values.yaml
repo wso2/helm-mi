@@ -1,3 +1,15 @@
+# ------------------------------------------------------------------------------------
+# WSO2 Integrator: MI - Minimal Configuration
+# ------------------------------------------------------------------------------------
+# This file contains minimal configurations for deploying WSO2 Integrator: MI
+# on a Kubernetes cluster.
+#
+# For detailed configuration options, refer to:
+#   - mi/values_full.yaml (complete reference)
+#   - mi/CONFIG.md (generated documentation)
+#   - https://github.com/wso2/helm-mi
+# ------------------------------------------------------------------------------------
+
 # -- Kubernetes cluster provider. Supported values: azure, aws
 provider: ""
 # -- Container registry (When running on a local Kubernetes cluster using local image, make this empty)
@@ -63,6 +75,31 @@ wso2:
       zoneName: ""
       # -- Ingress ratelimit burst limit
       burstLimit: ""
+  gatewayAPI:
+    # -- Enable Gateway API resources (set to true to use Gateway API instead of Ingress)
+    enabled: false
+    # -- Create a Gateway resource (set to false if using a shared/external Gateway)
+    # -- gatewayName and gatewayNamespace values defined below are used in creating the new Gateway.
+    createGateway: true
+    # -- GatewayClass name (must exist in cluster - e.g., envoy-gateway for Envoy Gateway)
+    gatewayClassName: "envoy"
+    # -- Name of the Gateway resource
+    gatewayName: "envoy"
+    # -- Namespace of the Gateway resource
+    gatewayNamespace: "envoy-gateway"
+    # -- TLS secret for Gateway HTTPS listener
+    # If tlsSecret is empty, a self-signed TLS certificate will be generated automatically for local/dev use.
+    # MANDATORY : For production, provide a cert-manager managed secret via tlsSecret.
+    tlsSecret: ""       # K8s TLS secret for configured hostname (if set, disables auto-generation)
+    # Rate Limiting (Modern Policy-driven)
+    ratelimit:
+      enabled: false
+      requestsPerSecond: 10
+      burst: 5
+    # Backend TLS (Replaces backend-protocol: "HTTPS" annotation)
+    backendTLS:
+      enabled: false
+      hostname: "localhost"
   config:
     # -- Port offset for Micro Integrator (https://apim.docs.wso2.com/en/latest/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/#changing-the-default-mi-ports)
     portOffset: 10

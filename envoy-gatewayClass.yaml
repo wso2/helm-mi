@@ -1,5 +1,5 @@
 # ------------------------------------------------------------------------------------
-# Copyright (c) 2024, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
+# Copyright (c) 2026, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
 #
 # WSO2 LLC. licenses this file to you under the Apache License,
 # Version 2.0 (the "License"); you may not use this file except
@@ -15,21 +15,9 @@
 # specific language governing permissions and limitations
 # under the License.
 #------------------------------------------------------------------------------------
-
-apiVersion: v1
-kind: Service
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
 metadata:
-  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
-  namespace : {{ .Release.Namespace }}
-  labels:
-{{ include "icp.labels" . | indent 4 }}
+  name: envoy
 spec:
-  selector:
-    deployment: {{ template "resource.prefix" . }}-{{ .Release.Name }}
-  ports:
-    - port: {{ .Values.wso2.config.serverPort }}
-      protocol: TCP
-      name: icp
-      {{- if .Values.wso2.gatewayAPI.enabled }}
-      appProtocol: https
-      {{- end }}
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller

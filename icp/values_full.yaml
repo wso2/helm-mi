@@ -1,3 +1,14 @@
+# ------------------------------------------------------------------------------------
+# WSO2 Integration Control Plane (ICP) - Full Configuration
+# ------------------------------------------------------------------------------------
+# This file contains full configurations for deploying ICP
+# on a Kubernetes cluster.
+#
+# For detailed configuration options, refer to:
+#   - icp/CONFIG.md (generated documentation)
+#   - https://github.com/wso2/helm-icp
+# ------------------------------------------------------------------------------------
+
 # -- Kubernetes cluster provider. Supported values: azure, aws
 provider: ""
 # -- Container registry
@@ -71,6 +82,48 @@ wso2:
       zoneName: ""
       # -- Ingress ratelimit burst limit
       burstLimit: ""
+  gatewayAPI:
+    # -- Enable Gateway API resources (set to true to use Gateway API instead of Ingress)
+    enabled: false
+    # -- Create a Gateway resource (set to false if using a shared/external Gateway)
+    # -- gatewayName and gatewayNamespace values defined below are used in creating the new Gateway.
+    createGateway: true
+    # -- GatewayClass name (must exist in cluster - e.g., envoy for Envoy Gateway)
+    gatewayClassName: "envoy"
+    # -- Name of the Gateway 
+    gatewayName: "envoy"
+    # -- Namespace where the Gateway resides 
+    gatewayNamespace: "envoy-gateway"
+    # -- K8s TLS secret for configured hostname (for Gateway API)
+    # TLS secret for Gateway HTTPS listener
+    # If tlsSecret is empty, a self-signed TLS certificate will be generated automatically for local/dev use.
+    # MANDATORY : For production, provide a cert-manager managed secret via tlsSecret.
+    tlsSecret: ""       # K8s TLS secret for configured hostname (if set, disables auto-generation)
+    # Rate Limiting
+    ratelimit:
+      # -- Enable Gateway API rate limiting
+      enabled: false
+      # -- Requests per second limit
+      requestsPerSecond: 10
+      # -- Burst limit for rate limiting
+      burst: 5
+    # Backend TLS (ICP serves all content over HTTPS)
+    backendTLS:
+      # -- Enable backend TLS policy
+      enabled: false
+      # -- Hostname to validate against the backend's TLS certificate CN/SAN (must match the CN in your keystore)
+      hostname: "localhost"
+    # Session Affinity (cookie-based sticky sessions via Envoy Gateway)
+    # Activate when running ICP with multiple replicas (replicas > 1).
+    # ICP uses server-side HTTP sessions for dashboard login state, CSRF tokens,
+    # and SSO flow state. Without session affinity, users may get logged out or
+    # encounter CSRF errors when requests land on different pods.
+    # Not needed for single-replica deployments.
+    sessionAffinity:
+      # -- Name of the affinity cookie set by Envoy Gateway
+      cookieName: "ICP_AFFINITY"
+      # -- TTL of the affinity cookie (e.g., 3600s = 1 hour)
+      cookieTTL: "3600s"
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
@@ -85,7 +138,9 @@ wso2:
       # -- The UID to run the entrypoint of the container process
       runAsUser: "10802"
       seLinux:
+        # -- Enable SELinux MCS (Multi-Category Security) labels on pods. Enable on RHEL/CentOS nodes with SELinux enforcing.
         enabled: false
+        # -- MCS label: s0=sensitivity, c26,c0=categories. Isolates pod file access to matching labels only.
         level: "s0:c26,c0"
     # -- Hostname of the ICP deployment
     hostname: ""

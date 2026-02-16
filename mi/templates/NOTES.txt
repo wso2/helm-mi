@@ -1,0 +1,110 @@
+
+WSO2 Micro Integrator has been deployed successfully!
+
+Release: {{ .Release.Name }}
+Namespace: {{ .Release.Namespace }}
+
+{{- if .Values.wso2.gatewayAPI.enabled }}
+================================================================================
+                        GATEWAY API CONFIGURATION
+================================================================================
+
+You have enabled Gateway API for traffic routing.
+
+IMPORTANT: Before HTTPRoute can work, ensure the following prerequisites are met:
+
+1. Gateway API CRDs must be installed:
+   kubectl get crd gateways.gateway.networking.k8s.io httproutes.gateway.networking.k8s.io
+
+   If not installed, run:
+   kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml
+
+
+2. A Gateway Controller must be running:
+   For Envoy Gateway (default):
+     kubectl get pods -n envoy-gateway-system
+
+   To install Envoy Gateway:
+     helm install eg oci://docker.io/envoyproxy/gateway-helm \
+       --version v1.7.0 -n envoy-gateway-system --create-namespace
+
+   For other controllers, see EXAMPLES.md for configuration and installation guidance.
+
+{{- if .Values.wso2.gatewayAPI.createGateway }}
+
+3. A GatewayClass "{{ .Values.wso2.gatewayAPI.gatewayClassName }}" must exist:
+   kubectl get gatewayclass {{ .Values.wso2.gatewayAPI.gatewayClassName }}
+
+Gateway resource created by this chart:
+  - Name: {{ .Values.wso2.gatewayAPI.gatewayName }}
+  - Namespace: {{ .Values.wso2.gatewayAPI.gatewayNamespace }}
+  - GatewayClass: {{ .Values.wso2.gatewayAPI.gatewayClassName }}
+
+{{- else }}
+
+3. An external Gateway resource must exist:
+   kubectl get gateway {{ .Values.wso2.gatewayAPI.gatewayName }} -n {{ .Values.wso2.gatewayAPI.gatewayNamespace }}
+
+External Gateway:
+  - Name: {{ .Values.wso2.gatewayAPI.gatewayName }}
+  - Namespace: {{ .Values.wso2.gatewayAPI.gatewayNamespace }}
+
+{{- end }}
+
+HTTPRoute Details:
+  - Name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-httproute
+  - Hostname: {{ .Values.wso2.deployment.hostname }}
+
+Verify HTTPRoute status:
+  kubectl get httproute -n {{ .Release.Namespace }}
+  kubectl describe httproute {{ template "resource.prefix" . }}-{{ .Release.Name }}-httproute -n {{ .Release.Namespace }}
+
+{{- if .Values.wso2.gatewayAPI.tlsSecret }}
+TLS Configuration:
+  - TLS Secret: {{ .Values.wso2.gatewayAPI.tlsSecret }}
+{{- if not .Values.wso2.gatewayAPI.createGateway }}
+  - ReferenceGrant created to allow external Gateway access to the TLS secret
+{{- end }}
+{{- end }}
+
+{{- if .Values.wso2.gatewayAPI.backendTLS.enabled }}
+Backend TLS:
+  - BackendTLSPolicy enabled for HTTPS backend communication
+{{- end }}
+
+{{- if .Values.wso2.gatewayAPI.ratelimit.enabled }}
+Rate Limiting:
+  - BackendTrafficPolicy enabled: {{ .Values.wso2.gatewayAPI.ratelimit.requestsPerSecond }}r/s (burst: {{ .Values.wso2.gatewayAPI.ratelimit.burst }})
+{{- end }}
+
+{{- else if .Values.wso2.ingress.enabled }}
+================================================================================
+                        INGRESS CONFIGURATION
+================================================================================
+
+Ingress is enabled for traffic routing.
+
+NOTE: The Ingress-NGINX project will stop receiving updates after March 2026.
+Consider migrating to Gateway API for future-proof traffic management.
+
+To migrate, set:
+  wso2.ingress.enabled=false
+  wso2.gatewayAPI.enabled=true
+
+{{- end }}
+
+================================================================================
+                           SERVICE ENDPOINTS
+================================================================================
+
+Service: {{ template "resource.prefix" . }}-{{ .Release.Name }}
+
+Ports:
+  - Pass-through HTTPS: {{ add 8253 .Values.wso2.config.portOffset -10 }}
+  - Management API: {{ add 9164 .Values.wso2.config.portOffset -10 }}
+  - Metrics/Health: {{ add 9201 .Values.wso2.config.portOffset -10 }}
+
+Health Check:
+  curl http://<GATEWAY_IP>/healthz -H "Host: {{ .Values.wso2.deployment.hostname }}"
+
+================================================================================

@@ -1,0 +1,85 @@
+{{- if .Values.wso2.gatewayAPI.enabled -}}
+# ------------------------------------------------------------------------------------
+# Copyright (c) 2026, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
+#
+# WSO2 LLC. licenses this file to you under the Apache License,
+# Version 2.0 (the "License"); you may not use this file except
+# in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied. See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#------------------------------------------------------------------------------------
+
+{{- if .Values.wso2.gatewayAPI.backendTLS.enabled }}
+# BackendTLSPolicy: ICP serves all content over HTTPS on a single port,
+# so the policy targets the main service directly (no split services needed)
+apiVersion: gateway.networking.k8s.io/v1alpha3
+kind: BackendTLSPolicy
+metadata:
+  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-icp-backend-tls
+  namespace: {{ .Release.Namespace }}
+spec:
+  targetRefs:
+    - group: ""
+      kind: Service
+      name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
+  validation:
+    # hostname must match the CN/SAN in the backend's TLS certificate (WSO2 default: localhost)
+    hostname: {{ .Values.wso2.gatewayAPI.backendTLS.hostname | default "localhost" }}
+    # CA certificate used to verify the backend's TLS certificate
+    caCertificateRefs:
+      - name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-icp-backend-ca
+        kind: ConfigMap
+        group: ""
+---
+{{- end }}
+{{- if eq .Values.wso2.gatewayAPI.gatewayClassName "envoy" }}
+# BackendTrafficPolicy: Envoy Gateway-specific policy for rate limiting and/or session affinity.
+# This resource is only created when gatewayClassName is "envoy" and either rate limiting
+# is enabled or multiple replicas require session affinity.
+#
+# Session Affinity (loadBalancer.consistentHash):
+#   Automatically enabled when running ICP with multiple replicas (replicas > 1).
+#   ICP uses server-side HTTP sessions for dashboard login state, CSRF tokens,
+#   and SSO flow state. Without session affinity, users may get logged out or
+#   encounter CSRF errors when requests land on different pods.
+#   Implementation uses Envoy Gateway's ConsistentHash load balancer with cookie-based hashing.
+#   Not needed for single-replica deployments or non-Envoy gateways.
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: BackendTrafficPolicy
+metadata:
+  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-icp-backend-traffic
+  namespace: {{ .Release.Namespace }}
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-icp-httproute
+  {{- if gt (int .Values.wso2.deployment.replicas) 1 }}
+  loadBalancer:
+    type: ConsistentHash
+    consistentHash:
+      type: Cookie
+      cookie:
+        name: {{ .Values.wso2.gatewayAPI.sessionAffinity.cookieName | default "ICP_AFFINITY" }}
+        ttl: {{ .Values.wso2.gatewayAPI.sessionAffinity.cookieTTL | default "3600s" }}
+  {{- end }}
+  {{- if .Values.wso2.gatewayAPI.ratelimit.enabled }}
+  rateLimit:
+    local:
+      rules:
+        - limit:
+            requests: {{ .Values.wso2.gatewayAPI.ratelimit.requestsPerSecond }}
+            unit: Second
+          clientSelectors:
+            - sourceCIDR: 0.0.0.0/0
+  {{- end }}
+{{- end }}
+{{- end }}
