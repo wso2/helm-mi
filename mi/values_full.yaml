@@ -689,7 +689,10 @@ wso2:
       enabled: false
       # -- Min available pods for pod disruption budget
       minAvailable: 1
-
+    # -- Node selector for the Micro Integrator deployment
+    nodeSelector:
+      # Key-value pairs to select nodes for pod assignment
+      key: value
     strategy:
       rollingUpdate:
         # -- The maximum number of pods that can be scheduled above the desired number of pods.
