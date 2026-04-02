@@ -33,7 +33,7 @@ spec:
   validation:
     hostname: {{ .Values.wso2.gatewayAPI.backendTLS.hostname | default "localhost" }}
     caCertificateRefs:
-      - name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-backend-ca
+      - name: {{ if .Values.wso2.gatewayAPI.backendTLS.caCertConfigMap }}{{ .Values.wso2.gatewayAPI.backendTLS.caCertConfigMap }}{{ else }}{{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-backend-ca{{ end }}
         kind: ConfigMap
         group: ""
 ---

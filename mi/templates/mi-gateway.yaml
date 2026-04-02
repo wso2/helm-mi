@@ -27,6 +27,7 @@ metadata:
 spec:
   gatewayClassName: {{ .Values.wso2.gatewayAPI.gatewayClassName }}
   listeners:
+    {{- if .Values.wso2.gatewayAPI.httpListener.enabled }}
     - name: http
       port: 80
       protocol: HTTP
@@ -34,6 +35,7 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
+    {{- end }}
     {{- $tlsSecretName := .Values.wso2.gatewayAPI.tlsSecret }}
     {{- if not $tlsSecretName }}
       {{- $tlsSecretName = printf "%s-%s-mi-gateway-tls" (include "resource.prefix" .) .Release.Name }}

@@ -73,7 +73,8 @@ Backend TLS:
 
 {{- if .Values.wso2.gatewayAPI.ratelimit.enabled }}
 Rate Limiting:
-  - BackendTrafficPolicy enabled: {{ .Values.wso2.gatewayAPI.ratelimit.requestsPerSecond }}r/s (burst: {{ .Values.wso2.gatewayAPI.ratelimit.burst }})
+  - BackendTrafficPolicy enabled: {{ .Values.wso2.gatewayAPI.ratelimit.requestsPerSecond }}r/s
+  - Note: Envoy Gateway's local rate limit does not support a burst/token-bucket parameter at the rule level.
 {{- end }}
 
 {{- if .Values.wso2.gatewayAPI.sessionAffinity.enabled }}

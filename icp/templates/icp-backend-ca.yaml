@@ -1,4 +1,4 @@
-{{- if and .Values.wso2.gatewayAPI.enabled .Values.wso2.gatewayAPI.backendTLS.enabled -}}
+{{- if and .Values.wso2.gatewayAPI.enabled .Values.wso2.gatewayAPI.backendTLS.enabled (not .Values.wso2.gatewayAPI.backendTLS.caCertConfigMap) -}}
 # ------------------------------------------------------------------------------------
 # Copyright (c) 2026, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
 #

@@ -35,7 +35,7 @@ spec:
     hostname: {{ .Values.wso2.gatewayAPI.backendTLS.hostname | default "localhost" }}
     # CA certificate used to verify the backend's TLS certificate
     caCertificateRefs:
-      - name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-icp-backend-ca
+      - name: {{ if .Values.wso2.gatewayAPI.backendTLS.caCertConfigMap }}{{ .Values.wso2.gatewayAPI.backendTLS.caCertConfigMap }}{{ else }}{{ template "resource.prefix" . }}-{{ .Release.Name }}-icp-backend-ca{{ end }}
         kind: ConfigMap
         group: ""
 ---

@@ -21,7 +21,7 @@ wso2:
     password: ""
   ingress:
     # -- Enable Ingress for MI
-    enabled: true
+    enabled: false
     # -- Ingress class name
     ingressClassName: "nginx"
     # -- (list) Ingress annotations
@@ -42,7 +42,7 @@ wso2:
         nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
   gatewayAPI:
     # -- Enable Gateway API resources
-    enabled: false
+    enabled: true
     # -- Create a Gateway resource (set to false if using a shared/external Gateway)
     # -- gatewayName and gatewayNamespace values defined below are used in creating the new Gateway.
     createGateway: true
@@ -56,15 +56,20 @@ wso2:
     # If tlsSecret is empty, a self-signed TLS certificate will be generated automatically for local/dev use.
     # MANDATORY : For production, provide a cert-manager managed secret via tlsSecret.
     tlsSecret: ""       # K8s TLS secret for configured hostname (if set, disables auto-generation)
+    # HTTP Listener
+    httpListener:
+      # -- Enable HTTP listener on port 80. Set to true for local development.
+      enabled: true
     # Rate Limiting (Modern Policy-driven)
     ratelimit:
       enabled: false
       requestsPerSecond: 10
-      burst: 5
     # Backend TLS (Replaces backend-protocol: "HTTPS" annotation)
     backendTLS:
       enabled: true
       hostname: "localhost"
+      # -- ConfigMap containing ca.crt for backend TLS verification (empty = use bundled cert)
+      caCertConfigMap: ""
   config:
     # -- Port offset for Micro Integrator (https://apim.docs.wso2.com/en/latest/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/#changing-the-default-mi-ports)
     portOffset: 10

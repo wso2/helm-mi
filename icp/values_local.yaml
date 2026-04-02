@@ -21,7 +21,7 @@ wso2:
     password: ""
   ingress:
     # -- Enable Ingress for ICP
-    enabled: true
+    enabled: false
     # -- Ingress class name
     ingressClassName: "nginx"
     # -- (list) Ingress annotations
@@ -42,7 +42,7 @@ wso2:
         nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
   gatewayAPI:
     # -- Enable Gateway API resources
-    enabled: false
+    enabled: true
     # -- Create a Gateway resource (set to false if using a shared/external Gateway)
     # -- gatewayName and gatewayNamespace values defined below are used in creating the new Gateway.
     createGateway: true
@@ -56,14 +56,19 @@ wso2:
     # If tlsSecret is empty, a self-signed TLS certificate will be generated automatically for local/dev use.
     # MANDATORY : For production, provide a cert-manager managed secret via tlsSecret.
     tlsSecret: ""       # K8s TLS secret for configured hostname (if set, disables auto-generation)
+    # HTTP Listener
+    httpListener:
+      # -- Enable HTTP listener on port 80. Set to true for local development.
+      enabled: true
     ratelimit:
       enabled: false
       requestsPerSecond: 10
-      burst: 5
     # Backend TLS (ICP serves all content over HTTPS)
     backendTLS:
       enabled: true
       hostname: "localhost"
+      # -- ConfigMap containing ca.crt for backend TLS verification (empty = use bundled cert)
+      caCertConfigMap: ""
     # Session Affinity (cookie-based sticky sessions via Envoy Gateway) 
     # Automatically enabled when running ICP with multiple replicas (replicas > 1)
     # login sessions, CSRF tokens, and SSO state pinned to the same pod.
