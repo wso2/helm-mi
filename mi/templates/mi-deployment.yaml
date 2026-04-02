@@ -67,6 +67,10 @@ spec:
         seccompProfile:
           type: {{ .Values.wso2.deployment.securityContext.seccompProfile.type }}
         {{- end }}
+      {{- with .Values.wso2.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
