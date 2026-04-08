@@ -253,7 +253,20 @@ service_catalog_password = {{ .Values.wso2.config.serviceCatalog.password | quot
 
 {{ if .Values.wso2.config.icp }}
 [dashboard_config]
+{{- if .Values.wso2.config.icp.url }}
 dashboard_url = {{ .Values.wso2.config.icp.url | quote }}
+{{- else }}
+{{- $icpPrefix := .Values.wso2.config.icp.resourcePrefix | default "cloud" }}
+{{- $icpRelease := .Values.wso2.config.icp.releaseName | default .Release.Name }}
+{{- $icpPort := .Values.wso2.config.icp.port | default 9743 }}
+{{- $icpNamespace := .Values.wso2.config.icp.namespace }}
+{{- $icpServiceName := printf "%s-%s" $icpPrefix $icpRelease }}
+{{- if $icpNamespace }}
+dashboard_url = {{ printf "https://%s.%s.svc.cluster.local:%v/dashboard/api" $icpServiceName $icpNamespace (int $icpPort) | quote }}
+{{- else }}
+dashboard_url = {{ printf "https://%s:%v/dashboard/api" $icpServiceName (int $icpPort) | quote }}
+{{- end }}
+{{- end }}
 {{- if .Values.wso2.config.icp.heartbeatInterval }}
 heartbeat_interval = {{ .Values.wso2.config.icp.heartbeatInterval }}
 {{- end }}

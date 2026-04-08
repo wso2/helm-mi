@@ -1,3 +1,15 @@
+# ------------------------------------------------------------------------------------
+# WSO2 Integrator: MI - Local Testing Configuration
+# ------------------------------------------------------------------------------------
+# This file contains minimal configurations for deploying WSO2 Integrator: MI
+# on a local Kubernetes cluster (e.g., Minikube, Kind, Docker Desktop).
+#
+# For detailed configuration options, refer to:
+#   - mi/values_full.yaml (complete reference)
+#   - mi/CONFIG.md (generated documentation)
+#   - https://github.com/wso2/helm-mi
+# ------------------------------------------------------------------------------------
+
 # -- Container registry (When running on a local Kubernetes cluster using local image, make this empty)
 containerRegistry: "wso2"
 
@@ -9,7 +21,7 @@ wso2:
     password: ""
   ingress:
     # -- Enable Ingress for MI
-    enabled: true
+    enabled: false
     # -- Ingress class name
     ingressClassName: "nginx"
     # -- (list) Ingress annotations
@@ -28,6 +40,36 @@ wso2:
     metrics:
       annotations:
         nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+  gatewayAPI:
+    # -- Enable Gateway API resources
+    enabled: true
+    # -- Create a Gateway resource (set to false if using a shared/external Gateway)
+    # -- gatewayName and gatewayNamespace values defined below are used in creating the new Gateway.
+    createGateway: true
+    # -- GatewayClass name (must exist in cluster)
+    gatewayClassName: "envoy"
+    # -- Name of the Gateway resource
+    gatewayName: "wso2-gateway-mi"
+    # -- Namespace of the Gateway resource
+    gatewayNamespace: "default"
+    # TLS secret for Gateway HTTPS listener
+    # If tlsSecret is empty, a self-signed TLS certificate will be generated automatically for local/dev use.
+    # MANDATORY : For production, provide a cert-manager managed secret via tlsSecret.
+    tlsSecret: ""       # K8s TLS secret for configured hostname (if set, disables auto-generation)
+    # HTTP Listener
+    httpListener:
+      # -- Enable HTTP listener on port 80. Set to true for local development.
+      enabled: true
+    # Rate Limiting (Modern Policy-driven)
+    ratelimit:
+      enabled: false
+      requestsPerSecond: 10
+    # Backend TLS (Replaces backend-protocol: "HTTPS" annotation)
+    backendTLS:
+      enabled: true
+      hostname: "localhost"
+      # -- ConfigMap containing ca.crt for backend TLS verification (empty = use bundled cert)
+      caCertConfigMap: ""
   config:
     # -- Port offset for Micro Integrator (https://apim.docs.wso2.com/en/latest/install-and-setup/setup/deployment-best-practices/changing-the-default-ports-with-offset/#changing-the-default-mi-ports)
     portOffset: 10
@@ -71,8 +113,12 @@ wso2:
         # -- Primary truststore password
         password: "wso2carbon"
     icp:
-      # -- ICP URL
-      url: "https://icp.wso2.com/dashboard/api"
+      # -- ICP URL (leave empty to auto-construct from service discovery fields below)
+      url: ""
+      # -- ICP service discovery: resource prefix of the ICP chart (matches ICP's cloudName, default: "cloud")
+      resourcePrefix: "cloud"
+      # -- ICP service discovery: Helm release name used for ICP (e.g., helm install cloud-icp icp/)
+      releaseName: "cloud-icp"
       # -- The time interval (in seconds) between two heartbeats sent from the Micro Integrator to the ICP server
       heartbeatInterval: 5
       # -- The group ID of the Micro Integrator deployment
@@ -88,8 +134,12 @@ wso2:
       # -- Enable/Disable seccomp profile (https://kubernetes.io/docs/tutorials/security/seccomp/)
       seccompProfile:
         enabled: false
+      # -- Enable/Disable runAsUser
+      enableRunAsUser: false
       # -- The UID to run the entrypoint of the container process
       runAsUser: "10802"
+      # -- Enable/Disable runAsGroup/fsGroup
+      enableRunAsGroup: false
     # -- Hostname of the Micro Integrator deployment
     hostname: "mi.wso2.com"
     # -- Build version of the Micro Integrator
@@ -100,7 +150,7 @@ wso2:
     imagePullSecrets: ""
     image:
       # -- Container image repository name
-      repository: "wso2mi"
+      repository: "docker.wso2.com/wso2mi"
       # -- Container image digest
       digest: ""
       # -- Container image tag

@@ -1,0 +1,66 @@
+{{- if .Values.wso2.gatewayAPI.enabled -}}
+# ------------------------------------------------------------------------------------
+# Copyright (c) 2026, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
+#
+# WSO2 LLC. licenses this file to you under the Apache License,
+# Version 2.0 (the "License"); you may not use this file except
+# in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied. See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#------------------------------------------------------------------------------------
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-httproute
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "micro-integrator.labels" . | indent 4 }}
+spec:
+  parentRefs:
+    - name: {{ .Values.wso2.gatewayAPI.gatewayName }}
+      namespace: {{ .Values.wso2.gatewayAPI.gatewayNamespace | default "default" }}
+  hostnames:
+    - {{ .Values.wso2.deployment.hostname | quote }}
+  rules:
+    # 1. Management API (Port 9164) - HTTPS backend
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /management
+      backendRefs:
+        - name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-https
+          port: {{ add 9164 .Values.wso2.config.portOffset -10 }}
+    # 2. Health endpoint (Port 9201) - HTTP backend
+    - matches:
+        - path:
+            type: Exact
+            value: /healthz
+      backendRefs:
+        - name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-http
+          port: {{ add 9201 .Values.wso2.config.portOffset -10 }}
+    # 3. Metrics endpoint (Port 9201) - HTTP backend
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /metric-service/metric
+      backendRefs:
+        - name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-http
+          port: {{ add 9201 .Values.wso2.config.portOffset -10 }}
+    # 4. Main Integration Service (Port 8253) - HTTPS backend - must be last due to catch-all
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-https
+          port: {{ add 8253 .Values.wso2.config.portOffset -10 }}
+{{- end }}

@@ -1,5 +1,17 @@
+# ------------------------------------------------------------------------------------
+# WSO2 Integration Control Plane (ICP) - Local Testing Configuration
+# ------------------------------------------------------------------------------------
+# This file contains minimal configurations for deploying ICP
+# on a local Kubernetes cluster (e.g., Minikube, Kind, Docker Desktop).
+#
+# For detailed configuration options, refer to:
+#   - icp/values_full.yaml (complete reference)
+#   - icp/CONFIG.md (generated documentation)
+#   - https://github.com/wso2/helm-icp
+# ------------------------------------------------------------------------------------
+
 # -- Container registry (When running on a local Kubernetes cluster using local image, make this empty)
-containerRegistry: "docker.io"
+containerRegistry: "wso2"
 
 wso2:
   subscription:
@@ -9,7 +21,7 @@ wso2:
     password: ""
   ingress:
     # -- Enable Ingress for ICP
-    enabled: true
+    enabled: false
     # -- Ingress class name
     ingressClassName: "nginx"
     # -- (list) Ingress annotations
@@ -28,6 +40,41 @@ wso2:
     metrics:
       annotations:
         nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+  gatewayAPI:
+    # -- Enable Gateway API resources
+    enabled: true
+    # -- Create a Gateway resource (set to false if using a shared/external Gateway)
+    # -- gatewayName and gatewayNamespace values defined below are used in creating the new Gateway.
+    createGateway: true
+    # -- GatewayClass name
+    gatewayClassName: "envoy"
+    # -- Name of the Gateway
+    gatewayName: "wso2-gateway-icp"
+    # -- Namespace where the Gateway resides
+    gatewayNamespace: "default"
+    # TLS secret for Gateway HTTPS listener
+    # If tlsSecret is empty, a self-signed TLS certificate will be generated automatically for local/dev use.
+    # MANDATORY : For production, provide a cert-manager managed secret via tlsSecret.
+    tlsSecret: ""       # K8s TLS secret for configured hostname (if set, disables auto-generation)
+    # HTTP Listener
+    httpListener:
+      # -- Enable HTTP listener on port 80. Set to true for local development.
+      enabled: true
+    ratelimit:
+      enabled: false
+      requestsPerSecond: 10
+    # Backend TLS (ICP serves all content over HTTPS)
+    backendTLS:
+      enabled: true
+      hostname: "localhost"
+      # -- ConfigMap containing ca.crt for backend TLS verification (empty = use bundled cert)
+      caCertConfigMap: ""
+    # Session Affinity (cookie-based sticky sessions via Envoy Gateway) 
+    # Automatically enabled when running ICP with multiple replicas (replicas > 1)
+    # login sessions, CSRF tokens, and SSO state pinned to the same pod.
+    sessionAffinity:
+      cookieName: "ICP_AFFINITY"
+      cookieTTL: "3600s"
   
  # Integration Control Plane (ICP) product configurations
   config:
@@ -82,8 +129,14 @@ wso2:
         enabled: true
         # -- Seccomp profile type
         type: RuntimeDefault
+      enableRunAsUser: true
       # -- The UID to run the entrypoint of the container process
       runAsUser: "10802"
+      seLinux:
+        # -- Enable SELinux MCS labels on pods. Enable on RHEL/CentOS nodes with SELinux enforcing.
+        enabled: false
+        # -- MCS label: s0=sensitivity, c26,c0=categories. Isolates pod file access to matching labels.
+        level: "s0:c26,c0"
     # -- Hostname of the Micro Integrator deployment
     hostname: "icp.wso2.com"
     # -- Build version of the Micro Integrator
@@ -94,11 +147,11 @@ wso2:
     imagePullSecrets: ""
     image:
       # -- Container image repository name
-      repository: "wso2-integration-control-plane"
+      repository: "docker.wso2.com/wso2-integration-control-plane"
       # -- Container image digest
       digest: ""
       # -- Container image tag
-      tag: "1.0.0"
+      tag: "1.2.0"
       # -- Container image pull policy. Refer (https://kubernetes.io/docs/concepts/containers/images/#updating-images)
       pullPolicy: IfNotPresent
 
@@ -168,3 +221,8 @@ wso2:
 
     # -- (list) Environment variables for the ICP deployment
     envs:
+
+    # -- Set UNIX permissions over the startup scripts
+    configMaps:
+      entryPoint:
+        defaultMode: "0407"

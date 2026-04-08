@@ -9,7 +9,9 @@ This guide provides step-by-step instructions to deploy WSO2 Micro Integrator (M
 1. **Git**: Install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) on your machine.
 2. **Helm**: Install [Helm](https://helm.sh/docs/intro/install/) (version 3 or later) on your machine.
 3. **Kubernetes Cluster**: Ensure you have an operational Kubernetes cluster (e.g. AKS, EKS, GKE, or a local Kubernetes cluster).
-4. **Ingress Controller**: Deploy an ingress controller (e.g. [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/deploy/)).
+4. **Traffic Routing** (one of the following):
+   - **Ingress Controller (Default)**: Deploy an ingress controller (e.g. [NGINX Ingress Controller](https://kubernetes.github.io/ingress-nginx/deploy/)).
+   - **Gateway API Controller (Recommended)**: Deploy a [Gateway API](https://gateway-api.sigs.k8s.io/) compatible controller (e.g. [Envoy Gateway](https://gateway.envoyproxy.io/), [NGINX Gateway Fabric](https://github.com/nginx/nginx-gateway-fabric)).
 5. **Docker Images**: Acquire WSO2 product Docker images. Push them to a container registry (e.g. ACR, ECR, GCR) if necessary.
 6. **WSO2 Subscription**: A valid WSO2 subscription is required to access Docker images from the **WSO2 private registry**. If you don't have a subscription, sign up for a [ WSO2 Free Trial Subscription ](https://wso2.com/subscription/).
 
@@ -28,16 +30,30 @@ You can utilize either **Minikube** or **Rancher Desktop** to establish a local 
    ```bash
    minikube start
    ```
-3. Enable the [NGINX ingress](https://kubernetes.github.io/ingress-nginx/deploy/#minikube) controller:
+3. Set up traffic routing (choose one):
+
+   **Option A: Ingress Controller**
    ```bash
    minikube addons enable ingress
+   ```
+
+   **Option B: Gateway API (Recommended)**
+   ```bash
+   # Install Gateway API CRDs
+   kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml
+
+   # Install Envoy Gateway
+   helm install eg oci://docker.io/envoyproxy/gateway-helm \
+     --version v1.2.1 -n envoy-gateway-system --create-namespace
    ```
 
 #### Using Rancher Desktop
 
 1. Install Rancher Desktop from the [official website](https://rancherdesktop.io/).
 2. Configure Rancher Desktop to use Kubernetes and set the desired Kubernetes version.
-3. Ensure the [NGINX ingress](https://kubernetes.github.io/ingress-nginx/deploy/#rancher-desktop) controller is installed.
+3. Set up traffic routing (choose one):
+   - **Ingress**: Install the [NGINX ingress](https://kubernetes.github.io/ingress-nginx/deploy/#rancher-desktop) controller.
+   - **Gateway API**: Install Gateway API CRDs and a Gateway controller (see Minikube Option B above).
 
 ### 2. Clone the Helm Chart Repository
 Clone the Helm chart repository containing the MI and ICP Helm charts:
@@ -256,18 +272,24 @@ kubectl get svc -n wso2-integration
     <img src="resources/services.png" alt="pods" />
 </figure>
 
-#### Check Ingress
-Confirm ingress resources:
+#### Check Ingress / Gateway API
+
+**If using Ingress:**
 ```bash
 kubectl get ingress -n wso2-integration
 ```
-<figure style="width: 100%; height: auto; margin-left: 0px;">
-    <figcaption style="text-align: center;">List of ingress</figcaption>
-    <img src="resources/ingress.png" alt="pods" />
-</figure>
+
+**If using Gateway API:**
+```bash
+# Check Gateway resources
+kubectl get gateway -n wso2-integration
+
+# Check HTTPRoute resources
+kubectl get httproute -n wso2-integration
+```
 
 > [!TIP]
-> The HOST of the Ingress is the hostname specified in the `values_local.yaml` file. The default values are,
+> The HOST is the hostname specified in `deployment.hostname` in the `values_local.yaml` file. The default values are,
 > - MI : mi.wso2.com
 > - ICP : icp.wso2.com
 
@@ -301,9 +323,27 @@ Please follow these steps
     - Access the ICP dashboard at `https://icp.wso2.com/login`.
     - Invoke the MI integrations as `curl https://mi.wso2.com/<resource-path> -k`.
 
-#### Invoke without Ingress controller
+#### Access through Gateway API
 
-You can also invoke the MI integration solutions and ICP without going through the Ingress controller by using the [port-forward](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/#forward-a-local-port-to-a-port-on-the-pod) method for services.
+1. Get the external IP of the Gateway:
+    ```bash
+    kubectl get gateway -n wso2-integration
+    ```
+    On a local Minikube cluster, use `minikube service` to get access URLs for the Gateway services in the `envoy-gateway-system` namespace.
+
+2. Add the host information to your /etc/hosts file.
+    ```bash
+    <EXTERNAL-IP>   mi.wso2.com 
+    <EXTERNAL-IP>   icp.wso2.com 
+    ```
+
+3. Now you can access as follows    
+    - Access the ICP dashboard at `https://icp.wso2.com/login`.
+    - Invoke the MI integrations as `curl https://mi.wso2.com/<resource-path> -k -H "Host: mi.wso2.com"`.
+
+#### Invoke without Ingress / Gateway (Port-Forward)
+
+You can also invoke the MI integration solutions and ICP without going through the Ingress or Gateway by using the [port-forward](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/#forward-a-local-port-to-a-port-on-the-pod) method for services.
 
 For ICP:
  ```bash
@@ -328,13 +368,13 @@ Provision a Kubernetes cluster using a CSP (e.g., AKS, EKS, GKE). Follow the res
 Push the WSO2 product Docker images to the CSP's container registry (e.g., ACR for Azure, ECR for AWS, GCR for Google Cloud).
 
 ### 3. Configure Values for MI and ICP
-Update the `values.yaml` files for MI and ICP to use the container registry paths and CSP-specific configurations (e.g. storage classes, load balancer annotations).
+Update the `values.yaml` files for MI and ICP to use the container registry paths and CSP-specific configurations (e.g. storage classes, load balancer annotations). Configure either Ingress or Gateway API for traffic routing.
 
 ### 4. Deploy MI and ICP
 Follow the same deployment steps as in the local setup, ensuring the `values.yaml` files are updated for the CSP environment.
 
 ### 5. Verify and Access
-Validate the deployment and access the applications using the CSP's load balancer or ingress configurations.
+Validate the deployment and access the applications using the CSP's load balancer, ingress, or Gateway API configurations.
 
 ### Supported Cluster providers
 

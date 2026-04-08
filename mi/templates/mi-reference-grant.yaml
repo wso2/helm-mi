@@ -1,5 +1,6 @@
+{{- if and .Values.wso2.gatewayAPI.enabled .Values.wso2.gatewayAPI.tlsSecret (not .Values.wso2.gatewayAPI.createGateway) -}}
 # ------------------------------------------------------------------------------------
-# Copyright (c) 2024, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
+# Copyright (c) 2026, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
 #
 # WSO2 LLC. licenses this file to you under the Apache License,
 # Version 2.0 (the "License"); you may not use this file except
@@ -16,20 +17,19 @@
 # under the License.
 #------------------------------------------------------------------------------------
 
-apiVersion: v1
-kind: Service
+# ReferenceGrant allows the external Gateway to access the TLS secret in this namespace
+apiVersion: gateway.networking.k8s.io/v1
+kind: ReferenceGrant
 metadata:
-  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
-  namespace : {{ .Release.Namespace }}
-  labels:
-{{ include "icp.labels" . | indent 4 }}
+  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-tls-grant
+  namespace: {{ .Release.Namespace }}
 spec:
-  selector:
-    deployment: {{ template "resource.prefix" . }}-{{ .Release.Name }}
-  ports:
-    - port: {{ .Values.wso2.config.serverPort }}
-      protocol: TCP
-      name: icp
-      {{- if .Values.wso2.gatewayAPI.enabled }}
-      appProtocol: https
-      {{- end }}
+  from:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      namespace: {{ .Values.wso2.gatewayAPI.gatewayNamespace }}
+  to:
+    - group: ""
+      kind: Secret
+      name: {{ .Values.wso2.gatewayAPI.tlsSecret }}
+{{- end }}

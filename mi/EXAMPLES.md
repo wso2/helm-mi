@@ -2,6 +2,138 @@
 
 This doc gives the sample configurations which can be used as values for the Helm chart for different use cases.
 
+## Gateway API (Recommended)
+
+[Gateway API](https://gateway-api.sigs.k8s.io/) is the successor to Ingress and the recommended standard for traffic management in Kubernetes. Any Gateway API compatible controller can be used (e.g. [Envoy Gateway](https://gateway.envoyproxy.io/), [NGINX Gateway Fabric](https://github.com/nginx/nginx-gateway-fabric)).
+
+### Prerequisites
+
+1. **Install Gateway API CRDs**:
+   ```bash
+   kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml
+   ```
+
+2. **Install a Gateway controller** (example: Envoy Gateway):
+   ```bash
+   helm install eg oci://docker.io/envoyproxy/gateway-helm \
+     --version v1.2.1 -n envoy-gateway-system --create-namespace
+   ```
+
+### Basic Gateway API Configuration (Gateway Created Automatically)
+
+By default, the Helm chart creates a Gateway resource for you. This is the simplest setup:
+
+```yaml
+wso2:
+  deployment:
+    hostname: "mi.example.com"         # Hostname for the Gateway listener
+  ingress:
+    enabled: false
+  gatewayAPI:
+    enabled: true
+    # createGateway: true              # Default - Gateway is created by the chart
+    gatewayClassName: "envoy"          # Must match your installed GatewayClass
+    backendTLS:
+      enabled: true                    # MI backend uses HTTPS
+```
+
+### Gateway API with TLS
+
+To terminate TLS at the Gateway, provide a TLS secret:
+
+```yaml
+wso2:
+  deployment:
+    hostname: "mi.example.com"
+  ingress:
+    enabled: false
+  gatewayAPI:
+    enabled: true
+    gatewayClassName: "envoy"
+    tlsSecret: "mi-tls-secret"         # If empty, a self-signed cert is auto-generated for dev/local. For production, provide a cert-manager managed secret.
+    backendTLS:
+      enabled: true
+```
+
+### Gateway API with External/Shared Gateway
+
+If you have a shared Gateway managed by your infrastructure team, set `createGateway: false`:
+
+```yaml
+wso2:
+  deployment:
+    hostname: "mi.example.com"
+  ingress:
+    enabled: false
+  gatewayAPI:
+    enabled: true
+    createGateway: false               # Use existing Gateway
+    gatewayName: "shared-gateway"      # Name of the external Gateway
+    gatewayNamespace: "infrastructure" # Namespace of the external Gateway
+    tlsSecret: "mi-tls-secret"         # If empty, a self-signed cert is auto-generated for dev/local. For production, provide a cert-manager managed secret. ReferenceGrant is auto-created for cross-namespace access.
+    backendTLS:
+      enabled: true
+```
+
+### Gateway API with Backend TLS and Rate Limiting
+
+```yaml
+wso2:
+  deployment:
+    hostname: "mi.example.com"
+  ingress:
+    enabled: false
+  gatewayAPI:
+    enabled: true
+    gatewayClassName: "envoy"
+    tlsSecret: "mi-tls-secret"
+    backendTLS:
+      enabled: true
+      hostname: "localhost"            # Must match the CN/SAN in MI's backend TLS certificate
+    ratelimit:
+      enabled: true
+      requestsPerSecond: 100
+      burst: 50
+```
+
+### Verify Gateway API Resources
+
+After deployment, verify the resources:
+
+```bash
+# Check Gateway (if createGateway: true)
+kubectl get gateway -n <namespace>
+
+# Check HTTPRoute status
+kubectl get httproute -n <namespace>
+
+# Verify HTTPRoute is attached to Gateway
+kubectl describe httproute cloud-<release-name>-httproute -n <namespace>
+
+# Check if policies are applied (Envoy Gateway)
+kubectl get backendtlspolicy -n <namespace>
+```
+
+### Deploy MI Helm Chart
+
+```bash
+# Install MI chart
+helm install <release-name> mi/ -n <namespace> --values values.yaml
+
+# Upgrade MI chart (if already installed)
+helm upgrade <release-name> mi/ -n <namespace> --values values.yaml
+```
+
+### Verify MI Deployment
+
+```bash
+kubectl get pods -n <namespace>
+kubectl get svc -n <namespace>
+
+# Port-forward for local testing
+kubectl port-forward svc/<service-name> 9743:9743 -n <namespace>
+```
+
 ## Supported Cluster providers
 
 Currently, the MI helm charts are tested with the following cluster providers,

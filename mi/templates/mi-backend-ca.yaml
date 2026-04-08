@@ -1,5 +1,6 @@
+{{- if and .Values.wso2.gatewayAPI.enabled .Values.wso2.gatewayAPI.backendTLS.enabled (not .Values.wso2.gatewayAPI.backendTLS.caCertConfigMap) -}}
 # ------------------------------------------------------------------------------------
-# Copyright (c) 2024, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
+# Copyright (c) 2026, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
 #
 # WSO2 LLC. licenses this file to you under the Apache License,
 # Version 2.0 (the "License"); you may not use this file except
@@ -15,21 +16,12 @@
 # specific language governing permissions and limitations
 # under the License.
 #------------------------------------------------------------------------------------
-
 apiVersion: v1
-kind: Service
+kind: ConfigMap
 metadata:
-  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
-  namespace : {{ .Release.Namespace }}
-  labels:
-{{ include "icp.labels" . | indent 4 }}
-spec:
-  selector:
-    deployment: {{ template "resource.prefix" . }}-{{ .Release.Name }}
-  ports:
-    - port: {{ .Values.wso2.config.serverPort }}
-      protocol: TCP
-      name: icp
-      {{- if .Values.wso2.gatewayAPI.enabled }}
-      appProtocol: https
-      {{- end }}
+  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-backend-ca
+  namespace: {{ .Release.Namespace }}
+data:
+  ca.crt: |
+{{ .Files.Get "confs/backend-ca.crt" | indent 4 }}
+{{- end }}

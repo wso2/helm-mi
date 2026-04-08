@@ -1,7 +1,6 @@
-
-{{- if not .Values.wso2.gatewayAPI.enabled -}}
+{{- if .Values.wso2.gatewayAPI.enabled }}
 # ------------------------------------------------------------------------------------
-# Copyright (c) 2024, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
+# Copyright (c) 2026, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
 #
 # WSO2 LLC. licenses this file to you under the Apache License,
 # Version 2.0 (the "License"); you may not use this file except
@@ -18,13 +17,15 @@
 # under the License.
 #------------------------------------------------------------------------------------
 
+# Service for HTTPS backends (requires TLS from Gateway)
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
+  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-https
   namespace : {{ .Release.Namespace }}
   labels:
 {{ include "micro-integrator.labels" . | indent 4 }}
+    protocol: https
 spec:
   selector:
     deployment: {{ template "resource.prefix" . }}-{{ .Release.Name }}
@@ -32,12 +33,28 @@ spec:
     - port: {{ add 8253 .Values.wso2.config.portOffset -10 }}
       protocol: TCP
       name: pass-through-https
-    - port: {{ add 9201 .Values.wso2.config.portOffset -10 }}
-      protocol: TCP
-      name: metrics
+      appProtocol: https
     - port: {{ add 9164 .Values.wso2.config.portOffset -10 }}
       protocol: TCP
       name: management
+      appProtocol: https
+---
+# Service for HTTP backends (no TLS from Gateway)
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-http
+  namespace : {{ .Release.Namespace }}
+  labels:
+{{ include "micro-integrator.labels" . | indent 4 }}
+    protocol: http
+spec:
+  selector:
+    deployment: {{ template "resource.prefix" . }}-{{ .Release.Name }}
+  ports:
+    - port: {{ add 9201 .Values.wso2.config.portOffset -10 }}
+      protocol: TCP
+      name: metrics
     {{- if .Values.wso2.deployment.synapseTest.enabled }}
     - port: {{ add 9008 .Values.wso2.config.portOffset -10 }}
       protocol: TCP
