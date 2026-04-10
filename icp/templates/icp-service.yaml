@@ -33,3 +33,8 @@ spec:
       {{- if .Values.wso2.gatewayAPI.enabled }}
       appProtocol: https
       {{- end }}
+    {{- range .Values.wso2.config.additionalPorts }}
+    - port: {{ .port }}
+      protocol: TCP
+      name: {{ .name }}
+    {{- end }}

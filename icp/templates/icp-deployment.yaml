@@ -92,10 +92,11 @@ spec:
                 - nc -z localhost {{ .Values.wso2.config.serverPort }}
             periodSeconds: {{ .Values.wso2.deployment.probes.liveness.periodSeconds }}
           readinessProbe:
-            httpGet:
-              path: /dashboard/api/healthz
-              port: {{ .Values.wso2.config.serverPort }}
-              scheme: HTTPS
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - nc -z localhost {{ .Values.wso2.config.serverPort }}
             initialDelaySeconds: {{ .Values.wso2.deployment.probes.readiness.initialDelaySeconds }}
             periodSeconds: {{ .Values.wso2.deployment.probes.readiness.periodSeconds }}
           resources:
@@ -117,6 +118,10 @@ spec:
           ports:
             - containerPort: {{ .Values.wso2.config.serverPort }}
               protocol: TCP
+            {{- range .Values.wso2.config.additionalPorts }}
+            - containerPort: {{ .port }}
+              protocol: TCP
+            {{- end }}
           env:
             - name: JAVA_MEM_OPTS
               value: "-Xms{{ .Values.wso2.deployment.resources.jvm.memory.xms }} -Xmx{{ .Values.wso2.deployment.resources.jvm.memory.xmx }}"

@@ -31,7 +31,35 @@ spec:
   hostnames:
     - {{ .Values.wso2.deployment.hostname | quote }}
   rules:
-    # ICP Dashboard and all APIs (single HTTPS port)
+    # GraphQL API (dedicated port)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /graphql
+      {{- if .Values.wso2.gatewayAPI.backendTLS.enabled }}
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            hostname: {{ .Values.wso2.gatewayAPI.backendTLS.hostname | default "localhost" }}
+      {{- end }}
+      backendRefs:
+        - name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
+          port: 9446
+    # Observability API (dedicated port)
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /icp/observability
+      {{- if .Values.wso2.gatewayAPI.backendTLS.enabled }}
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            hostname: {{ .Values.wso2.gatewayAPI.backendTLS.hostname | default "localhost" }}
+      {{- end }}
+      backendRefs:
+        - name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
+          port: 9448
+    # ICP Dashboard and all other APIs (main HTTPS port)
     # URLRewrite rewrites the hostname to match the backend's TLS certificate CN/SAN
     # (set via BackendTLSPolicy). ICP's Jetty server enforces Host == SNI.
     - matches:

@@ -11,7 +11,7 @@
 # ------------------------------------------------------------------------------------
 
 # -- Container registry (When running on a local Kubernetes cluster using local image, make this empty)
-containerRegistry: "wso2"
+containerRegistry: ""
 
 wso2:
   subscription:
@@ -112,21 +112,20 @@ wso2:
         fileName: "client-truststore.jks"
         # -- Primary truststore password
         password: "wso2carbon"
-    icp:
-      # -- ICP URL (leave empty to auto-construct from service discovery fields below)
-      url: ""
-      # -- ICP service discovery: resource prefix of the ICP chart (matches ICP's cloudName, default: "cloud")
-      resourcePrefix: "cloud"
-      # -- ICP service discovery: Helm release name used for ICP (e.g., helm install cloud-icp icp/)
-      releaseName: "cloud-icp"
-      # -- The time interval (in seconds) between two heartbeats sent from the Micro Integrator to the ICP server
-      heartbeatInterval: 5
-      # -- The group ID of the Micro Integrator deployment
-      # @default -- release name
-      groupId: "mi_dev"
-      # -- The node ID of the Micro Integrator deployment
-      # @default -- pod name
-      nodeId: "dev_node_2"
+    # -- ICP 2.0 configuration for connecting MI to the Integration Control Plane
+    # icp:
+    #   # -- Runtime ID (obtained from ICP)
+    #   runtime: ""
+    #   # -- Environment name
+    #   environment: ""
+    #   # -- Project name
+    #   project: ""
+    #   # -- Integration name
+    #   integration: ""
+    #   # -- Secret key (obtained from ICP)
+    #   secret: ""
+    #   # -- ICP server URL
+    #   # icpUrl: "https://icp-server:9443"
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
@@ -140,10 +139,11 @@ wso2:
       runAsUser: "10802"
       # -- Enable/Disable runAsGroup/fsGroup
       enableRunAsGroup: false
+    nodeSelector: {}
     # -- Hostname of the Micro Integrator deployment
     hostname: "mi.wso2.com"
     # -- Build version of the Micro Integrator
-    BuildVersion: "4.5.0"
+    BuildVersion: "4.6.0"
     # -- K8s secret name which contains JKS files
     JKSSecretName: ""
     # -- imagePullSecrets for private docker registry
@@ -154,7 +154,7 @@ wso2:
       # -- Container image digest
       digest: ""
       # -- Container image tag
-      tag: "4.5.0"
+      tag: "4.6.0-alpine"
       # -- Container image pull policy. Refer (https://kubernetes.io/docs/concepts/containers/images/#updating-images)
       pullPolicy: IfNotPresent
 
@@ -237,3 +237,6 @@ wso2:
     synapseTest:
       # -- Enable/Disable synapse testing
       enabled: false
+    configMaps:
+      entryPoint:
+        defaultMode: "0755"  

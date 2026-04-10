@@ -121,6 +121,20 @@ wso2:
       file:
         # -- Enable/Disable file based userstore
         enabled: true
+    # -- ICP 2.0 configuration for connecting MI to the Integration Control Plane
+    # icp:
+    #   # -- Runtime ID (obtained from ICP)
+    #   runtime: ""
+    #   # -- Environment name
+    #   environment: ""
+    #   # -- Project name
+    #   project: ""
+    #   # -- Integration name
+    #   integration: ""
+    #   # -- Secret key (obtained from ICP)
+    #   secret: ""
+    #   # -- ICP server URL (defaults to auto-discovery via K8s service)
+    #   # icpUrl: "https://icp-server:9443"
     secureVault:
       # -- Enable/Disable secure vault
       enabled: false
@@ -150,6 +164,9 @@ wso2:
         # -- Primary truststore password
         password: "wso2carbon"
   deployment:
+    nodeSelector:
+      node-role.kubernetes.io/worker: ""
+      topology.kubernetes.io/zone: "eastus-1"
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
       apparmor: true

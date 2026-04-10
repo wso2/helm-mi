@@ -252,39 +252,24 @@ service_catalog_password = {{ .Values.wso2.config.serviceCatalog.password | quot
 {{- end }}
 
 {{ if .Values.wso2.config.icp }}
-[dashboard_config]
-{{- if .Values.wso2.config.icp.url }}
-dashboard_url = {{ .Values.wso2.config.icp.url | quote }}
-{{- else }}
-{{- $icpPrefix := .Values.wso2.config.icp.resourcePrefix | default "cloud" }}
-{{- $icpRelease := .Values.wso2.config.icp.releaseName | default .Release.Name }}
-{{- $icpPort := .Values.wso2.config.icp.port | default 9743 }}
-{{- $icpNamespace := .Values.wso2.config.icp.namespace }}
-{{- $icpServiceName := printf "%s-%s" $icpPrefix $icpRelease }}
-{{- if $icpNamespace }}
-dashboard_url = {{ printf "https://%s.%s.svc.cluster.local:%v/dashboard/api" $icpServiceName $icpNamespace (int $icpPort) | quote }}
-{{- else }}
-dashboard_url = {{ printf "https://%s:%v/dashboard/api" $icpServiceName (int $icpPort) | quote }}
+[icp_config]
+{{- if .Values.wso2.config.icp.runtime }}
+runtime = {{ .Values.wso2.config.icp.runtime | quote }}
 {{- end }}
+{{- if .Values.wso2.config.icp.environment }}
+environment = {{ .Values.wso2.config.icp.environment | quote }}
 {{- end }}
-{{- if .Values.wso2.config.icp.heartbeatInterval }}
-heartbeat_interval = {{ .Values.wso2.config.icp.heartbeatInterval }}
+{{- if .Values.wso2.config.icp.project }}
+project = {{ .Values.wso2.config.icp.project | quote }}
 {{- end }}
-{{- if .Values.wso2.config.icp.groupId }}
-group_id = {{ .Values.wso2.config.icp.groupId | quote }}
-{{- else }}
-group_id = {{ .Release.Name | quote }}
+{{- if .Values.wso2.config.icp.integration }}
+integration = {{ .Values.wso2.config.icp.integration | quote }}
 {{- end }}
-{{- if .Values.wso2.config.icp.nodeId }}
-node_id = {{ .Values.wso2.config.icp.nodeId | quote }}
-{{- else }}
-node_id = "$env{POD_NAME}"
+{{- if .Values.wso2.config.icp.secret }}
+secret = {{ .Values.wso2.config.icp.secret | quote }}
 {{- end }}
-{{- if .Values.wso2.config.icp.managementHostname }}
-management_hostname = {{ .Values.wso2.config.icp.managementHostname | quote }}
-{{- end }}
-{{- if .Values.wso2.config.icp.managementPort }}
-management_port = {{ .Values.wso2.config.icp.managementPort }}
+{{- if .Values.wso2.config.icp.icpUrl }}
+icp_url = {{ .Values.wso2.config.icp.icpUrl | quote }}
 {{- end }}
 {{- end }}
 

@@ -66,6 +66,16 @@ gcp:
       # -- Secret name for internal keystore password. Expected format is `projects/<PROJECT_ID>/secrets/<SECRET_NAME>/versions/<VERSION>`
       internalKeystorePassword: ""
 wso2:
+  # OpenShift specific configurations
+  openshift:
+    # -- Enable OpenShift specific configurations
+    enabled: false
+    route:
+      tls:
+        # -- TLS termination type: reencrypt, edge, passthrough
+        termination: "reencrypt"
+        # -- Insecure traffic policy: Redirect, Allow, None
+        insecureEdgeTerminationPolicy: "Redirect"
   ingress:
     # -- Enable Ingress for ICP
     enabled: false
@@ -151,7 +161,7 @@ wso2:
     # -- Hostname of the ICP deployment
     hostname: ""
     # -- Build version of the ICP
-    BuildVersion: "1.0.0"
+    BuildVersion: "2.0.0"
     # -- K8s secret name which contains JKS files
     JKSSecretName: ""
     # -- Image pull secrets for pulling the container image from a private registry
@@ -236,117 +246,122 @@ wso2:
       entryPoint:
         defaultMode: "0407"
 
-  # Integration Control Plane (ICP) product configurations
+  # Integration Control Plane (ICP) 2.0 product configurations
   config:
-    serviceAccount:
-      # -- The username for signing in to the WSO2 Integrator: MI runtimes
-      mi:
-        username: "admin"
-        password: "admin"
-      # -- The username for signing in to the WSO2 Integrator: BI runtimes
-      bi:
-        username: "bal_admin"
-        password: "bal_secret"
-      # -- The username for signing in to the WSO2 Integrator: SI runtimes
-      si:
-        username: "admin"
-        password: "admin"
-    userstore:
-      file:
-        # -- Enable/Disable file based userstore
-        enabled: true
-      rdbms:
-        # -- User Database URL
-        url: ""
-        # -- User Database username
-        username: ""
-        # -- User Database password
-        password: ""
-        jdbc:
-          # -- JDBC driver class name of the User Database
-          driver: ""
-          # -- (list) JDBC connection pool parameters of the User Database
-          poolParameters:
-            maxActive: 50
-            maxWait: 60000
-      ldap:
-        type: "read_only_ldap"
-        class: "org.wso2.micro.integrator.security.user.core.ldap.ReadOnlyLDAPUserStoreManager"
-        connectionUrl: ""
-        connectionName: ""
-        connectionPassword: ""
-        anonymousBind: false
-        userSearchBase: ""
-        userNameAttribute: ""
-        userNameSearchFilter: ""
-        userNameListFilter: ""
-        displayNameAttribute: ""
-        readGroups: true
-        groupSearchBase: ""
-        groupNameAttribute: ""
-        groupNameSearchFilter: ""
-        groupNameListFilter: ""
-        membershipAttribute: ""
-        backLinksEnabled: false
-        usernameJavaRegex: "[a-zA-Z0-9._\\-|//]{3,30}$"
-        rolenameJavaRegex: "[a-zA-Z0-9._\\-|//]{3,30}$"
-        passwordJavaRegex: "^[\\S]{5,30}$"
-        scimEnabled: false
-        passwordHashMethod: "PLAIN_TEXT"
-        multiAttributeSeparator: ","
-        maxUserNameListLength: 100
-        maxRoleNameListLength: 100
-        userRolesCacheEnabled: true
-        connectionPoolingEnabled: true
-        ldapConnectionTimeout: 5000
-        # -- (int)
-        readTimeout:
-        # -- (int)
-        retryAttempts:
-        replaceEscapeCharactersAtUserLogin: true
-        readOnly: false
+    # -- ICP server port
+    serverPort: 9445
+    # -- ICP server host
+    # serverHost: "0.0.0.0"
+    # -- GraphQL port
+    # graphqlPort: 9090
+    # -- Additional ICP ports exposed by the container
+    additionalPorts:
+      - name: icp-port-2
+        port: 9446
+      - name: icp-port-3
+        port: 9447
+      - name: icp-port-4
+        port: 9448
+      - name: icp-port-5
+        port: 9449
+    # -- Scheduler interval in seconds
+    schedulerIntervalSeconds: 30
+    # -- Refresh token cleanup interval in seconds
+    # refreshTokenCleanupIntervalSeconds: 86400
+    # -- Log level (DEBUG, INFO, WARN, ERROR)
+    logLevel: "INFO"
+    # -- Enable audit logging
+    enableAuditLogging: true
+    # -- Enable metrics
+    enableMetrics: true
+    # -- Authentication backend URL
+    authBackendUrl: "https://localhost:9447"
+    # -- Frontend JWT HMAC secret (at least 32 characters for HS256)
+    frontendJwtHMACSecret: "default-secret-key-at-least-32-characters-long-for-hs256"
+    # -- Token expiry time in seconds
+    # defaultTokenExpiryTime: 3600
+    # -- Refresh token expiry time in seconds
+    # refreshTokenExpiryTime: 604800
+    # -- Enable refresh token rotation
+    # enableRefreshTokenRotation: true
+    # -- Maximum refresh tokens per user (0 = unlimited)
+    # maxRefreshTokensPerUser: 10
+    # -- Allow insecure TLS for MI artifacts API
+    artifactsApiAllowInsecureTLS: true
+    # -- Enable observability
+    # observabilityEnabled: true
+    # Credentials database configuration
+    credentialsDb:
+      # -- Credentials database type (h2, postgresql, mysql, mssql)
+      # dbType: "h2"
+      # -- Credentials database host
+      # dbHost: "localhost"
+      # -- Credentials database port
+      # dbPort: 5432
+      # -- Credentials database name
+      # dbName: "credentialsdb"
+      # -- Credentials database user
+      # dbUser: "icp_user"
+      # -- Credentials database password
+      # dbPassword: "icp_password"
+    # Primary database / storage configuration
+    storage:
+      # -- Heartbeat timeout in seconds
+      # heartbeatTimeoutSeconds: 30
+      # -- Database type (h2, mysql, mssql, postgresql)
+      # dbType: "h2"
+      # -- Database host
+      # dbHost: "localhost"
+      # -- Database port
+      # dbPort: 3306
+      # -- Database name
+      # dbName: "icp_database"
+      # -- Database user
+      # dbUser: "root"
+      # -- Database password
+      # dbPassword: "my-secret-pw"
+      # -- Maximum number of open connections
+      # maxOpenConnections: 10
+      # -- Minimum number of idle connections
+      # minIdleConnections: 5
+      # -- Maximum connection lifetime in seconds
+      # maxConnectionLifeTime: 1800.0
+    # OpenSearch configuration
+    # opensearch:
+    #   url: "https://localhost:9200"
+    #   username: "admin"
+    #   password: ""
+    # SSO (OIDC) configuration
+    sso:
+      # -- Enable/Disable SSO authentication
+      enabled: false
+      # -- SSO issuer URL
+      # issuer: ""
+      # -- SSO authorization endpoint
+      # authorizationEndpoint: ""
+      # -- SSO token endpoint
+      # tokenEndpoint: ""
+      # -- SSO logout endpoint
+      # logoutEndpoint: ""
+      # -- SSO client ID
+      # clientId: ""
+      # -- SSO client secret
+      # clientSecret: ""
+      # -- SSO redirect URI
+      # redirectUri: ""
+      # -- SSO username claim
+      # usernameClaim: "email"
+      # -- SSO scopes
+      # scopes:
+      #   - "openid"
+      #   - "email"
+      #   - "profile"
+    # Secure vault configuration
     secureVault:
       # -- Enable/Disable secure vault
       enabled: false
-    keyStore:
-      #  -- The keystore file name
-      fileName: "dashboard.jks"
-      # -- The keystore alias
-      alias: "wso2carbon"
-      # -- The keystore password
-      password: ""
-      # -- The keystore key password
-      keyPassword: ""
-    trustStore:
-      # -- The truststore file name
-      fileName: "client-trustore.jks"
-      # -- The truststore password
-      password: ""
-    sso:
-      # -- Enable/Disable Single Sign-On for ICP
-      enabled: false
-      # -- Client ID from Identity Provider
-      clientId: ""
-      # -- Identity Provider URL
-      baseUrl: ""
-      # -- Identity Provider issuer identifier
-      jwtIssuer: ""
-      # -- Integration Control Plane URLs
-      resourceServerURLs:
-        - ""
-      # -- Sign In redirect URL
-      signInRedirectUrl: ""
-      # -- Claim name for user groups
-      adminGroupAttribute: ""
-      # -- Groups with admin privileges
-      adminGroups:
-        - "admin"
-        - "tester"
-      # -- Custom authorization parameters
-      authorizationRequestParams:
-        - key: ""
-          value: ""
-    # -- Number of threads used by the executor pool to handle incoming requests from Micro Integrator runtimes
-    heartbeatPoolSize: 15
-    # -- ICP server port
-    serverPort: 9743
+      # -- Encrypted secret values
+      # secrets:
+      #   secretJWTsecret: ""
+      #   secCredsDbPassword: ""
+      #   secDbPassword: ""
