@@ -187,3 +187,6 @@ wso2:
     synapseTest:
       # -- Enable/Disable synapse testing
       enabled: false
+    configMaps:
+      entryPoint:
+        defaultMode: "0755"
