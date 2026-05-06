@@ -148,7 +148,7 @@ wso2:
       # -- Container image digest
       digest: ""
       # -- Container image tag
-      tag: "2.0.0-ubuntu"
+      tag: "2.0.0"
       # -- Container image pull policy. Refer (https://kubernetes.io/docs/concepts/containers/images/#updating-images)
       pullPolicy: IfNotPresent
 
