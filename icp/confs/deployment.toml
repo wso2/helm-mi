@@ -10,9 +10,6 @@ serverPort = {{ .Values.wso2.config.serverPort }}
 {{- if .Values.wso2.config.serverHost }}
 serverHost = {{ .Values.wso2.config.serverHost | quote }}
 {{- end }}
-{{- if .Values.wso2.config.graphqlPort }}
-graphqlPort = {{ .Values.wso2.config.graphqlPort }}
-{{- end }}
 
 # =============================================================================
 # OPERATIONAL CONFIGURATION
@@ -30,12 +27,8 @@ refreshTokenCleanupIntervalSeconds = {{ .Values.wso2.config.refreshTokenCleanupI
 {{- if .Values.wso2.config.logLevel }}
 logLevel = {{ .Values.wso2.config.logLevel | quote }}
 {{- end }}
-{{- if .Values.wso2.config.enableAuditLogging }}
-enableAuditLogging = {{ .Values.wso2.config.enableAuditLogging }}
-{{- end }}
-{{- if .Values.wso2.config.enableMetrics }}
-enableMetrics = {{ .Values.wso2.config.enableMetrics }}
-{{- end }}
+enableAuditLogging = {{ .Values.wso2.config.enableAuditLogging | default false }}
+enableMetrics = {{ .Values.wso2.config.enableMetrics | default false }}
 
 # =============================================================================
 # AUTHENTICATION BACKEND CONFIGURATION
@@ -88,9 +81,7 @@ defaultTokenExpiryTime = {{ .Values.wso2.config.defaultTokenExpiryTime }}
 {{- if .Values.wso2.config.refreshTokenExpiryTime }}
 refreshTokenExpiryTime = {{ .Values.wso2.config.refreshTokenExpiryTime }}
 {{- end }}
-{{- if .Values.wso2.config.enableRefreshTokenRotation }}
-enableRefreshTokenRotation = {{ .Values.wso2.config.enableRefreshTokenRotation }}
-{{- end }}
+enableRefreshTokenRotation = {{ .Values.wso2.config.enableRefreshTokenRotation | default false }}
 {{- if .Values.wso2.config.maxRefreshTokensPerUser }}
 maxRefreshTokensPerUser = {{ .Values.wso2.config.maxRefreshTokensPerUser }}
 {{- end }}
@@ -110,6 +101,12 @@ secCredsDbPassword = {{ .Values.wso2.config.secureVault.secrets.secCredsDbPasswo
 {{- if .Values.wso2.config.secureVault.secrets.secDbPassword }}
 secDbPassword = {{ .Values.wso2.config.secureVault.secrets.secDbPassword | quote }}
 {{- end }}
+{{- end }}
+{{- if and (.Values.wso2.config.sso) (.Values.wso2.config.sso.enabled) (.Values.wso2.config.sso.clientSecret) }}
+ssoClientSecret = {{ .Values.wso2.config.sso.clientSecret | quote }}
+{{- end }}
+{{- if and (.Values.wso2.config.opensearch) (.Values.wso2.config.opensearch.password) }}
+opensearchPassword = {{ .Values.wso2.config.opensearch.password | quote }}
 {{- end }}
 {{- end }}
 
@@ -158,9 +155,7 @@ ssoScopes = [
 # =============================================================================
 # OBSERVABILITY CONFIGURATION
 # =============================================================================
-{{- if .Values.wso2.config.observabilityEnabled }}
-observabilityEnabled = {{ .Values.wso2.config.observabilityEnabled }}
-{{- end }}
+observabilityEnabled = {{ .Values.wso2.config.observabilityEnabled | default false }}
 
 # =============================================================================
 # OPENSEARCH CONFIGURATION
@@ -173,7 +168,11 @@ opensearchUrl = {{ .Values.wso2.config.opensearch.url | quote }}
 opensearchUsername = {{ .Values.wso2.config.opensearch.username | quote }}
 {{- end }}
 {{- if .Values.wso2.config.opensearch.password }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+opensearchPassword = "$secret{opensearchPassword}"
+{{- else }}
 opensearchPassword = {{ .Values.wso2.config.opensearch.password | quote }}
+{{- end }}
 {{- end }}
 {{- end }}
 

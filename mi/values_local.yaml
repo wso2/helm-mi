@@ -11,7 +11,7 @@
 # ------------------------------------------------------------------------------------
 
 # -- Container registry (When running on a local Kubernetes cluster using local image, make this empty)
-containerRegistry: ""
+containerRegistry: "wso2"
 
 wso2:
   subscription:
@@ -113,19 +113,21 @@ wso2:
         # -- Primary truststore password
         password: "wso2carbon"
     # -- ICP 2.0 configuration for connecting MI to the Integration Control Plane
-    # icp:
-    #   # -- Runtime ID (obtained from ICP)
-    #   runtime: ""
-    #   # -- Environment name
-    #   environment: ""
-    #   # -- Project name
-    #   project: ""
-    #   # -- Integration name
-    #   integration: ""
-    #   # -- Secret key (obtained from ICP)
-    #   secret: ""
-    #   # -- ICP server URL
-    #   # icpUrl: "https://icp-server:9443"
+    icp:
+      # -- Enable ICP connectivity
+      enabled: false
+      # -- Runtime ID (obtained from ICP)
+      runtime: ""
+      # -- Environment name
+      environment: ""
+      # -- Project name
+      project: ""
+      # -- Integration name
+      integration: ""
+      # -- Secret key (obtained from ICP)
+      secret: ""
+      # -- ICP server URL
+      # icpUrl: "https://icp-server:9445"
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
@@ -140,6 +142,10 @@ wso2:
       # -- Enable/Disable runAsGroup/fsGroup
       enableRunAsGroup: false
     nodeSelector: {}
+    # Example:
+    # nodeSelector:
+    #   node-role.kubernetes.io/worker: ""
+    #   topology.kubernetes.io/zone: "eastus-1"
     # -- Hostname of the Micro Integrator deployment
     hostname: "mi.wso2.com"
     # -- Build version of the Micro Integrator
@@ -150,11 +156,11 @@ wso2:
     imagePullSecrets: ""
     image:
       # -- Container image repository name
-      repository: "docker.wso2.com/wso2mi"
+      repository: "wso2mi"
       # -- Container image digest
       digest: ""
       # -- Container image tag
-      tag: "4.6.0-alpine"
+      tag: "4.6.0"
       # -- Container image pull policy. Refer (https://kubernetes.io/docs/concepts/containers/images/#updating-images)
       pullPolicy: IfNotPresent
 

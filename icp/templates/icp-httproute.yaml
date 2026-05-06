@@ -44,7 +44,7 @@ spec:
       {{- end }}
       backendRefs:
         - name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
-          port: 9446
+          port: {{ .Values.wso2.config.graphqlPort }}
     # Observability API (dedicated port)
     - matches:
         - path:
@@ -58,7 +58,7 @@ spec:
       {{- end }}
       backendRefs:
         - name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
-          port: 9448
+          port: {{ .Values.wso2.config.observabilityPort }}
     # ICP Dashboard and all other APIs (main HTTPS port)
     # URLRewrite rewrites the hostname to match the backend's TLS certificate CN/SAN
     # (set via BackendTLSPolicy). ICP's Jetty server enforces Host == SNI.

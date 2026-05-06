@@ -81,6 +81,9 @@ wso2:
     # -- Ingress class name
     ingressClassName: ""
     # -- (list) Ingress annotations
+    # ICP serves HTTPS natively; you must configure your ingress controller for backend HTTPS.
+    # For NGINX: nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    # For Traefik: traefik.ingress.kubernetes.io/service.serversscheme: "https"
     annotations:
     # -- K8s TLS secret for configured hostname
     tlsSecret: ""
@@ -140,14 +143,14 @@ wso2:
   config:
     # -- ICP server port
     serverPort: 9445
+    # -- GraphQL API port
+    graphqlPort: 9446
+    # -- Observability API port
+    observabilityPort: 9448
     # -- Additional ICP ports exposed by the container
     additionalPorts:
-      - name: icp-port-2
-        port: 9446
       - name: icp-port-3
         port: 9447
-      - name: icp-port-4
-        port: 9448
       - name: icp-port-5
         port: 9449
     # -- Scheduler interval in seconds
@@ -161,9 +164,9 @@ wso2:
     # -- Authentication backend URL
     authBackendUrl: "https://localhost:9447"
     # -- Frontend JWT HMAC secret (at least 32 characters for HS256)
-    frontendJwtHMACSecret: "default-secret-key-at-least-32-characters-long-for-hs256"
+    frontendJwtHMACSecret: ""
     # -- Allow insecure TLS for MI artifacts API
-    artifactsApiAllowInsecureTLS: true
+    artifactsApiAllowInsecureTLS: false
     # Credentials database configuration
     credentialsDb:
     # Primary database / storage configuration

@@ -96,7 +96,10 @@ spec:
               command:
                 - /bin/sh
                 - -c
-                - nc -z localhost {{ .Values.wso2.config.serverPort }}
+                - |
+                  nc -z localhost {{ .Values.wso2.config.serverPort }} &&
+                  nc -z localhost {{ .Values.wso2.config.graphqlPort }} &&
+                  nc -z localhost {{ .Values.wso2.config.observabilityPort }}
             initialDelaySeconds: {{ .Values.wso2.deployment.probes.readiness.initialDelaySeconds }}
             periodSeconds: {{ .Values.wso2.deployment.probes.readiness.periodSeconds }}
           resources:
@@ -117,6 +120,10 @@ spec:
               drop: ["ALL"]
           ports:
             - containerPort: {{ .Values.wso2.config.serverPort }}
+              protocol: TCP
+            - containerPort: {{ .Values.wso2.config.graphqlPort }}
+              protocol: TCP
+            - containerPort: {{ .Values.wso2.config.observabilityPort }}
               protocol: TCP
             {{- range .Values.wso2.config.additionalPorts }}
             - containerPort: {{ .port }}

@@ -253,6 +253,7 @@ service_catalog_password = {{ .Values.wso2.config.serviceCatalog.password | quot
 
 {{ if .Values.wso2.config.icp }}
 [icp_config]
+enabled = {{ .Values.wso2.config.icp.enabled | default false }}
 {{- if .Values.wso2.config.icp.runtime }}
 runtime = {{ .Values.wso2.config.icp.runtime | quote }}
 {{- end }}

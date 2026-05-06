@@ -21,11 +21,19 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-graphql
+  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
   namespace : {{ .Release.Namespace }}
-{{- if .Values.wso2.ingress.annotations }}
+{{- if or .Values.wso2.ingress.annotations .Values.wso2.ingress.ratelimit.enabled }}
   annotations:
+{{- if .Values.wso2.ingress.annotations }}
 {{ toYaml .Values.wso2.ingress.annotations | indent 4 }}
+{{- end }}
+{{- end }}
+{{- if .Values.wso2.ingress.ratelimit.enabled }}
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      limit_req zone={{ .Values.wso2.ingress.ratelimit.zoneName }} burst={{ .Values.wso2.ingress.ratelimit.burstLimit }} nodelay;
+      limit_req_status 429;
+{{- end }}
 {{- end }}
 spec:
   {{- if .Values.wso2.ingress.ingressClassName }}
@@ -48,30 +56,6 @@ spec:
                 name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
                 port:
                   number: 9446
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-observability
-  namespace : {{ .Release.Namespace }}
-{{- if .Values.wso2.ingress.annotations }}
-  annotations:
-{{ toYaml .Values.wso2.ingress.annotations | indent 4 }}
-{{- end }}
-spec:
-  {{- if .Values.wso2.ingress.ingressClassName }}
-  ingressClassName: {{ .Values.wso2.ingress.ingressClassName }}
-  {{- end }}
-  {{- if .Values.wso2.ingress.tlsSecret }}
-  tls:
-    - hosts:
-        - {{ .Values.wso2.deployment.hostname | quote }}
-      secretName: {{ .Values.wso2.ingress.tlsSecret }}
-  {{- end }}
-  rules:
-    - host: {{ .Values.wso2.deployment.hostname | quote }}
-      http:
-        paths:
           - path: /icp/observability
             pathType: Prefix
             backend:
@@ -79,37 +63,6 @@ spec:
                 name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
                 port:
                   number: 9448
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
-  namespace : {{ .Release.Namespace }}
-{{- if or .Values.wso2.ingress.annotations .Values.wso2.ingress.ratelimit.enabled }}
-  annotations:
-{{- if .Values.wso2.ingress.annotations }}
-{{ toYaml .Values.wso2.ingress.annotations | indent 4 }}
-{{- end }}
-{{- if .Values.wso2.ingress.ratelimit.enabled }}
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      limit_req zone={{ .Values.wso2.ingress.ratelimit.zoneName }} burst={{ .Values.wso2.ingress.ratelimit.burstLimit }} nodelay;                                                   
-      limit_req_status 429;
-{{- end }}
-{{- end }}
-spec:
-  {{- if .Values.wso2.ingress.ingressClassName }}
-  ingressClassName: {{ .Values.wso2.ingress.ingressClassName }}
-  {{- end }}
-  {{- if .Values.wso2.ingress.tlsSecret }}
-  tls:
-    - hosts:
-        - {{ .Values.wso2.deployment.hostname | quote }}
-      secretName: {{ .Values.wso2.ingress.tlsSecret }}
-  {{- end }}
-  rules:
-    - host: {{ .Values.wso2.deployment.hostname | quote }}
-      http:
-        paths:
           - path: /
             pathType: Prefix
             backend:
@@ -117,5 +70,4 @@ spec:
                 name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
                 port:
                   number: {{ .Values.wso2.config.serverPort }}
-{{- end }}
 {{- end }}

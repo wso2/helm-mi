@@ -39,7 +39,7 @@ spec:
   host: {{ .Values.wso2.deployment.hostname | quote }}
   path: /graphql
   port:
-    targetPort: 9446
+    targetPort: {{ .Values.wso2.config.graphqlPort }}
   to:
     kind: Service
     name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
@@ -61,7 +61,7 @@ spec:
   host: {{ .Values.wso2.deployment.hostname | quote }}
   path: /icp/observability
   port:
-    targetPort: 9448
+    targetPort: {{ .Values.wso2.config.observabilityPort }}
   to:
     kind: Service
     name: {{ template "resource.prefix" . }}-{{ .Release.Name }}

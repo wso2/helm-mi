@@ -80,14 +80,14 @@ wso2:
   config:
     # -- ICP server port
     serverPort: 9445
+    # -- GraphQL API port
+    graphqlPort: 9446
+    # -- Observability API port
+    observabilityPort: 9448
     # -- Additional ICP ports exposed by the container
     additionalPorts:
-      - name: icp-port-2
-        port: 9446
       - name: icp-port-3
         port: 9447
-      - name: icp-port-4
-        port: 9448
       - name: icp-port-5
         port: 9449
     # -- Scheduler interval in seconds
@@ -144,11 +144,11 @@ wso2:
     imagePullSecrets: ""
     image:
       # -- Container image repository name
-      repository: "docker.wso2.com/wso2-integration-control-plane"
+      repository: "wso2-integration-control-plane"
       # -- Container image digest
       digest: ""
       # -- Container image tag
-      tag: "2.0.0"
+      tag: "2.0.0-ubuntu"
       # -- Container image pull policy. Refer (https://kubernetes.io/docs/concepts/containers/images/#updating-images)
       pullPolicy: IfNotPresent
 
