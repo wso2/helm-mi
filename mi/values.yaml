@@ -224,4 +224,4 @@ wso2:
     # -- Set UNIX permissions over the startup scripts
     configMaps:
       entryPoint:
-        defaultMode: "0407"
+        defaultMode: "0555"
