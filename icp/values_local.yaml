@@ -1,5 +1,5 @@
 # -- Container registry (When running on a local Kubernetes cluster using local image, make this empty)
-containerRegistry: "docker.io"
+containerRegistry: "wso2"
 
 wso2:
   subscription:
@@ -98,7 +98,7 @@ wso2:
       # -- Container image digest
       digest: ""
       # -- Container image tag
-      tag: "1.0.0"
+      tag: "1.2.0"
       # -- Container image pull policy. Refer (https://kubernetes.io/docs/concepts/containers/images/#updating-images)
       pullPolicy: IfNotPresent
 
