@@ -168,17 +168,46 @@ wso2:
     # -- Allow insecure TLS for MI artifacts API
     artifactsApiAllowInsecureTLS: false
     # Credentials database configuration
-    credentialsDb:
+    credentialsDb: {}
     # Primary database / storage configuration
-    storage:
+    storage: {}
     # SSO (OIDC) configuration
     sso:
       # -- Enable/Disable SSO authentication
       enabled: false
+      # -- OIDC issuer URL (used as ssoIssuer in deployment.toml)
+      # issuer: "https://api.asgardeo.io/t/{org}/oauth2/token"
+      # -- Authorization endpoint URL
+      # authorizationEndpoint: "https://api.asgardeo.io/t/{org}/oauth2/authorize"
+      # -- Token endpoint URL
+      # tokenEndpoint: "https://api.asgardeo.io/t/{org}/oauth2/token"
+      # -- Logout endpoint URL
+      # logoutEndpoint: "https://api.asgardeo.io/t/{org}/oidc/logout"
+      # -- OIDC client ID registered with the identity provider
+      # clientId: ""
+      # -- OIDC client secret. When secureVault.enabled=true this value is written
+      #    into [icp_server.secrets] as ssoClientSecret and referenced via $secret{ssoClientSecret}.
+      # clientSecret: ""
+      # -- Redirect URI registered with the identity provider (must match exactly)
+      # redirectUri: "https://icp.wso2.com/auth/callback"
+      # -- JWT claim to use as the ICP username ("email" or "preferred_username")
+      # usernameClaim: "email"
+      # -- OIDC scopes to request (openid is required)
+      # scopes:
+      #   - openid
+      #   - email
+      #   - profile
     # Secure vault configuration
     secureVault:
       # -- Enable/Disable secure vault
       enabled: false
+      # -- Encrypted secret values written into [icp_server.secrets] in deployment.toml.
+      #    Each key must match the alias used in the $secret{<alias>} reference.
+      #    Provide the base64-encoded ciphertext produced by the WSO2 cipher tool.
+      # secrets:
+      #   secretJWTsecret: "<encrypted-jwt-secret>"          # alias for frontendJwtHMACSecret
+      #   secCredsDbPassword: "<encrypted-creds-db-password>" # alias for credentialsDbPassword
+      #   secDbPassword: "<encrypted-storage-db-password>"    # alias for storage.dbPassword
 
   deployment:
     securityContext:

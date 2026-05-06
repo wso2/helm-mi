@@ -103,7 +103,7 @@ wso2:
     # -- Frontend JWT HMAC secret (at least 32 characters for HS256)
     frontendJwtHMACSecret: "default-secret-key-at-least-32-characters-long-for-hs256"
     # -- Allow insecure TLS for MI artifacts API
-    artifactsApiAllowInsecureTLS: true
+    artifactsApiAllowInsecureTLS: false
     # Credentials database configuration
     credentialsDb: {}
     # Primary database / storage configuration
