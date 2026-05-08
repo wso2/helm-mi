@@ -82,7 +82,7 @@ defaultTokenExpiryTime = {{ .Values.wso2.config.defaultTokenExpiryTime }}
 refreshTokenExpiryTime = {{ .Values.wso2.config.refreshTokenExpiryTime }}
 {{- end }}
 enableRefreshTokenRotation = {{ .Values.wso2.config.enableRefreshTokenRotation | default false }}
-{{- if .Values.wso2.config.maxRefreshTokensPerUser }}
+{{- if hasKey .Values.wso2.config "maxRefreshTokensPerUser" }}
 maxRefreshTokensPerUser = {{ .Values.wso2.config.maxRefreshTokensPerUser }}
 {{- end }}
 
@@ -102,11 +102,11 @@ secCredsDbPassword = {{ .Values.wso2.config.secureVault.secrets.secCredsDbPasswo
 secDbPassword = {{ .Values.wso2.config.secureVault.secrets.secDbPassword | quote }}
 {{- end }}
 {{- end }}
-{{- if and (.Values.wso2.config.sso) (.Values.wso2.config.sso.enabled) (.Values.wso2.config.sso.clientSecret) }}
-ssoClientSecret = {{ .Values.wso2.config.sso.clientSecret | quote }}
+{{- if and (.Values.wso2.config.sso) (.Values.wso2.config.sso.enabled) (.Values.wso2.config.secureVault.secrets.ssoClientSecret) }}
+ssoClientSecret = {{ .Values.wso2.config.secureVault.secrets.ssoClientSecret | quote }}
 {{- end }}
-{{- if and (.Values.wso2.config.opensearch) (.Values.wso2.config.opensearch.password) }}
-opensearchPassword = {{ .Values.wso2.config.opensearch.password | quote }}
+{{- if and (.Values.wso2.config.opensearch) (.Values.wso2.config.secureVault.secrets.opensearchPassword) }}
+opensearchPassword = {{ .Values.wso2.config.secureVault.secrets.opensearchPassword | quote }}
 {{- end }}
 {{- end }}
 

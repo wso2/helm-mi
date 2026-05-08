@@ -245,4 +245,4 @@ wso2:
       enabled: false
     configMaps:
       entryPoint:
-        defaultMode: "0755"  
+        defaultMode: "0755"

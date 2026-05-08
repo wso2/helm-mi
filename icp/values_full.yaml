@@ -259,6 +259,8 @@ wso2:
     graphqlPort: 9446
     # -- Observability API port
     observabilityPort: 9448
+    # -- Auth API port
+    authPort: 9447
     # -- Additional ICP ports exposed by the container
     additionalPorts:
       - name: icp-port-3

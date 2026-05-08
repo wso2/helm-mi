@@ -84,6 +84,8 @@ wso2:
     graphqlPort: 9446
     # -- Observability API port
     observabilityPort: 9448
+    # -- Auth API port
+    authPort: 9447
     # -- Additional ICP ports exposed by the container
     additionalPorts:
       - name: icp-port-3
@@ -101,7 +103,7 @@ wso2:
     # -- Authentication backend URL
     authBackendUrl: "https://localhost:9447"
     # -- Frontend JWT HMAC secret (at least 32 characters for HS256)
-    frontendJwtHMACSecret: "default-secret-key-at-least-32-characters-long-for-hs256"
+    frontendJwtHMACSecret: ""
     # -- Allow insecure TLS for MI artifacts API
     artifactsApiAllowInsecureTLS: false
     # Credentials database configuration

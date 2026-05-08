@@ -55,14 +55,21 @@ spec:
               service:
                 name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
                 port:
-                  number: 9446
+                  number: {{ .Values.wso2.config.graphqlPort }}
           - path: /icp/observability
             pathType: Prefix
             backend:
               service:
                 name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
                 port:
-                  number: 9448
+                  number: {{ .Values.wso2.config.observabilityPort }}
+          - path: /auth
+             pathType: Prefix
+             backend:
+               service:
+                 name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
+                 port:
+                   number: {{ .Values.wso2.config.authPort }}        
           - path: /
             pathType: Prefix
             backend:
