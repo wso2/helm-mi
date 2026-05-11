@@ -1,215 +1,250 @@
-[server_config]
-port = {{ .Values.wso2.config.serverPort }}
+# ICP Server Configuration File
+# This file contains all configurable parameters for the Integration Control Plane server
 
-[heartbeat_config]
-pool_size = {{ .Values.wso2.config.heartbeatPoolSize }}
+# =============================================================================
+# SERVER CONFIGURATION
+# =============================================================================
+{{- if .Values.wso2.config.serverPort }}
+serverPort = {{ .Values.wso2.config.serverPort }}
+{{- end }}
+{{- if .Values.wso2.config.serverHost }}
+serverHost = {{ .Values.wso2.config.serverHost | quote }}
+{{- end }}
 
-[mi_super_admin]
-username = {{ .Values.wso2.config.serviceAccount.mi.username | quote }}
+# =============================================================================
+# OPERATIONAL CONFIGURATION
+# =============================================================================
+{{- if .Values.wso2.config.schedulerIntervalSeconds }}
+schedulerIntervalSeconds = {{ .Values.wso2.config.schedulerIntervalSeconds }}
+{{- end }}
+{{- if .Values.wso2.config.refreshTokenCleanupIntervalSeconds }}
+refreshTokenCleanupIntervalSeconds = {{ .Values.wso2.config.refreshTokenCleanupIntervalSeconds }}
+{{- end }}
+
+# =============================================================================
+# LOGGING CONFIGURATION
+# =============================================================================
+{{- if .Values.wso2.config.logLevel }}
+logLevel = {{ .Values.wso2.config.logLevel | quote }}
+{{- end }}
+enableAuditLogging = {{ .Values.wso2.config.enableAuditLogging | default false }}
+enableMetrics = {{ .Values.wso2.config.enableMetrics | default false }}
+
+# =============================================================================
+# AUTHENTICATION BACKEND CONFIGURATION
+# =============================================================================
+{{- if .Values.wso2.config.authBackendUrl }}
+authBackendUrl = {{ .Values.wso2.config.authBackendUrl | quote }}
+{{- end }}
+
+# =============================================================================
+# AUTH SERVICE CONFIGURATION
+# =============================================================================
 {{- if .Values.wso2.config.secureVault.enabled }}
-password = "$secret{mi_admin_password}"
+frontendJwtHMACSecret = "$secret{secretJWTsecret}"
 {{- else }}
-password = {{ .Values.wso2.config.serviceAccount.mi.password | quote }}
+frontendJwtHMACSecret = {{ .Values.wso2.config.frontendJwtHMACSecret | quote }}
 {{- end }}
 
-[bal_service_account]
-username = {{ .Values.wso2.config.serviceAccount.bi.username | quote }}
+# =============================================================================
+# CREDENTIALS DATABASE CONFIGURATION
+# =============================================================================
+{{- if .Values.wso2.config.credentialsDb }}
+{{- if .Values.wso2.config.credentialsDb.dbType }}
+credentialsDbType = {{ .Values.wso2.config.credentialsDb.dbType | quote }}
+{{- end }}
+{{- if .Values.wso2.config.credentialsDb.dbHost }}
+credentialsDbHost = {{ .Values.wso2.config.credentialsDb.dbHost | quote }}
+{{- end }}
+{{- if .Values.wso2.config.credentialsDb.dbPort }}
+credentialsDbPort = {{ .Values.wso2.config.credentialsDb.dbPort }}
+{{- end }}
+{{- if .Values.wso2.config.credentialsDb.dbName }}
+credentialsDbName = {{ .Values.wso2.config.credentialsDb.dbName | quote }}
+{{- end }}
+{{- if .Values.wso2.config.credentialsDb.dbUser }}
+credentialsDbUser = {{ .Values.wso2.config.credentialsDb.dbUser | quote }}
+{{- end }}
+{{- if .Values.wso2.config.credentialsDb.dbPassword }}
 {{- if .Values.wso2.config.secureVault.enabled }}
-password = "$secret{bi_admin_password}"
+credentialsDbPassword = "$secret{secCredsDbPassword}"
 {{- else }}
-password = {{ .Values.wso2.config.serviceAccount.bi.password | quote }}
+credentialsDbPassword = {{ .Values.wso2.config.credentialsDb.dbPassword | quote }}
+{{- end }}
+{{- end }}
 {{- end }}
 
-[si_service_account]
-username = {{ .Values.wso2.config.serviceAccount.si.username | quote }}
+# Token expiry settings
+{{- if .Values.wso2.config.defaultTokenExpiryTime }}
+defaultTokenExpiryTime = {{ .Values.wso2.config.defaultTokenExpiryTime }}
+{{- end }}
+{{- if .Values.wso2.config.refreshTokenExpiryTime }}
+refreshTokenExpiryTime = {{ .Values.wso2.config.refreshTokenExpiryTime }}
+{{- end }}
+enableRefreshTokenRotation = {{ .Values.wso2.config.enableRefreshTokenRotation | default false }}
+{{- if hasKey .Values.wso2.config "maxRefreshTokensPerUser" }}
+maxRefreshTokensPerUser = {{ .Values.wso2.config.maxRefreshTokensPerUser }}
+{{- end }}
+
+# =============================================================================
+# ENCRYPTED SECRETS CONFIGURATION
+# =============================================================================
 {{- if .Values.wso2.config.secureVault.enabled }}
-password = "$secret{si_admin_password}"
-{{- else }}
-password = {{ .Values.wso2.config.serviceAccount.si.password | quote }}
+[icp_server.secrets]
+{{- if .Values.wso2.config.secureVault.secrets }}
+{{- if .Values.wso2.config.secureVault.secrets.secretJWTsecret }}
+secretJWTsecret = {{ .Values.wso2.config.secureVault.secrets.secretJWTsecret | quote }}
 {{- end }}
-
-[internal_apis.file_user_store]
-enable = {{ .Values.wso2.config.userstore.file.enabled }}
-
-{{- if not .Values.wso2.config.userstore.file.enabled }}
-[user_store]
-{{- if .Values.wso2.config.userstore.rdbms }}
-class = "org.wso2.dashboard.security.user.core.jdbc.JDBCUserStoreManager"
-type = "database"
-{{- if .Values.wso2.config.userstore.rdbms.jdbc.driver }}
-driver_name = {{ .Values.wso2.config.userstore.rdbms.jdbc.driver | quote }}
+{{- if .Values.wso2.config.secureVault.secrets.secCredsDbPassword }}
+secCredsDbPassword = {{ .Values.wso2.config.secureVault.secrets.secCredsDbPassword | quote }}
 {{- end }}
-{{- if .Values.wso2.config.userstore.rdbms.url }}
-url = {{ .Values.wso2.config.userstore.rdbms.url | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userstore.rdbms.username }}
-username = {{ .Values.wso2.config.userstore.rdbms.username | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userstore.rdbms.password }}
-password = {{ .Values.wso2.config.userstore.rdbms.password | quote }}
-{{- end }}
-{{- range $key, $value := .Values.wso2.config.userstore.rdbms.jdbc.poolParameters }}
-{{ if typeIs "string" $value }}
-pool_options.{{ $key }} = {{ $value | quote }}
-{{- else }}
-pool_options.{{ $key }} = {{ $value }}
+{{- if .Values.wso2.config.secureVault.secrets.secDbPassword }}
+secDbPassword = {{ .Values.wso2.config.secureVault.secrets.secDbPassword | quote }}
 {{- end }}
 {{- end }}
-{{ else if .Values.wso2.config.userstore.ldap }}
-{{- if .Values.wso2.config.userStore.ldap.type }}
-type = {{ .Values.wso2.config.userStore.ldap.type | quote }}
+{{- if and (.Values.wso2.config.sso) (.Values.wso2.config.sso.enabled) (.Values.wso2.config.secureVault.secrets.ssoClientSecret) }}
+ssoClientSecret = {{ .Values.wso2.config.secureVault.secrets.ssoClientSecret | quote }}
 {{- end }}
-{{- if .Values.wso2.config.userStore.ldap.class }}
-class = {{ .Values.wso2.config.userStore.ldap.class | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.connectionUrl }}
-connection_url = {{ .Values.wso2.config.userStore.ldap.connectionUrl | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.connectionName }}
-connection_name = {{ .Values.wso2.config.userStore.ldap.connectionName | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.connectionPassword }}
-connection_password = {{ .Values.wso2.config.userStore.ldap.connectionPassword | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.anonymousBind }}
-anonymous_bind = {{ .Values.wso2.config.userStore.ldap.anonymousBind }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.userSearchBase }}
-user_search_base = {{ .Values.wso2.config.userStore.ldap.userSearchBase | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.userNameAttribute }}
-user_name_attribute = {{ .Values.wso2.config.userStore.ldap.userNameAttribute | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.userNameSearchFilter }}
-user_name_search_filter = {{ .Values.wso2.config.userStore.ldap.userNameSearchFilter | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.userNameListFilter }}
-user_name_list_filter = {{ .Values.wso2.config.userStore.ldap.userNameListFilter | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.displayNameAttribute }}
-display_name_attribute = {{ .Values.wso2.config.userStore.ldap.displayNameAttribute | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.readGroups }}
-read_groups = {{ .Values.wso2.config.userStore.ldap.readGroups }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.groupSearchBase }}
-group_search_base = {{ .Values.wso2.config.userStore.ldap.groupSearchBase | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.groupNameAttribute }}
-group_name_attribute = {{ .Values.wso2.config.userStore.ldap.groupNameAttribute | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.groupNameSearchFilter }}
-group_name_search_filter = {{ .Values.wso2.config.userStore.ldap.groupNameSearchFilter | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.groupNameListFilter }}
-group_name_list_filter = {{ .Values.wso2.config.userStore.ldap.groupNameListFilter | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.membershipAttribute }}
-membership_attribute = {{ .Values.wso2.config.userStore.ldap.membershipAttribute | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.backLinksEnabled }}
-back_links_enabled = {{ .Values.wso2.config.userStore.ldap.backLinksEnabled }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.usernameJavaRegex }}
-username_java_regex = {{ .Values.wso2.config.userStore.ldap.usernameJavaRegex | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.rolenameJavaRegex }}
-rolename_java_regex = {{ .Values.wso2.config.userStore.ldap.rolenameJavaRegex | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.passwordJavaRegex }}
-password_java_regex = {{ .Values.wso2.config.userStore.ldap.passwordJavaRegex | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.scimEnabled }}
-scim_enabled = {{ .Values.wso2.config.userStore.ldap.scimEnabled }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.passwordHashMethod }}
-password_hash_method = {{ .Values.wso2.config.userStore.ldap.passwordHashMethod | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.multiAttributeSeparator }}
-multi_attribute_separator = {{ .Values.wso2.config.userStore.ldap.multiAttributeSeparator | quote }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.maxUserNameListLength }}
-max_user_name_list_length = {{ .Values.wso2.config.userStore.ldap.maxUserNameListLength }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.maxRoleNameListLength }}
-max_role_name_list_length = {{ .Values.wso2.config.userStore.ldap.maxRoleNameListLength }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.userRolesCacheEnabled }}
-user_roles_cache_enabled = {{ .Values.wso2.config.userStore.ldap.userRolesCacheEnabled }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.connectionPoolingEnabled }}
-connection_pooling_enabled = {{ .Values.wso2.config.userStore.ldap.connectionPoolingEnabled }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.ldapConnectionTimeout }}
-ldap_connection_timeout = {{ .Values.wso2.config.userStore.ldap.ldapConnectionTimeout }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.readTimeout }}
-read_timeout = {{ .Values.wso2.config.userStore.ldap.readTimeout }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.retryAttempts }}
-retry_attempts = {{ .Values.wso2.config.userStore.ldap.retryAttempts }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.replaceEscapeCharactersAtUserLogin }}
-replace_escape_characters_at_user_login = {{ .Values.wso2.config.userStore.ldap.replaceEscapeCharactersAtUserLogin }}
-{{- end }}
-{{- if .Values.wso2.config.userStore.ldap.readOnly }}
-read_only = {{ .Values.wso2.config.userStore.ldap.readOnly }}
-{{- end }}
-{{- else }}
-type = "read_only_ldap"
+{{- if and (.Values.wso2.config.opensearch) (.Values.wso2.config.secureVault.secrets.opensearchPassword) }}
+opensearchPassword = {{ .Values.wso2.config.secureVault.secrets.opensearchPassword | quote }}
 {{- end }}
 {{- end }}
 
-[keystore]
-file_name = "conf/security/{{ .Values.wso2.config.keyStore.fileName }}"
+# =============================================================================
+# SSO (OIDC) CONFIGURATION
+# =============================================================================
+{{- if and (.Values.wso2.config.sso) (.Values.wso2.config.sso.enabled) }}
+ssoEnabled = true
+{{- if .Values.wso2.config.sso.issuer }}
+ssoIssuer = {{ .Values.wso2.config.sso.issuer | quote }}
+{{- end }}
+{{- if .Values.wso2.config.sso.authorizationEndpoint }}
+ssoAuthorizationEndpoint = {{ .Values.wso2.config.sso.authorizationEndpoint | quote }}
+{{- end }}
+{{- if .Values.wso2.config.sso.tokenEndpoint }}
+ssoTokenEndpoint = {{ .Values.wso2.config.sso.tokenEndpoint | quote }}
+{{- end }}
+{{- if .Values.wso2.config.sso.logoutEndpoint }}
+ssoLogoutEndpoint = {{ .Values.wso2.config.sso.logoutEndpoint | quote }}
+{{- end }}
+{{- if .Values.wso2.config.sso.clientId }}
+ssoClientId = {{ .Values.wso2.config.sso.clientId | quote }}
+{{- end }}
+{{- if .Values.wso2.config.sso.clientSecret }}
 {{- if .Values.wso2.config.secureVault.enabled }}
-password = "$secret{keystore_password}"
-key_password = "$secret{keystore_key_password}"
+ssoClientSecret = "$secret{ssoClientSecret}"
 {{- else }}
-password = "{{ .Values.wso2.config.keyStore.password }}"
-key_password = "{{ .Values.wso2.config.keyStore.keyPassword }}"
+ssoClientSecret = {{ .Values.wso2.config.sso.clientSecret | quote }}
 {{- end }}
-
-[truststore]
-file_name = "conf/security/{{ .Values.wso2.config.trustStore.fileName }}"
-{{- if .Values.wso2.config.secureVault.enabled }}
-password = "$secret{truststore_password}"
-{{- else }}
-password = "{{ .Values.wso2.config.trustStore.password }}"
-{{ end }}
-
-{{ if and (.Values.wso2.config.sso) (.Values.wso2.config.sso.enabled) }}
-[sso]
-enable = true
-client_id = {{ .Values.wso2.config.sso.clientId | quote }}
-base_url = {{ .Values.wso2.config.sso.baseUrl | quote }}
-jwt_issuer = {{ .Values.wso2.config.sso.jwtIssuer | quote }}
-resource_server_URLs = [
-    {{- range .Values.wso2.config.sso.resourceServerURLs }}
+{{- end }}
+{{- if .Values.wso2.config.sso.redirectUri }}
+ssoRedirectUri = {{ .Values.wso2.config.sso.redirectUri | quote }}
+{{- end }}
+{{- if .Values.wso2.config.sso.usernameClaim }}
+ssoUsernameClaim = {{ .Values.wso2.config.sso.usernameClaim | quote }}
+{{- end }}
+{{- if .Values.wso2.config.sso.scopes }}
+ssoScopes = [
+    {{- range .Values.wso2.config.sso.scopes }}
     "{{ . }}",
     {{- end }}
 ]
-sign_in_redirect_URL = {{ .Values.wso2.config.sso.signInRedirectUrl | quote }}
-admin_group_attribute = {{ .Values.wso2.config.sso.adminGroupAttribute | quote }}
-admin_groups = [
-    {{- range .Values.wso2.config.sso.adminGroups }}
-    "{{ . }}",
-    {{- end }}
-]
+{{- end }}
+{{- end }}
 
-{{- range .Values.wso2.config.sso.authorizationRequestParams }}
-[[sso.authorization_request.params]]
-key = "{{ .key }}"
-value = "{{ .value }}"
+# =============================================================================
+# OBSERVABILITY CONFIGURATION
+# =============================================================================
+observabilityEnabled = {{ .Values.wso2.config.observabilityEnabled | default false }}
+
+# =============================================================================
+# OPENSEARCH CONFIGURATION
+# =============================================================================
+{{- if .Values.wso2.config.opensearch }}
+{{- if .Values.wso2.config.opensearch.url }}
+opensearchUrl = {{ .Values.wso2.config.opensearch.url | quote }}
+{{- end }}
+{{- if .Values.wso2.config.opensearch.username }}
+opensearchUsername = {{ .Values.wso2.config.opensearch.username | quote }}
+{{- end }}
+{{- if .Values.wso2.config.opensearch.password }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+opensearchPassword = "$secret{opensearchPassword}"
+{{- else }}
+opensearchPassword = {{ .Values.wso2.config.opensearch.password | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+# =============================================================================
+# FRONTEND URL CONFIGURATION (derived from hostname)
+# =============================================================================
+{{- if .Values.wso2.deployment.hostname }}
+backendGraphqlEndpoint = "https://{{ .Values.wso2.deployment.hostname }}/graphql"
+backendAuthBaseUrl = "https://{{ .Values.wso2.deployment.hostname }}/auth"
+backendObservabilityEndpoint = "https://{{ .Values.wso2.deployment.hostname }}/icp/observability"
+{{- end }}
+
+# =============================================================================
+# MI ARTIFACTS API CONFIGURATION
+# =============================================================================
+{{- if .Values.wso2.config.artifactsApiAllowInsecureTLS }}
+artifactsApiAllowInsecureTLS = {{ .Values.wso2.config.artifactsApiAllowInsecureTLS }}
+{{- end }}
+
+# =============================================================================
+# DATABASE CONFIGURATION
+# =============================================================================
+[icp_server.storage]
+{{- if .Values.wso2.config.storage }}
+{{- if .Values.wso2.config.storage.heartbeatTimeoutSeconds }}
+heartbeatTimeoutSeconds = {{ .Values.wso2.config.storage.heartbeatTimeoutSeconds }}
+{{- end }}
+{{- if .Values.wso2.config.storage.dbType }}
+dbType = {{ .Values.wso2.config.storage.dbType | quote }}
+{{- end }}
+{{- if .Values.wso2.config.storage.dbHost }}
+dbHost = {{ .Values.wso2.config.storage.dbHost | quote }}
+{{- end }}
+{{- if .Values.wso2.config.storage.dbPort }}
+dbPort = {{ .Values.wso2.config.storage.dbPort }}
+{{- end }}
+{{- if .Values.wso2.config.storage.dbName }}
+dbName = {{ .Values.wso2.config.storage.dbName | quote }}
+{{- end }}
+{{- if .Values.wso2.config.storage.dbUser }}
+dbUser = {{ .Values.wso2.config.storage.dbUser | quote }}
+{{- end }}
+{{- if .Values.wso2.config.storage.dbPassword }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+dbPassword = "$secret{secDbPassword}"
+{{- else }}
+dbPassword = {{ .Values.wso2.config.storage.dbPassword | quote }}
+{{- end }}
+{{- end }}
+{{- if .Values.wso2.config.storage.maxOpenConnections }}
+maxOpenConnections = {{ .Values.wso2.config.storage.maxOpenConnections }}
+{{- end }}
+{{- if .Values.wso2.config.storage.minIdleConnections }}
+minIdleConnections = {{ .Values.wso2.config.storage.minIdleConnections }}
+{{- end }}
+{{- if .Values.wso2.config.storage.maxConnectionLifeTime }}
+maxConnectionLifeTime = {{ .Values.wso2.config.storage.maxConnectionLifeTime }}
 {{- end }}
 {{- end }}
 
 {{- if .Values.wso2.config.secureVault.enabled }}
-[secrets]
-mi_admin_password = {{ .Values.wso2.config.serviceAccount.mi.password | quote }}
-bi_admin_password = {{ .Values.wso2.config.serviceAccount.bi.password | quote }}
-si_admin_password = {{ .Values.wso2.config.serviceAccount.si.password | quote }}
-keystore_password = {{ .Values.wso2.config.keyStore.password | quote }}
-keystore_key_password = {{ .Values.wso2.config.keyStore.keyPassword | quote }}
-truststore_password = {{ .Values.wso2.config.trustStore.password | quote }}
+[icp_server.storage.secrets]
+{{- if .Values.wso2.config.secureVault.secrets }}
+{{- if .Values.wso2.config.secureVault.secrets.secDbPassword }}
+secDbPassword = {{ .Values.wso2.config.secureVault.secrets.secDbPassword | quote }}
 {{- end }}
+{{- end }}
+{{- end }}
+
+[[ballerina.log.modules]]
+name = "wso2/icp_server"
+level = {{ .Values.wso2.config.logLevel | default "INFO" | quote }}
+
+[ballerina.http.traceLogAdvancedConfig]
+console = false

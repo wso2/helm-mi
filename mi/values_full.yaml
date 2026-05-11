@@ -105,6 +105,9 @@ wso2:
     # -- Ingress class name
     ingressClassName: ""
     # -- (list) Ingress annotations
+    # MI serves HTTPS natively; you must configure your ingress controller for backend HTTPS.
+    # For NGINX: nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    # For Traefik: traefik.ingress.kubernetes.io/service.serversscheme: "https"
     annotations:
     # -- K8s TLS secret for configured hostname
     tlsSecret: ""
@@ -258,36 +261,22 @@ wso2:
         fileName: "client-truststore.jks"
         # -- Primary truststore password
         password: ""
+    # -- ICP 2.0 configuration for connecting MI to the Integration Control Plane
     icp:
-      # -- ICP URL (manually specify the full URL, takes precedence over service discovery fields below)
-      # -- Use this when connecting to an ICP instance outside the cluster or with a custom URL.
-      url: ""
-      # -- ICP service discovery fields (used to dynamically construct the dashboard_url)
-      # -- The resource prefix of the ICP Helm release (defaults to "cloud", matches ICP chart's cloudName value)
-      resourcePrefix: "cloud"
-      # -- The Helm release name used when installing the ICP chart (e.g., helm install <releaseName> icp/)
-      releaseName: ""
-      # -- The namespace where ICP is deployed (leave empty for same namespace)
-      namespace: ""
-      # -- The port of the ICP service
-      port: 9743
-      # -- The time interval (in seconds) between two heartbeats sent from the Micro Integrator to the ICP server
-      heartbeatInterval: 5
-      # -- The group ID of the Micro Integrator deployment
-      # @default -- release name
-      groupId: ""
-      # -- The node ID of the Micro Integrator deployment
-      # @default -- pod name
-      nodeId: ""
-      # -- The service name of the Micro Integrator
-      managementHostname: ""
-      # -- If communicating via Ingress, use the following configuration:
-      # managementHostname = "<INGRESS_HOSTNAME>"
-      # -- If communicating via Service instead, use the following configuration:
-      # managementHostname = "<SERVICE_NAME>"
-      # management_port = <SERVICE_PORT>
-      # -- The management port of the Micro Integrator
-      managementPort: 9164
+      # -- Enable ICP connectivity
+      enabled: false
+      # -- Runtime ID (If not defined Pod UID will be used as runtime ID)
+      runtime: ""
+      # -- Environment name
+      environment: ""
+      # -- Project name
+      project: ""
+      # -- Integration name
+      integration: ""
+      # -- Secret key (obtained from ICP after creating a runtime)
+      secret: ""
+      # -- ICP server URL (defaults to auto-discovery; set explicitly if ICP is in a different namespace)
+      # icpUrl: "https://icp-server:9445"
     # -- Required if you want the Micro Integrator to publish integation services to the Service Catalog in the API Publisher (https://apim.docs.wso2.com/en/4.1.0/tutorials/integration-tutorials/service-catalog-tutorial/#step-3-configure-the-micro-integrator)
     serviceCatalog:
       # -- Enable/Disable service catalog
@@ -690,7 +679,7 @@ wso2:
     # -- Hostname of the Micro Integrator deployment
     hostname: ""
     # -- Build version of the Micro Integrator
-    BuildVersion: "4.5.0"
+    BuildVersion: "4.6.0"
     # -- K8s secret name which contains JKS files
     JKSSecretName: ""
     # -- imagePullSecrets for private docker registry

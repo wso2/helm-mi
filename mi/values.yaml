@@ -65,6 +65,9 @@ wso2:
     # -- Ingress class name
     ingressClassName: ""
     # -- (list) Ingress annotations
+    # MI serves HTTPS natively; you must configure your ingress controller for backend HTTPS.
+    # For NGINX: nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    # For Traefik: traefik.ingress.kubernetes.io/service.serversscheme: "https"
     annotations:
     # -- K8s TLS secret for configured hostname
     tlsSecret: ""
@@ -121,6 +124,22 @@ wso2:
       file:
         # -- Enable/Disable file based userstore
         enabled: true
+    # -- ICP 2.0 configuration for connecting MI to the Integration Control Plane
+    # icp:
+    #   # -- Enable ICP connectivity
+    #   enabled: true
+    #   # -- Runtime ID (If not defined Pod UID will be used as runtime ID)
+    #   runtime: ""
+    #   # -- Environment name
+    #   environment: ""
+    #   # -- Project name
+    #   project: ""
+    #   # -- Integration name
+    #   integration: ""
+    #   # -- Secret key (obtained from ICP)
+    #   secret: ""
+    #   # -- ICP server URL (defaults to auto-discovery via K8s service)
+    #   # icpUrl: "https://icp-server:9445"
     secureVault:
       # -- Enable/Disable secure vault
       enabled: false
@@ -150,6 +169,7 @@ wso2:
         # -- Primary truststore password
         password: "wso2carbon"
   deployment:
+    nodeSelector: {}
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
       apparmor: true
@@ -182,7 +202,7 @@ wso2:
       # -- Container image digest
       digest: ""
       # -- Container image tag
-      tag: "4.5.0"
+      tag: "4.6.0"
       # -- Container image pull policy. Refer (https://kubernetes.io/docs/concepts/containers/images/#updating-images)
       pullPolicy: IfNotPresent
 
@@ -268,4 +288,4 @@ wso2:
     # -- Set UNIX permissions over the startup scripts
     configMaps:
       entryPoint:
-        defaultMode: "0407"
+        defaultMode: "0555"

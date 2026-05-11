@@ -47,7 +47,7 @@ spec:
         checksum.mi.log4j2.properties: {{ include (print $.Template.BasePath "/mi-log4j2-conf.yaml") . | sha256sum }}
         checksum.mi.secret.properties: {{ include (print $.Template.BasePath "/mi-secret-conf.yaml") . | sha256sum }}
         checksum.mi.entrypoint.sh: {{ include (print $.Template.BasePath "/mi-conf-entrypoint.yaml") . | sha256sum }}
-        {{- if .Values.wso2.deployment.securityContext.apparmor }}
+        {{- if and .Values.wso2.deployment.securityContext.apparmor (not (semverCompare ">=1.30-0" .Capabilities.KubeVersion.GitVersion)) }}
         container.apparmor.security.beta.kubernetes.io/wso2mi: "runtime/default"
         {{- end }}
       labels:
@@ -66,6 +66,10 @@ spec:
         {{- if .Values.wso2.deployment.securityContext.seccompProfile.enabled }}
         seccompProfile:
           type: {{ .Values.wso2.deployment.securityContext.seccompProfile.type }}
+        {{- end }}
+        {{- if and .Values.wso2.deployment.securityContext.apparmor (semverCompare ">=1.30-0" .Capabilities.KubeVersion.GitVersion) }}
+        appArmorProfile:
+          type: RuntimeDefault
         {{- end }}
       {{- with .Values.wso2.deployment.nodeSelector }}
       nodeSelector:

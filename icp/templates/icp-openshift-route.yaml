@@ -1,0 +1,120 @@
+# ------------------------------------------------------------------------------------
+# Copyright (c) 2024, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
+#
+# WSO2 LLC. licenses this file to you under the Apache License,
+# Version 2.0 (the "License"); you may not use this file except
+# in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied. See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#------------------------------------------------------------------------------------
+
+{{- if and .Values.wso2.openshift.enabled (not .Values.wso2.gatewayAPI.enabled) }}
+{{- $destCA := "" }}
+{{- if eq .Values.wso2.openshift.route.tls.termination "reencrypt" }}
+  {{- if .Values.wso2.deployment.JKSSecretName -}}
+    {{- $secret := lookup "v1" "Secret" .Release.Namespace .Values.wso2.deployment.JKSSecretName -}}
+    {{- if and $secret $secret.data (index $secret.data "ca.crt") -}}
+      {{- $destCA = index $secret.data "ca.crt" | b64dec -}}
+    {{- else -}}
+      {{- $destCA = .Files.Get "files/default-ca.crt" -}}
+    {{- end -}}
+  {{- else -}}
+    {{- $destCA = .Files.Get "files/default-ca.crt" -}}
+  {{- end -}}
+{{- end }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-graphql
+  namespace: {{ .Release.Namespace }}
+spec:
+  host: {{ .Values.wso2.deployment.hostname | quote }}
+  path: /graphql
+  port:
+    targetPort: {{ .Values.wso2.config.graphqlPort }}
+  to:
+    kind: Service
+    name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
+    weight: 100
+  tls:
+    termination: {{ .Values.wso2.openshift.route.tls.termination }}
+    insecureEdgeTerminationPolicy: {{ .Values.wso2.openshift.route.tls.insecureEdgeTerminationPolicy }}
+    {{- if $destCA }}
+    destinationCACertificate: |
+{{ $destCA | indent 6 }}
+    {{- end }}
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-observability
+  namespace: {{ .Release.Namespace }}
+spec:
+  host: {{ .Values.wso2.deployment.hostname | quote }}
+  path: /icp/observability
+  port:
+    targetPort: {{ .Values.wso2.config.observabilityPort }}
+  to:
+    kind: Service
+    name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
+    weight: 100
+  tls:
+    termination: {{ .Values.wso2.openshift.route.tls.termination }}
+    insecureEdgeTerminationPolicy: {{ .Values.wso2.openshift.route.tls.insecureEdgeTerminationPolicy }}
+    {{- if $destCA }}
+    destinationCACertificate: |
+{{ $destCA | indent 6 }}
+    {{- end }}
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-auth
+  namespace: {{ .Release.Namespace }}
+spec:
+  host: {{ .Values.wso2.deployment.hostname | quote }}
+  path: /auth
+  port:
+    targetPort: {{ .Values.wso2.config.authPort }}
+  to:
+    kind: Service
+    name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
+    weight: 100
+  tls:
+    termination: {{ .Values.wso2.openshift.route.tls.termination }}
+    insecureEdgeTerminationPolicy: {{ .Values.wso2.openshift.route.tls.insecureEdgeTerminationPolicy }}
+    {{- if $destCA }}
+    destinationCACertificate: |
+{{ $destCA | indent 6 }}
+    {{- end }}
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  host: {{ .Values.wso2.deployment.hostname | quote }}
+  path: /
+  port:
+    targetPort: {{ .Values.wso2.config.serverPort }}
+  to:
+    kind: Service
+    name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
+    weight: 100
+  tls:
+    termination: {{ .Values.wso2.openshift.route.tls.termination }}
+    insecureEdgeTerminationPolicy: {{ .Values.wso2.openshift.route.tls.insecureEdgeTerminationPolicy }}
+    {{- if $destCA }}
+    destinationCACertificate: |
+{{ $destCA | indent 6 }}
+    {{- end }}
+{{- end }}

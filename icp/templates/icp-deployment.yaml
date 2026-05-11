@@ -42,7 +42,7 @@ spec:
         checksum.icp.log4j2.properties: {{ include (print $.Template.BasePath "/icp-log4j2-conf.yaml") . | sha256sum }}
         checksum.icp.secret.properties: {{ include (print $.Template.BasePath "/icp-secret-conf.yaml") . | sha256sum }}
         checksum.icp.entrypoint.sh: {{ include (print $.Template.BasePath "/icp-conf-entrypoint.yaml") . | sha256sum }}
-        {{- if .Values.wso2.deployment.securityContext.apparmor }}
+        {{- if and .Values.wso2.deployment.securityContext.apparmor (not (semverCompare ">=1.30-0" .Capabilities.KubeVersion.GitVersion)) }}
         container.apparmor.security.beta.kubernetes.io/wso2-integration-control-plane: "runtime/default"
         {{- end }}
       labels:
@@ -58,6 +58,10 @@ spec:
         {{- if .Values.wso2.deployment.securityContext.seccompProfile.enabled }}
         seccompProfile:
           type: {{ .Values.wso2.deployment.securityContext.seccompProfile.type }}
+        {{- end }}
+        {{- if and .Values.wso2.deployment.securityContext.apparmor (semverCompare ">=1.30-0" .Capabilities.KubeVersion.GitVersion) }}
+        appArmorProfile:
+          type: RuntimeDefault
         {{- end }}
       affinity:
         podAntiAffinity:
@@ -92,10 +96,14 @@ spec:
                 - nc -z localhost {{ .Values.wso2.config.serverPort }}
             periodSeconds: {{ .Values.wso2.deployment.probes.liveness.periodSeconds }}
           readinessProbe:
-            httpGet:
-              path: /dashboard/api/healthz
-              port: {{ .Values.wso2.config.serverPort }}
-              scheme: HTTPS
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  nc -z localhost {{ .Values.wso2.config.serverPort }} &&
+                  nc -z localhost {{ .Values.wso2.config.graphqlPort }} &&
+                  nc -z localhost {{ .Values.wso2.config.observabilityPort }}
             initialDelaySeconds: {{ .Values.wso2.deployment.probes.readiness.initialDelaySeconds }}
             periodSeconds: {{ .Values.wso2.deployment.probes.readiness.periodSeconds }}
           resources:
@@ -117,6 +125,14 @@ spec:
           ports:
             - containerPort: {{ .Values.wso2.config.serverPort }}
               protocol: TCP
+            - containerPort: {{ .Values.wso2.config.graphqlPort }}
+              protocol: TCP
+            - containerPort: {{ .Values.wso2.config.observabilityPort }}
+              protocol: TCP
+            {{- range .Values.wso2.config.additionalPorts }}
+            - containerPort: {{ .port }}
+              protocol: TCP
+            {{- end }}
           env:
             - name: JAVA_MEM_OPTS
               value: "-Xms{{ .Values.wso2.deployment.resources.jvm.memory.xms }} -Xmx{{ .Values.wso2.deployment.resources.jvm.memory.xmx }}"

@@ -33,3 +33,20 @@ spec:
       {{- if .Values.wso2.gatewayAPI.enabled }}
       appProtocol: https
       {{- end }}
+    - port: {{ .Values.wso2.config.graphqlPort }}
+      protocol: TCP
+      name: icp-graphql
+      {{- if .Values.wso2.gatewayAPI.enabled }}
+      appProtocol: https
+      {{- end }}
+    - port: {{ .Values.wso2.config.observabilityPort }}
+      protocol: TCP
+      name: icp-observability
+      {{- if .Values.wso2.gatewayAPI.enabled }}
+      appProtocol: https
+      {{- end }}
+    {{- range .Values.wso2.config.additionalPorts }}
+    - port: {{ .port }}
+      protocol: TCP
+      name: {{ .name }}
+    {{- end }}

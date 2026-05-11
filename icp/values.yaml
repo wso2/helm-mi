@@ -60,15 +60,33 @@ wso2:
     username: ""
     # -- WSO2 subscription password
     password: ""
+  # -- OpenShift-specific configurations
+  # -- Set openshift.enabled=true to deploy OpenShift Routes instead of Ingress.
+  # -- Required when running on OpenShift with reencrypt TLS (router -> pod encryption with CA verification).
+  # -- Standard Ingress cannot carry a destinationCACertificate field; OpenShift Routes support this natively.
+  openshift:
+    enabled: false
+    route:
+      tls:
+        # -- TLS termination type: reencrypt (recommended), edge, or passthrough
+        # -- reencrypt: router terminates external TLS and re-encrypts to the pod; CA verified via destinationCACertificate
+        # -- edge: router terminates TLS, sends plaintext HTTP to pod (not suitable if pod serves HTTPS)
+        # -- passthrough: raw TLS forwarded to pod; path-based routing is NOT possible with this mode
+        termination: "reencrypt"
+        # -- Insecure traffic policy (None, Allow, Redirect)
+        insecureEdgeTerminationPolicy: "Redirect"
   ingress:
     # -- Enable Ingress for ICP
     enabled: false
     # -- Ingress class name
     ingressClassName: ""
     # -- (list) Ingress annotations
+    # ICP serves HTTPS natively; you must configure your ingress controller for backend HTTPS.
+    # For NGINX: nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    # For Traefik: traefik.ingress.kubernetes.io/service.serversscheme: "https"
     annotations:
     # -- K8s TLS secret for configured hostname
-    tlsSecret: ""       
+    tlsSecret: ""
     ratelimit:
       # -- Ingress rate limit
       enabled: false
@@ -121,49 +139,78 @@ wso2:
       # -- TTL of the affinity cookie
       cookieTTL: "3600s"
 
-  # Integration Control Plane (ICP) product configurations
+  # Integration Control Plane (ICP) 2.0 product configurations
   config:
-    serviceAccount:
-      # -- The username for signing in to the WSO2 Integrator: MI runtimes
-      mi:
-        username: "admin"
-        password: "admin"
-      # -- The username for signing in to the WSO2 Integrator: BI runtimes
-      bi:
-        username: "bal_admin"
-        password: "bal_secret"
-      # -- The username for signing in to the WSO2 Integrator: SI runtimes
-      si:
-        username: "admin"
-        password: "admin"
-    userstore:
-      file:
-        # -- Enable/Disable file based userstore
-        enabled: true
+    # -- ICP server port
+    serverPort: 9445
+    # -- GraphQL API port
+    graphqlPort: 9446
+    # -- Observability API port
+    observabilityPort: 9448
+    # -- Auth API port
+    authPort: 9447
+    # -- Additional ICP ports exposed by the container
+    additionalPorts:
+      - name: icp-port-3
+        port: 9447
+      - name: icp-port-5
+        port: 9449
+    # -- Scheduler interval in seconds
+    schedulerIntervalSeconds: 30
+    # -- Log level (DEBUG, INFO, WARN, ERROR)
+    logLevel: "INFO"
+    # -- Enable audit logging
+    enableAuditLogging: true
+    # -- Enable metrics
+    enableMetrics: true
+    # -- Authentication backend URL
+    authBackendUrl: "https://localhost:9447"
+    # -- Frontend JWT HMAC secret (at least 32 characters for HS256)
+    frontendJwtHMACSecret: ""
+    # -- Allow insecure TLS for MI artifacts API
+    artifactsApiAllowInsecureTLS: false
+    # Credentials database configuration
+    credentialsDb: {}
+    # Primary database / storage configuration
+    storage: {}
+    # SSO (OIDC) configuration
+    sso:
+      # -- Enable/Disable SSO authentication
+      enabled: false
+      # -- OIDC issuer URL (used as ssoIssuer in deployment.toml)
+      # issuer: "https://api.asgardeo.io/t/{org}/oauth2/token"
+      # -- Authorization endpoint URL
+      # authorizationEndpoint: "https://api.asgardeo.io/t/{org}/oauth2/authorize"
+      # -- Token endpoint URL
+      # tokenEndpoint: "https://api.asgardeo.io/t/{org}/oauth2/token"
+      # -- Logout endpoint URL
+      # logoutEndpoint: "https://api.asgardeo.io/t/{org}/oidc/logout"
+      # -- OIDC client ID registered with the identity provider
+      # clientId: ""
+      # -- OIDC client secret. When secureVault.enabled=true this value is written
+      #    into [icp_server.secrets] as ssoClientSecret and referenced via $secret{ssoClientSecret}.
+      # clientSecret: ""
+      # -- Redirect URI registered with the identity provider (must match exactly)
+      # redirectUri: "https://icp.wso2.com/auth/callback"
+      # -- JWT claim to use as the ICP username ("email" or "preferred_username")
+      # usernameClaim: "email"
+      # -- OIDC scopes to request (openid is required)
+      # scopes:
+      #   - openid
+      #   - email
+      #   - profile
+    # Secure vault configuration
     secureVault:
       # -- Enable/Disable secure vault
       enabled: false
-    keyStore:
-      # -- The keystore file name
-      fileName: "dashboard.jks"
-      # -- The keystore alias
-      alias: "wso2carbon"
-      # -- The keystore password
-      password: "wso2carbon"
-      # -- The keystore key password
-      keyPassword: "wso2carbon"
-    trustStore:
-      # -- The truststore file name
-      fileName: "client-trustore.jks"
-      # -- The truststore password
-      password: "wso2carbon"
-    sso:
-      # -- Enable/Disable Single Sign-On for ICP
-      enabled: false
-    # -- Number of threads used by the executor pool to handle incoming requests from Micro Integrator runtimes
-    heartbeatPoolSize: 15
-    # -- ICP server port
-    serverPort: 9743
+      # -- Encrypted secret values written into [icp_server.secrets] in deployment.toml.
+      #    Each key must match the alias used in the $secret{<alias>} reference.
+      #    Provide the base64-encoded ciphertext produced by the WSO2 cipher tool.
+      # secrets:
+      #   secretJWTsecret: "<encrypted-jwt-secret>"          # alias for frontendJwtHMACSecret
+      #   secCredsDbPassword: "<encrypted-creds-db-password>" # alias for credentialsDbPassword
+      #   secDbPassword: "<encrypted-storage-db-password>"    # alias for storage.dbPassword
+
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)
@@ -185,7 +232,7 @@ wso2:
     # -- Hostname of the ICP deployment
     hostname: "icp.wso2.com"
     # -- Build version of the ICP
-    BuildVersion: "1.2.0"
+    BuildVersion: "2.0.0"
     # -- K8s secret name which contains JKS files
     JKSSecretName: ""
     # -- imagePullSecrets for private docker registry
@@ -196,7 +243,7 @@ wso2:
       # -- Container image digest
       digest: ""
       # -- Container image tag
-      tag: "1.2.0-alpine"
+      tag: "2.0.0"
       # -- Container image pull policy. Refer (https://kubernetes.io/docs/concepts/containers/images/#updating-images)
       pullPolicy: IfNotPresent
 

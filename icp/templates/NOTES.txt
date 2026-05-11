@@ -3,6 +3,23 @@ WSO2 Integration Control Plane (ICP) has been deployed successfully!
 Release: {{ .Release.Name }}
 Namespace: {{ .Release.Namespace }}
 
+{{- if and .Values.wso2.openshift.enabled (not .Values.wso2.gatewayAPI.enabled) (eq .Values.wso2.openshift.route.tls.termination "reencrypt") (not .Values.wso2.deployment.JKSSecretName) }}
+
+================================================================================
+  !! PRODUCTION WARNING: BUNDLED SELF-SIGNED CA CERTIFICATE IN USE !!
+================================================================================
+  wso2.deployment.JKSSecretName is not set. The OpenShift Route is using the
+  bundled self-signed CA certificate which EXPIRES on 2026-12-14 and is
+  intended for local/development use only.
+
+  For production deployments, create a Kubernetes Secret containing your CA
+  certificate under the key 'ca.crt' and set:
+
+    wso2.deployment.JKSSecretName: <your-secret-name>
+
+================================================================================
+{{- end }}
+
 {{- if .Values.wso2.gatewayAPI.enabled }}
 ================================================================================
                         GATEWAY API CONFIGURATION

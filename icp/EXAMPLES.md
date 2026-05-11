@@ -138,6 +138,35 @@ Cookie-based session affinity is currently **only supported with Envoy Gateway**
               ttl: "3600s"
     ```
   - **Traefik**: Use sticky sessions middleware
+
+### Advanced Gateway API Example: Session Affinity, Rate Limiting, and Custom CA
+
+This example demonstrates enabling session affinity, rate limiting, and a custom backend CA for ICP:
+
+```yaml
+wso2:
+  deployment:
+    hostname: "icp.example.com"
+  ingress:
+    enabled: false
+  gatewayAPI:
+    enabled: true
+    gatewayClassName: "envoy"
+    tlsSecret: "icp-tls-secret"
+    backendTLS:
+      enabled: true
+      hostname: "localhost"
+      caCertConfigMap: "icp-backend-ca"   # Custom CA ConfigMap for backend TLS
+    sessionAffinity:
+      cookieName: "ICP_AFFINITY"
+      cookieTTL: "3600s"
+    ratelimit:
+      enabled: true
+      requestsPerSecond: 100
+      burst: 50
+```
+
+This configuration is recommended for production deployments with multiple replicas and custom backend certificates.
     ```yaml
     apiVersion: traefik.containo.us/v1alpha1
     kind: Middleware
