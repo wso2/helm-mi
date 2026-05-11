@@ -116,7 +116,7 @@ wso2:
     icp:
       # -- Enable ICP connectivity
       enabled: false
-      # -- Runtime ID (obtained from ICP)
+      # -- Runtime ID (If not defined Pod UID will be used as runtime ID)
       runtime: ""
       # -- Environment name
       environment: ""

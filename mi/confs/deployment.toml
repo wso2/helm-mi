@@ -256,6 +256,8 @@ service_catalog_password = {{ .Values.wso2.config.serviceCatalog.password | quot
 enabled = {{ .Values.wso2.config.icp.enabled | default false }}
 {{- if .Values.wso2.config.icp.runtime }}
 runtime = {{ .Values.wso2.config.icp.runtime | quote }}
+{{- else }}
+runtime = "$env{POD_NAME}"
 {{- end }}
 {{- if .Values.wso2.config.icp.environment }}
 environment = {{ .Values.wso2.config.icp.environment | quote }}
