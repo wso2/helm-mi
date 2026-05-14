@@ -87,6 +87,80 @@ maxRefreshTokensPerUser = {{ .Values.wso2.config.maxRefreshTokensPerUser }}
 {{- end }}
 
 # =============================================================================
+# LDAP CONFIGURATION
+# =============================================================================
+{{- if .Values.wso2.config.ldap }}
+{{- if .Values.wso2.config.ldap.enabled }}
+ldapUserStoreEnabled = {{ .Values.wso2.config.ldap.enabled }}
+{{- end }}
+{{- if .Values.wso2.config.ldap.hostName }}
+ldapHostName = {{ .Values.wso2.config.ldap.hostName | quote }}
+{{- end }}
+{{- if .Values.wso2.config.ldap.port }}
+ldapPort = {{ .Values.wso2.config.ldap.port }}
+{{- end }}
+{{- if .Values.wso2.config.ldap.connectionName }}
+ldapConnectionName = {{ .Values.wso2.config.ldap.connectionName | quote }}
+{{- end }}
+{{- if .Values.wso2.config.ldap.connectionPassword }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+ldapConnectionPassword = "$secret{ldapConnectionPassword}"
+{{- else }}
+ldapConnectionPassword = {{ .Values.wso2.config.ldap.connectionPassword | quote }}
+{{- end }}
+{{- end }}
+{{- if .Values.wso2.config.ldap.userSearchBase }}
+ldapUserSearchBase = {{ .Values.wso2.config.ldap.userSearchBase | quote }}
+{{- end }}
+{{- if .Values.wso2.config.ldap.userNameAttribute }}
+ldapUserNameAttribute = {{ .Values.wso2.config.ldap.userNameAttribute | quote }}
+{{- end }}
+{{- if .Values.wso2.config.ldap.userSearchFilter }}
+ldapUserSearchFilter = {{ .Values.wso2.config.ldap.userSearchFilter | quote }}
+{{- end }}
+{{- if .Values.wso2.config.ldap.userDNPattern }}
+ldapUserDNPattern = {{ .Values.wso2.config.ldap.userDNPattern | quote }}
+{{- end }}
+{{- if .Values.wso2.config.ldap.displayNameAttribute }}
+ldapDisplayNameAttribute = {{ .Values.wso2.config.ldap.displayNameAttribute | quote }}
+{{- end }}
+{{- if hasKey .Values.wso2.config.ldap "readGroups" }}
+ldapReadGroups = {{ .Values.wso2.config.ldap.readGroups }}
+{{- end }}
+{{- if .Values.wso2.config.ldap.memberOfAttribute }}
+ldapMemberOfAttribute = {{ .Values.wso2.config.ldap.memberOfAttribute | quote }}
+{{- end }}
+{{- if .Values.wso2.config.ldap.groupSearchBase }}
+ldapGroupSearchBase = {{ .Values.wso2.config.ldap.groupSearchBase | quote }}
+{{- end }}
+{{- if .Values.wso2.config.ldap.groupNameAttribute }}
+ldapGroupNameAttribute = {{ .Values.wso2.config.ldap.groupNameAttribute | quote }}
+{{- end }}
+{{- if .Values.wso2.config.ldap.groupSearchFilter }}
+ldapGroupSearchFilter = {{ .Values.wso2.config.ldap.groupSearchFilter | quote }}
+{{- end }}
+{{- if .Values.wso2.config.ldap.membershipAttribute }}
+ldapMembershipAttribute = {{ .Values.wso2.config.ldap.membershipAttribute | quote }}
+{{- end }}
+{{- if .Values.wso2.config.ldap.adminRoles }}
+ldapAdminRoles = [{{ range .Values.wso2.config.ldap.adminRoles }}"{{ . }}", {{ end }}]
+{{- end }}
+{{- if .Values.wso2.config.ldap.sslEnabled }}
+ldapSslEnabled = {{ .Values.wso2.config.ldap.sslEnabled }}
+{{- end }}
+{{- if .Values.wso2.config.ldap.trustStorePath }}
+ldapTrustStorePath = {{ .Values.wso2.config.ldap.trustStorePath | quote }}
+{{- end }}
+{{- if .Values.wso2.config.ldap.trustStorePassword }}
+{{- if .Values.wso2.config.secureVault.enabled }}
+ldapTrustStorePassword = "$secret{ldapTrustStorePassword}"
+{{- else }}
+ldapTrustStorePassword = {{ .Values.wso2.config.ldap.trustStorePassword | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+# =============================================================================
 # ENCRYPTED SECRETS CONFIGURATION
 # =============================================================================
 {{- if .Values.wso2.config.secureVault.enabled }}
@@ -104,6 +178,12 @@ secDbPassword = {{ .Values.wso2.config.secureVault.secrets.secDbPassword | quote
 {{- end }}
 {{- if and (.Values.wso2.config.sso) (.Values.wso2.config.sso.enabled) (.Values.wso2.config.secureVault.secrets.ssoClientSecret) }}
 ssoClientSecret = {{ .Values.wso2.config.secureVault.secrets.ssoClientSecret | quote }}
+{{- end }}
+{{- if and (.Values.wso2.config.ldap) (.Values.wso2.config.secureVault.secrets.ldapConnectionPassword) }}
+ldapConnectionPassword = {{ .Values.wso2.config.secureVault.secrets.ldapConnectionPassword | quote }}
+{{- end }}
+{{- if and (.Values.wso2.config.ldap) (.Values.wso2.config.secureVault.secrets.ldapTrustStorePassword) }}
+ldapTrustStorePassword = {{ .Values.wso2.config.secureVault.secrets.ldapTrustStorePassword | quote }}
 {{- end }}
 {{- if and (.Values.wso2.config.opensearch) (.Values.wso2.config.secureVault.secrets.opensearchPassword) }}
 opensearchPassword = {{ .Values.wso2.config.secureVault.secrets.opensearchPassword | quote }}
@@ -126,6 +206,9 @@ ssoTokenEndpoint = {{ .Values.wso2.config.sso.tokenEndpoint | quote }}
 {{- end }}
 {{- if .Values.wso2.config.sso.logoutEndpoint }}
 ssoLogoutEndpoint = {{ .Values.wso2.config.sso.logoutEndpoint | quote }}
+{{- end }}
+{{- if .Values.wso2.config.sso.jwksUrl }}
+ssoJwksUrl = {{ .Values.wso2.config.sso.jwksUrl | quote }}
 {{- end }}
 {{- if .Values.wso2.config.sso.clientId }}
 ssoClientId = {{ .Values.wso2.config.sso.clientId | quote }}
@@ -150,12 +233,10 @@ ssoScopes = [
     {{- end }}
 ]
 {{- end }}
+{{- if .Values.wso2.config.sso.allowInsecureTLS }}
+ssoAllowInsecureTLS = {{ .Values.wso2.config.sso.allowInsecureTLS }}
 {{- end }}
-
-# =============================================================================
-# OBSERVABILITY CONFIGURATION
-# =============================================================================
-observabilityEnabled = {{ .Values.wso2.config.observabilityEnabled | default false }}
+{{- end }}
 
 # =============================================================================
 # OPENSEARCH CONFIGURATION

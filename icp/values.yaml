@@ -141,20 +141,14 @@ wso2:
 
   # Integration Control Plane (ICP) 2.0 product configurations
   config:
-    # -- ICP server port
-    serverPort: 9445
-    # -- GraphQL API port
-    graphqlPort: 9446
-    # -- Observability API port
-    observabilityPort: 9448
-    # -- Auth API port
-    authPort: 9447
+    # -- ICP server port (console, GraphQL, observability, auth — all served here)
+    serverPort: 9446
+    # -- ICP runtime service port (MI artifact management API)
+    runtimePort: 9445
+    # -- OpenSearch adapter port (receives data from MI instances; only needed when opensearch is configured)
+    opensearchAdapterPort: 9449
     # -- Additional ICP ports exposed by the container
-    additionalPorts:
-      - name: icp-port-3
-        port: 9447
-      - name: icp-port-5
-        port: 9449
+    additionalPorts: []
     # -- Scheduler interval in seconds
     schedulerIntervalSeconds: 30
     # -- Log level (DEBUG, INFO, WARN, ERROR)
@@ -185,6 +179,10 @@ wso2:
       # tokenEndpoint: "https://api.asgardeo.io/t/{org}/oauth2/token"
       # -- Logout endpoint URL
       # logoutEndpoint: "https://api.asgardeo.io/t/{org}/oidc/logout"
+      # -- JWKS URL for verifying ID tokens
+      # jwksUrl: "https://api.asgardeo.io/t/{org}/oauth2/jwks"
+      # -- Allow insecure TLS for the OIDC provider (self-signed cert). Set false in production.
+      # allowInsecureTLS: false
       # -- OIDC client ID registered with the identity provider
       # clientId: ""
       # -- OIDC client secret. When secureVault.enabled=true this value is written
@@ -199,6 +197,45 @@ wso2:
       #   - openid
       #   - email
       #   - profile
+    # LDAP user store configuration
+    # ldap:
+    #   # -- Enable LDAP user store (set to true to activate)
+    #   enabled: false
+    #   # -- LDAP server hostname
+    #   hostName: "localhost"
+    #   # -- LDAP server port (use 636 for LDAPS)
+    #   port: 10389
+    #   # -- DN used to bind to the LDAP server
+    #   connectionName: "uid=admin,ou=system"
+    #   # -- Password for the bind DN. Use secureVault for production.
+    #   connectionPassword: "secret"
+    #   # -- Base DN for user search
+    #   userSearchBase: "ou=Users,dc=wso2,dc=org"
+    #   # -- Attribute holding the username (use sAMAccountName for AD)
+    #   userNameAttribute: "uid"
+    #   # -- LDAP filter for user lookup ('?' replaced with username)
+    #   userSearchFilter: "(&(objectClass=person)(uid=?))"
+    #   # -- Enable group/role lookup
+    #   readGroups: true
+    #   # -- memberOf attribute for AD-style group lookup (leave empty for standard search)
+    #   memberOfAttribute: ""
+    #   # -- Base DN for group search
+    #   groupSearchBase: "ou=Groups,dc=wso2,dc=org"
+    #   # -- Attribute holding the group name
+    #   groupNameAttribute: "cn"
+    #   # -- LDAP filter for group search
+    #   groupSearchFilter: "(objectClass=groupOfNames)"
+    #   # -- Attribute linking group to members
+    #   membershipAttribute: "member"
+    #   # -- Groups whose members get ICP super-admin on first login
+    #   adminRoles:
+    #     - "admin"
+    #   # -- Enable LDAPS (TLS)
+    #   sslEnabled: false
+    #   # -- Path to JKS truststore for LDAP server CA cert verification
+    #   trustStorePath: ""
+    #   # -- Truststore password. Use secureVault for production.
+    #   trustStorePassword: ""
     # Secure vault configuration
     secureVault:
       # -- Enable/Disable secure vault

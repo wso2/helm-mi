@@ -49,27 +49,6 @@ spec:
     - host: {{ .Values.wso2.deployment.hostname | quote }}
       http:
         paths:
-          - path: /graphql
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
-                port:
-                  number: {{ .Values.wso2.config.graphqlPort }}
-          - path: /icp/observability
-            pathType: Prefix
-            backend:
-              service:
-                name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
-                port:
-                  number: {{ .Values.wso2.config.observabilityPort }}
-          - path: /auth
-             pathType: Prefix
-             backend:
-               service:
-                 name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
-                 port:
-                   number: {{ .Values.wso2.config.authPort }}        
           - path: /
             pathType: Prefix
             backend:

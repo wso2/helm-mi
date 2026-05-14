@@ -24,78 +24,14 @@
     {{- if and $secret $secret.data (index $secret.data "ca.crt") -}}
       {{- $destCA = index $secret.data "ca.crt" | b64dec -}}
     {{- else -}}
-      {{- $destCA = .Files.Get "files/default-ca.crt" -}}
+      {{- $destCA = .Files.Get "confs/backend-ca.crt" -}}
     {{- end -}}
   {{- else -}}
-    {{- $destCA = .Files.Get "files/default-ca.crt" -}}
+    {{- $destCA = .Files.Get "confs/backend-ca.crt" -}}
   {{- end -}}
 {{- end }}
 apiVersion: route.openshift.io/v1
 kind: Route
-metadata:
-  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-graphql
-  namespace: {{ .Release.Namespace }}
-spec:
-  host: {{ .Values.wso2.deployment.hostname | quote }}
-  path: /graphql
-  port:
-    targetPort: {{ .Values.wso2.config.graphqlPort }}
-  to:
-    kind: Service
-    name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
-    weight: 100
-  tls:
-    termination: {{ .Values.wso2.openshift.route.tls.termination }}
-    insecureEdgeTerminationPolicy: {{ .Values.wso2.openshift.route.tls.insecureEdgeTerminationPolicy }}
-    {{- if $destCA }}
-    destinationCACertificate: |
-{{ $destCA | indent 6 }}
-    {{- end }}
----
-apiVersion: route.openshift.io/v1
-kind: Route
-metadata:
-  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-observability
-  namespace: {{ .Release.Namespace }}
-spec:
-  host: {{ .Values.wso2.deployment.hostname | quote }}
-  path: /icp/observability
-  port:
-    targetPort: {{ .Values.wso2.config.observabilityPort }}
-  to:
-    kind: Service
-    name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
-    weight: 100
-  tls:
-    termination: {{ .Values.wso2.openshift.route.tls.termination }}
-    insecureEdgeTerminationPolicy: {{ .Values.wso2.openshift.route.tls.insecureEdgeTerminationPolicy }}
-    {{- if $destCA }}
-    destinationCACertificate: |
-{{ $destCA | indent 6 }}
-    {{- end }}
----
-apiVersion: route.openshift.io/v1
-kind: Route
-metadata:
-  name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-auth
-  namespace: {{ .Release.Namespace }}
-spec:
-  host: {{ .Values.wso2.deployment.hostname | quote }}
-  path: /auth
-  port:
-    targetPort: {{ .Values.wso2.config.authPort }}
-  to:
-    kind: Service
-    name: {{ template "resource.prefix" . }}-{{ .Release.Name }}
-    weight: 100
-  tls:
-    termination: {{ .Values.wso2.openshift.route.tls.termination }}
-    insecureEdgeTerminationPolicy: {{ .Values.wso2.openshift.route.tls.insecureEdgeTerminationPolicy }}
-    {{- if $destCA }}
-    destinationCACertificate: |
-{{ $destCA | indent 6 }}
-    {{- end }}
----
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
