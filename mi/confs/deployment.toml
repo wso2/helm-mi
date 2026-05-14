@@ -274,6 +274,12 @@ secret = {{ .Values.wso2.config.icp.secret | quote }}
 {{- if .Values.wso2.config.icp.icpUrl }}
 icp_url = {{ .Values.wso2.config.icp.icpUrl | quote }}
 {{- end }}
+{{- if not (kindIs "invalid" .Values.wso2.config.icp.sslVerify) }}
+ssl_verify = {{ .Values.wso2.config.icp.sslVerify }}
+{{- end }}
+{{- if .Values.wso2.config.icp.heartbeatInterval }}
+heartbeat_interval = {{ .Values.wso2.config.icp.heartbeatInterval }}
+{{- end }}
 {{- end }}
 
 {{ if .Values.wso2.config.serviceCatalog }}

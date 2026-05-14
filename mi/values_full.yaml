@@ -275,8 +275,20 @@ wso2:
       integration: ""
       # -- Secret key (obtained from ICP after creating a runtime)
       secret: ""
-      # -- ICP server URL (defaults to auto-discovery; set explicitly if ICP is in a different namespace)
+      # -- ICP server URL. Required when icp is enabled.
+      # If ICP is deployed in the same cluster, use the Kubernetes service DNS name: https://<cloudName>-<release-name>:9445
+      # If ICP is deployed externally or in a different namespace, provide the full reachable URL.
       # icpUrl: "https://icp-server:9445"
+      # -- Verify ICP's TLS certificate. Set to false only for local development with self-signed certificates.
+      # For production, create a secret containing ICP's CA certificate (key: ca.crt) and set icp.caCertSecretName.
+      # sslVerify: true
+      # -- Name of the Kubernetes secret containing ICP's CA certificate (key: ca.crt).
+      # Required for production TLS trust. The chart mounts the secret and imports the cert into MI's truststore at startup.
+      # Create it with: kubectl create secret generic <name> --from-file=ca.crt=icp.crt -n <namespace>
+      # If the secret is managed externally (e.g. cert-manager), set this to the name cert-manager created.
+      # caCertSecretName: ""
+      # -- Seconds between heartbeats sent from MI to ICP. Defaults to 10.
+      # heartbeatInterval: 10
     # -- Required if you want the Micro Integrator to publish integation services to the Service Catalog in the API Publisher (https://apim.docs.wso2.com/en/4.1.0/tutorials/integration-tutorials/service-catalog-tutorial/#step-3-configure-the-micro-integrator)
     serviceCatalog:
       # -- Enable/Disable service catalog

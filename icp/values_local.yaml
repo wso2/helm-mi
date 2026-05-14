@@ -79,19 +79,13 @@ wso2:
  # Integration Control Plane (ICP) 2.0 product configurations
   config:
     # -- ICP server port
-    serverPort: 9445
-    # -- GraphQL API port
-    graphqlPort: 9446
-    # -- Observability API port
-    observabilityPort: 9448
-    # -- Auth API port
-    authPort: 9447
+    serverPort: 9446
+    # -- ICP runtime service port
+    runtimePort: 9445
+    # -- OpenSearch adapter port
+    opensearchAdapterPort: 9449
     # -- Additional ICP ports exposed by the container
-    additionalPorts:
-      - name: icp-port-3
-        port: 9447
-      - name: icp-port-5
-        port: 9449
+    additionalPorts: []
     # -- Scheduler interval in seconds
     schedulerIntervalSeconds: 30
     # -- Log level (DEBUG, INFO, WARN, ERROR)

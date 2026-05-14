@@ -33,6 +33,16 @@ data:
     test ! -d ${WSO2_SERVER_HOME} && echo "WSO2 Docker product home does not exist" && exit 1
     # copy any configuration changes mounted to config_volume
     test -d ${config_volume} && [ "$(ls -A ${config_volume})" ] && cp -RL ${config_volume}/* ${WSO2_SERVER_HOME}/
+    {{- if and .Values.wso2.config.icp.enabled .Values.wso2.config.icp.caCertSecretName }}
+    # Import ICP CA certificate into MI's client truststore (if secret exists)
+    if [ -f /mnt/icp-trust/ca.crt ]; then
+      keytool -import -noprompt -alias icp-ca \
+        -file /mnt/icp-trust/ca.crt \
+        -keystore ${WSO2_SERVER_HOME}/repository/resources/security/{{ .Values.wso2.config.trustStore.primary.fileName | default "client-truststore.jks" }} \
+        -storepass {{ .Values.wso2.config.trustStore.primary.password | default "wso2carbon" }} \
+        2>/dev/null && echo "ICP CA cert imported into truststore." || echo "[WARN] ICP CA cert import failed or already exists."
+    fi
+    {{- end }}
     {{- if .Values.wso2.config.secureVault.enabled }}
     # copy internal keystore credentials to password-tmp file for cipher-tool usage
     {{ template "cp-secret-to-password-tmp" . }}
