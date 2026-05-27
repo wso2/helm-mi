@@ -33,18 +33,17 @@ spec:
       {{- if .Values.wso2.gatewayAPI.enabled }}
       appProtocol: https
       {{- end }}
-    - port: {{ .Values.wso2.config.graphqlPort }}
+    - port: {{ .Values.wso2.config.runtimePort }}
       protocol: TCP
-      name: icp-graphql
+      name: icp-runtime
       {{- if .Values.wso2.gatewayAPI.enabled }}
       appProtocol: https
       {{- end }}
-    - port: {{ .Values.wso2.config.observabilityPort }}
+    {{- if .Values.wso2.config.opensearch }}
+    - port: {{ .Values.wso2.config.opensearchAdapterPort }}
       protocol: TCP
-      name: icp-observability
-      {{- if .Values.wso2.gatewayAPI.enabled }}
-      appProtocol: https
-      {{- end }}
+      name: icp-opensearch
+    {{- end }}
     {{- range .Values.wso2.config.additionalPorts }}
     - port: {{ .port }}
       protocol: TCP
