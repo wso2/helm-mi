@@ -10,6 +10,14 @@ Common prefix prepended to Kubernetes resources of this chart
 {{- end -}}
 
 {{/*
+Name of the Kubernetes secret containing ICP's CA certificate (key: ca.crt).
+Must be explicitly set via wso2.config.icp.caCertSecretName when cert trust is required.
+*/}}
+{{- define "icp.caCertSecretName" -}}
+{{- .Values.wso2.config.icp.caCertSecretName -}}
+{{- end -}}
+
+{{/*
 Common labels
 */}}
 {{- define "micro-integrator.labels" -}}

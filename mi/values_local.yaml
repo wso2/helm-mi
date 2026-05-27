@@ -127,7 +127,9 @@ wso2:
       # -- Secret key (obtained from ICP)
       secret: ""
       # -- ICP server URL
-      # icpUrl: "https://icp-server:9445"
+      icpUrl: "https://cloud-icp:9445"
+      # -- Set to false for local dev with self-signed ICP certificate. Never use in production.
+      sslVerify: false
   deployment:
     securityContext:
       # -- Enable/Disable AppArmor (https://kubernetes.io/docs/tutorials/security/apparmor/)

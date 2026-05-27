@@ -224,6 +224,11 @@ spec:
               mountPath: /home/wso2carbon/wso2-config-volume/conf/file.properties
               subPath: file.properties
             {{- end }}
+            {{- if and .Values.wso2.config.icp.enabled .Values.wso2.config.icp.caCertSecretName }}
+            - name: icp-trust
+              mountPath: /mnt/icp-trust
+              readOnly: true
+            {{- end }}
       volumes:
         - name: wso2mi-toml
           configMap:
@@ -272,6 +277,11 @@ spec:
         - name: wso2mi-file-properties
           configMap:
             name: {{ template "resource.prefix" . }}-{{ .Release.Name }}-mi-file-properties
+        {{- end }}
+        {{- if and .Values.wso2.config.icp.enabled .Values.wso2.config.icp.caCertSecretName }}
+        - name: icp-trust
+          secret:
+            secretName: {{ template "icp.caCertSecretName" . }}
         {{- end }}
       {{- if .Values.wso2.deployment.imagePullSecrets }}
       imagePullSecrets:

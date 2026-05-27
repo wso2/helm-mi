@@ -138,8 +138,13 @@ wso2:
     #   integration: ""
     #   # -- Secret key (obtained from ICP)
     #   secret: ""
-    #   # -- ICP server URL (defaults to auto-discovery via K8s service)
-    #   # icpUrl: "https://icp-server:9445"
+    #   # -- ICP server URL. Required when icp is enabled.
+    #   icpUrl: "https://icp-server:9445"
+    #   # -- Set to false for local dev with self-signed ICP certificate. Never use in production.
+    #   # sslVerify: true
+    #   # -- Name of the Kubernetes secret containing ICP's CA certificate (key: ca.crt).
+    #   # Required for production TLS trust. Create with: kubectl create secret generic <name> --from-file=ca.crt=icp.crt
+    #   # caCertSecretName: ""
     secureVault:
       # -- Enable/Disable secure vault
       enabled: false
