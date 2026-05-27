@@ -102,8 +102,7 @@ spec:
                 - -c
                 - |
                   nc -z localhost {{ .Values.wso2.config.serverPort }} &&
-                  nc -z localhost {{ .Values.wso2.config.graphqlPort }} &&
-                  nc -z localhost {{ .Values.wso2.config.observabilityPort }}
+                  nc -z localhost {{ .Values.wso2.config.runtimePort }}
             initialDelaySeconds: {{ .Values.wso2.deployment.probes.readiness.initialDelaySeconds }}
             periodSeconds: {{ .Values.wso2.deployment.probes.readiness.periodSeconds }}
           resources:
@@ -125,10 +124,12 @@ spec:
           ports:
             - containerPort: {{ .Values.wso2.config.serverPort }}
               protocol: TCP
-            - containerPort: {{ .Values.wso2.config.graphqlPort }}
+            - containerPort: {{ .Values.wso2.config.runtimePort }}
               protocol: TCP
-            - containerPort: {{ .Values.wso2.config.observabilityPort }}
+            {{- if .Values.wso2.config.opensearch }}
+            - containerPort: {{ .Values.wso2.config.opensearchAdapterPort }}
               protocol: TCP
+            {{- end }}
             {{- range .Values.wso2.config.additionalPorts }}
             - containerPort: {{ .port }}
               protocol: TCP
