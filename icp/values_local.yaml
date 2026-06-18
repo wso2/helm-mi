@@ -51,7 +51,7 @@ wso2:
     # -- Name of the Gateway
     gatewayName: "wso2-gateway-icp"
     # -- Namespace where the Gateway resides
-    gatewayNamespace: "default"
+    gatewayNamespace: "icp"
     # TLS secret for Gateway HTTPS listener
     # If tlsSecret is empty, a self-signed TLS certificate will be generated automatically for local/dev use.
     # MANDATORY : For production, provide a cert-manager managed secret via tlsSecret.
@@ -97,13 +97,14 @@ wso2:
     # -- Authentication backend URL
     authBackendUrl: "https://localhost:9447"
     # -- Frontend JWT HMAC secret (at least 32 characters for HS256)
-    frontendJwtHMACSecret: ""
+    frontendJwtHMACSecret: ""  # Set to a random string of at least 32 chars (e.g., openssl rand -base64 32)
     # -- Allow insecure TLS for MI artifacts API
     artifactsApiAllowInsecureTLS: false
     # Credentials database configuration
     credentialsDb: {}
     # Primary database / storage configuration
-    storage: {}
+    storage:
+      deploymentType: "K8S"
     # SSO (OIDC) configuration
     sso:
       # -- Enable/Disable SSO authentication

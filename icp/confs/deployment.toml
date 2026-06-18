@@ -278,6 +278,9 @@ artifactsApiAllowInsecureTLS = {{ .Values.wso2.config.artifactsApiAllowInsecureT
 # =============================================================================
 [icp_server.storage]
 {{- if .Values.wso2.config.storage }}
+{{- if .Values.wso2.config.storage.deploymentType }}
+deploymentType = {{ .Values.wso2.config.storage.deploymentType | quote }}
+{{- end }}
 {{- if .Values.wso2.config.storage.heartbeatTimeoutSeconds }}
 heartbeatTimeoutSeconds = {{ .Values.wso2.config.storage.heartbeatTimeoutSeconds }}
 {{- end }}
