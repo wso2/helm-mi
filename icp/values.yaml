@@ -168,7 +168,7 @@ wso2:
     # Primary database / storage configuration
     storage:
       # -- Deployment type for runtime discovery. "K8S" enables Kubernetes-native MI pod discovery; "VM" for static/VM deployments.
-      deploymentType: ""
+      deploymentType: "K8S"
     # SSO (OIDC) configuration
     sso:
       # -- Enable/Disable SSO authentication
