@@ -29,25 +29,22 @@ You have enabled Gateway API for traffic routing.
 
 IMPORTANT: Before HTTPRoute can work, ensure the following prerequisites are met:
 
-1. Gateway API CRDs must be installed:
-   kubectl get crd gateways.gateway.networking.k8s.io httproutes.gateway.networking.k8s.io
-
-   If not installed, run:
-   kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.2.0/standard-install.yaml
-
-2. A Gateway Controller must be running:
+1. A Gateway Controller must be running:
    For Envoy Gateway (default):
      kubectl get pods -n envoy-gateway-system
 
-   To install Envoy Gateway:
+   To install Envoy Gateway (this also installs Gateway API CRDs automatically):
      helm install eg oci://docker.io/envoyproxy/gateway-helm \
-       --version v1.7.0 -n envoy-gateway-system --create-namespace
+       --version v1.2.1 -n envoy-gateway-system --create-namespace
+
+   NOTE: Do not pre-install Gateway API CRDs separately — Envoy Gateway's Helm
+   chart manages them. Pre-installing with kubectl causes a CRD ownership conflict.
 
    For other controllers, see EXAMPLES.md for configuration and installation guidance.
 
 {{- if .Values.wso2.gatewayAPI.createGateway }}
 
-3. A GatewayClass "{{ .Values.wso2.gatewayAPI.gatewayClassName }}" must exist:
+2. A GatewayClass "{{ .Values.wso2.gatewayAPI.gatewayClassName }}" must exist:
    kubectl get gatewayclass {{ .Values.wso2.gatewayAPI.gatewayClassName }}
 
 Gateway resource created by this chart:
@@ -57,7 +54,7 @@ Gateway resource created by this chart:
 
 {{- else }}
 
-3. An external Gateway resource must exist:
+2. An external Gateway resource must exist:
    kubectl get gateway {{ .Values.wso2.gatewayAPI.gatewayName }} -n {{ .Values.wso2.gatewayAPI.gatewayNamespace }}
 
 External Gateway:
