@@ -118,6 +118,13 @@ wso2:
             tag: "<image-tag>"
             pullPolicy: IfNotPresent
 ```
+
+> [!IMPORTANT]
+> If this local image is built directly from a distribution zip (not `FROM` the official WSO2
+> product image), it must still satisfy the ICP chart's entrypoint/config contract, or every
+> `wso2.config.*` and `wso2.deployment.hostname` value you set will be silently ignored at runtime.
+> See [icp/LOCAL_DEV_IMAGE.md](./icp/LOCAL_DEV_IMAGE.md) for the exact requirements and an example Dockerfile.
+
 ##### User Stores
 ###### File-based user store (default)
 
