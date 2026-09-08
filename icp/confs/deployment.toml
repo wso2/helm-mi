@@ -260,10 +260,14 @@ opensearchPassword = {{ .Values.wso2.config.opensearch.password | quote }}
 # =============================================================================
 # FRONTEND URL CONFIGURATION (derived from hostname)
 # =============================================================================
+# Set publicBaseUrl itself, not the individual backend*Endpoint/backendWsUrl configs it defaults
+# from (icp_server/config.bal) — those cover graphql/auth/observability/workflow/tryit/ws today,
+# and any future one icp_server adds. Overriding them piecemeal here previously missed
+# backendWorkflowEndpoint/backendTryitEndpoint/backendWsUrl, which silently stayed on their
+# https://localhost:9446 default (e.g. the runtime-status WebSocket) whenever hostname wasn't
+# "localhost".
 {{- if .Values.wso2.deployment.hostname }}
-backendGraphqlEndpoint = "https://{{ .Values.wso2.deployment.hostname }}/graphql"
-backendAuthBaseUrl = "https://{{ .Values.wso2.deployment.hostname }}/auth"
-backendObservabilityEndpoint = "https://{{ .Values.wso2.deployment.hostname }}/icp/observability"
+publicBaseUrl = "https://{{ .Values.wso2.deployment.hostname }}"
 {{- end }}
 
 # =============================================================================
