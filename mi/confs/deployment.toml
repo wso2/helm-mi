@@ -953,7 +953,7 @@ sender.ssl_profile.read_interval = {{ .Values.wso2.config.transport.http.nonBloc
 {{- end }}
 
 {{- if .Values.wso2.config.transport.http.blocking }}
-[transport.http.blocking]
+[transport.blocking.http]
 {{- if .Values.wso2.config.transport.http.blocking.listener.enable }}
 listener.enable = {{ .Values.wso2.config.transport.http.blocking.listener.enable }}
 {{- end }}
